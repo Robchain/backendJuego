@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Persona from './models/persona';
+import Persona from './models/Persona';
 
 async function conectdb(){
    const db = await mongoose.connect('mongodb+srv://robertrrr:roro2069@robertrr.wuxak.mongodb.net/Testi');
@@ -8,15 +8,20 @@ async function conectdb(){
 
 conectdb();
 
-const persona = new Persona({
-    IdPersona: 1,
-    Nombre: "Robert",
-    Apellido: "Roman",
-    Identificacion: "0912345678",
-    Email: "testo@corre.com",
-    FotoPerfil: "url", 
-    FechaRegistro: "8/2/2022",
-    FechaModificado: "8/2/2022",
-    Estado: true
-})
-console.log(persona);
+
+async function Crear(){
+    const persona = new Persona({
+        IdPersona: 1,
+        Nombre: "Robert",
+        Apellido: "Roman",
+        Identificacion: "0912345678",
+        Email: "testo@corre.com",
+        FotoPerfil: "url", 
+        FechaRegistro: "8/2/2022",
+        FechaModificado: "8/2/2022",
+        Estado: true
+    })
+    await persona.save();
+}
+
+Crear();
