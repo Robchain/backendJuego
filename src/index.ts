@@ -8,7 +8,7 @@ async function conectdb(){
 
 conectdb();
 
-new Persona({
+const persona = new Persona({
     IdPersona: 1,
     Nombre: "Robert",
     Apellido: "Roman",
@@ -19,3 +19,4 @@ new Persona({
     FechaModificado: "8/2/2022",
     Estado: true
 })
+console.log(persona);
