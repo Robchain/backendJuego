@@ -1,12 +1,9 @@
 import mongoose from "mongoose";
 import Persona from './models/Persona';
+import './Conection';
+//import App from './App';
 
-async function conectdb(){
-   const db = await mongoose.connect('mongodb+srv://robertrrr:roro2069@robertrr.wuxak.mongodb.net/Testi');
-    console.log("nombre de la base:", db.connection.name);
-}
 
-conectdb();
 
 
 async function Crear(){
