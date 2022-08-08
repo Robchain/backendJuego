@@ -1,9 +1,10 @@
 import mongoose  from "mongoose";
+import config from './config/confi';
 
 
 (async () =>{
     try {
-       const db = await mongoose.connect("mongodb+srv://robertrrr:roro2069@robertrr.wuxak.mongodb.net/Testi");
+       const db = await mongoose.connect(`${config.db.URI}`);
 console.log("ejemplo", db.connection.name); 
     } catch (error) {
         console.log(error)
