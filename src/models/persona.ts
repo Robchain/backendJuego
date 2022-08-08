@@ -1,28 +1,28 @@
-import {prop,getModelForClass} from '@typegoose/typegoose';
-import { ObjectId } from 'mongoose';
+import {Schema, model} from 'mongoose';
 
+const schemaPerson = new Schema({
+    Nombre:{
 
-class Persona {
-    @prop()
-    IdPersona: string
-    @prop()
-    Nombre: string
-    @prop()
-    Apellido: string
-    @prop()
-    Identificacion: number
-    @prop()
-    Email: string
-    @prop()
-    FotoPerfil: string
-    @prop()
-    FechaRegistro: string
-    @prop()
-    FechaModificado: string
-    @prop()
-    Estado: boolean
+    },
+    Apellido:{
 
-}
+    },
+    Identificacion:{
 
-const PersonaModel = getModelForClass(Persona)
-export default PersonaModel;
+    },
+    Email:{
+
+    },
+    FotoPerfil:{
+        type:   String
+    },
+    Estado:{
+
+    }},
+    {
+        versionKey:false,
+        timestamps:true
+    })
+
+export default model('persona',schemaPerson);
+

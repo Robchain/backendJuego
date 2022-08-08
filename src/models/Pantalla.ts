@@ -1,18 +1,17 @@
-import {prop,getModelForClass} from '@typegoose/typegoose';
-import { Mongoose, ObjectId } from 'mongoose';
+import {model, Schema} from 'mongoose'
 
-class Pantallas {
-    @prop()
-    idPantalla:ObjectId
-    @prop()
-    urlPantalla:string
-    @prop()
-    fechaRegistro:string
-    @prop()
-    fechaModificado:string
-    @prop()
-    estado:boolean
-}
+const pantallaSchema = new Schema({    
+    url:{
+        type:   String
+    },
+    estado:{
+        type: Boolean
+    }
+},{
+    versionKey:false,
+    timestamps:true
+})
 
-const PantallasModels = getModelForClass(Pantallas);
-export default PantallasModels;
+export default model('pantalla',pantallaSchema);
+
+
