@@ -1,4 +1,5 @@
-import {model, Schema} from 'mongoose'
+import {model, Schema, Document} from 'mongoose'
+
 
 const pantallaSchema = new Schema({    
     url:{
