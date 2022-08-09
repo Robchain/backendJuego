@@ -19,17 +19,25 @@ export const signup = async (req:Request, res:Response)=>{
     
     const personaSave = await persona.save();
     //toker
-    const token:string = jwt.sign({_id: personaSave._id}, process.env.TOKKEN_SCRET||'tokendidactico');
+    const token:string = jwt.sign({_id: personaSave._id}, process.env.TOKKEN_SCRET||'tokendidactico',{
+        expiresIn: 86400
+    });
 
     res.header('Token_entrada',token).json(personaSave);
 
     
 };
 //para el login
-export const signin =   (req:Request, res:Response)  =>{
-    res.send('signin');
+export const signin =  async (req:Request, res:Response)  =>{
+    const persona = await Persona.findOne({Email:req.body.Email})
+    if(!persona)    return res.status(400).json('Correo o contraseña incorrecta');
 
-}
+    
+   const isMatch:boolean = await persona.compararPassword(req.body.Password)
+   if(!isMatch) return res.status(400).json('Contraseña incorrecta');
+   if(isMatch)  return res.status(200).json()
+
+} 
 // datos del usuario
 export const profile    =   (req: Request, res:Response)=>{
     res.send('profile');

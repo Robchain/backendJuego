@@ -1,16 +1,18 @@
 import {Schema, model,Document} from 'mongoose';
 import bcrypt from 'bcrypt';
+import { userInfo } from 'os';
 //  interface
 export interface IPersona extends Document{
-    Nombre:string,
-    Apellido:string,
-    Email:string,
-    Usuario:string,
-    FotoPerfil:string,
-    Password:string,
-    TipoUsuario:string,
-    Identificacion:string,
-    Estado:string
+    Nombre:string;
+    Apellido:string;
+    Email:string;
+    Usuario:string;
+    FotoPerfil:string;
+    Password:string;
+    TipoUsuario:string;
+    Identificacion:string;
+    Estado:string;
+    compararPassword(password:string): Promise<boolean>;
 }
 // esquema de la coleccion
 const schemaPerson = new Schema({
@@ -74,6 +76,8 @@ schemaPerson.pre<IPersona>('save', async function(next){
 
 const  salt = await bcrypt.genSalt(10)
    const hash = await bcrypt.hash(this.Password, salt );
+   this.Password= hash;
+   next();
 
 });
 

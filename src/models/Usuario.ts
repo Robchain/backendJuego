@@ -6,6 +6,7 @@ export interface IUser extends Document {
     Usuario:    string,
     Password:   string,
     Estado:Boolean,
+     
 }
 //schema de la coleccion 
 const usuarioSchema =   new Schema({
