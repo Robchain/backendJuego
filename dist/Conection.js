@@ -13,9 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const confi_1 = __importDefault(require("./config/confi"));
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const db = yield mongoose_1.default.connect("mongodb+srv://robertrrr:roro2069@robertrr.wuxak.mongodb.net/Testi");
+        const db = yield mongoose_1.default.connect(`${confi_1.default.db.URI}`);
         console.log("ejemplo", db.connection.name);
     }
     catch (error) {

@@ -10,6 +10,7 @@ function   createToken(persona:IPersona){
     });
 }
 
+
 // para registrar usuario
 export const signup = async (req:Request, res:Response)=>{
     // guardando un nuevo usuario
@@ -28,8 +29,6 @@ export const signup = async (req:Request, res:Response)=>{
     const personaSave = await persona.save();
 
     res.json(personaSave);
-
-    
 };
 //para el login
 export const signin =  async (req:Request, res:Response)  =>{
@@ -49,6 +48,8 @@ export const profile    =  async (req: Request, res:Response)=>{
     if(!user)   return res.status(400).json('no User Found');
     res.json(user);
 
-
-
+}
+// rompecabeza
+export const rompeacabezaAdmn = async (req:Request,res:Response)=>{
+ //   const rommpecabezasave = await rompeacabezaAdmn.save()
 }

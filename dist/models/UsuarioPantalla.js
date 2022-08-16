@@ -1,41 +1,17 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const typegoose_1 = require("@typegoose/typegoose");
-class UsuarioPantalla {
-}
-__decorate([
-    (0, typegoose_1.prop)({ requiere: true }) //mongoose
-    ,
-    __metadata("design:type", Object)
-], UsuarioPantalla.prototype, "idUsuarioPantalla", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", Object)
-], UsuarioPantalla.prototype, "idPantalla", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", Object)
-], UsuarioPantalla.prototype, "idUsuario", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
-], UsuarioPantalla.prototype, "fechaModificado", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
-], UsuarioPantalla.prototype, "fechaRegistro", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", Boolean)
-], UsuarioPantalla.prototype, "estado", void 0);
-const UsuarioPantallaModelo = (0, typegoose_1.getModelForClass)(UsuarioPantalla);
-exports.default = UsuarioPantallaModelo;
+const mongoose_1 = require("mongoose");
+const usuarioPantallaSchema = new mongoose_1.Schema({
+    Usuario: {
+        type: String
+    },
+    Pantalla: {
+        type: String
+    },
+    Estado: {
+        type: Boolean
+    }
+}, {
+    timestamps: true,
+    versionKey: false
+});

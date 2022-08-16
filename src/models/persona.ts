@@ -1,6 +1,6 @@
 import {Schema, model,Document} from 'mongoose';
 import bcrypt from 'bcrypt';
-import { userInfo } from 'os';
+
 //  interface
 export interface IPersona extends Document{
     Nombre:string;

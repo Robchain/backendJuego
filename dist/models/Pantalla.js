@@ -1,36 +1,15 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const typegoose_1 = require("@typegoose/typegoose");
-class Pantallas {
-}
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", Object)
-], Pantallas.prototype, "idPantalla", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
-], Pantallas.prototype, "urlPantalla", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
-], Pantallas.prototype, "fechaRegistro", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
-], Pantallas.prototype, "fechaModificado", void 0);
-__decorate([
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", Boolean)
-], Pantallas.prototype, "estado", void 0);
-const PantallasModels = (0, typegoose_1.getModelForClass)(Pantallas);
-exports.default = PantallasModels;
+const mongoose_1 = require("mongoose");
+const pantallaSchema = new mongoose_1.Schema({
+    url: {
+        type: String
+    },
+    estado: {
+        type: Boolean
+    }
+}, {
+    versionKey: false,
+    timestamps: true
+});
+exports.default = (0, mongoose_1.model)('pantalla', pantallaSchema);
