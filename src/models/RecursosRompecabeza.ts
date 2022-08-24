@@ -1,17 +1,28 @@
 import { Schema, Document,model  } from "mongoose";
 export interface IRompecabeza extends Document{
+    Nombre:string,
     FileBlanco:string,
     FileColor:string,
     Estado:string
 }
 
 const rompecabezaSchema = new Schema({
+    Nombre:{
+        type:String,
+        require:true,
+        trim:true
+    },
     FileBlanco:{
         type:String,
         require:true,
         trim:true
     },
     FileColor:{
+        type:String,
+        require:true,
+        trim:true
+    },
+    Juego:{
         type:String,
         require:true,
         trim:true

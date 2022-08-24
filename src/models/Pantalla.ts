@@ -1,5 +1,10 @@
 import {model, Schema, Document} from 'mongoose'
 
+export interface IPantalla extends Document{
+    url:string,
+    estado:boolean,
+    perfil:string
+}
 
 const pantallaSchema = new Schema({    
     url:{
@@ -7,12 +12,16 @@ const pantallaSchema = new Schema({
     },
     estado:{
         type: Boolean
+    },
+    perfil:{
+        type:String
     }
+
 },{
     versionKey:false,
     timestamps:true
 })
 
-export default model('pantalla',pantallaSchema);
+export default model<IPantalla>('pantalla',pantallaSchema);
 
 

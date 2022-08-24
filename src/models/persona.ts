@@ -13,6 +13,7 @@ export interface IPersona extends Document{
     Identificacion:string;
     Estado:string;
     compararPassword(password:string): Promise<boolean>;
+    regresarPerfil():Promise<string>;
 }
 // esquema de la coleccion
 const schemaPerson = new Schema({
@@ -41,7 +42,7 @@ const schemaPerson = new Schema({
     },
     FotoPerfil:{
         type:String,
-        require:true,
+        require:false,
         trim:true
     },
     Usuario:{
@@ -85,6 +86,7 @@ const  salt = await bcrypt.genSalt(10)
 schemaPerson.methods.compararPassword = async function( password: string) : Promise<boolean>{
    return await bcrypt.compare(password,this.Password)
 }
+
 // exportacion del archivo
 export default model<IPersona>('persona',schemaPerson);
 
