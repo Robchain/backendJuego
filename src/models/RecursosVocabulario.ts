@@ -1,4 +1,5 @@
-import {Schema, model,  Document} from 'mongoose';
+import { isObject } from '@typegoose/typegoose/lib/internal/utils';
+import mongoose, {Schema, model,  Document} from 'mongoose';
 
 export interface    IRecursosVocabulario extends Document{
     Categoria:string,
@@ -12,6 +13,7 @@ export interface    IRecursosVocabulario extends Document{
 const schemaRecursosVocabulario =  new Schema({
     Categoria:{
         type:String,
+        //type: mongoose.Types.ObjectId,
         require:true,
         trim:true
     },

@@ -1,20 +1,39 @@
 import {model, Schema, Document} from 'mongoose'
 
 export interface IPantalla extends Document{
-    url:string,
-    estado:boolean,
-    perfil:string
+    Nombre:string,
+    Descripcion:string,
+    Url:string,
+    Estado:string,
+    Perfil:string
 }
 
 const pantallaSchema = new Schema({    
-    url:{
-        type:   String
+    Nombre:{
+        type:String,
+        require:true,
+        trim:true
     },
-    estado:{
-        type: Boolean
+    Descripcion:{
+        type:String,
+        require:true,
+        trim:true
     },
-    perfil:{
-        type:String
+    Url:{
+        type:   String,
+        require:true,
+        trim:true
+    },
+    Estado:{
+        type: String,
+        require:true,
+        trim:true
+    },
+    Perfil:{
+        type:String,
+        default:'Estudiante',
+        require:true,
+        trim:true
     }
 
 },{

@@ -21,15 +21,31 @@ export const subirVocabulario =async (req:Request, res:Response) => {
 
 }
 
-
+//borrar todas las coincidencias 
 export const borrarVocabulario  = async (req:Request,res:Response) => {
   try {
-    const Data  = await Vocabulario.findOneAndDelete(req.body.Palabra);
+    const Data  = await Vocabulario.deleteMany({Palabra:req.body.Palabra});
    res.json(Data);
   } catch (error) {
     res.json(error);
   }
 }
-
+//mostrar toddos en la data
+export const mostrarVocaTodos =async (req:Request, res:Response) => {
+  try {
+    const Data = await Vocabulario.find({},{"createdAt":0,"updatedAt":0});
+    res.json(Data);
+  } catch (error) {
+    res.json(error);
+  }
+}
+export const mostrarVocaPala = async (req:Request,res:Response)=>{
+  try {
+    const Data = await Vocabulario.find({Palabra:req.body.Palabra})
+    res.json(Data);
+  } catch (error) {
+    res.json(error)
+  }
+}
 
 

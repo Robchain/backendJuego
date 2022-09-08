@@ -5,7 +5,7 @@ import config from './config/confi';
 (async () =>{
     try {
        const db = await mongoose.connect(`${config.db.URI}`);
-console.log("ejemplo", db.connection.name); 
+console.log("Base de datos", db.connection.name); 
     } catch (error) {
         console.log(error)
     }

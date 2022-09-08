@@ -1,16 +1,12 @@
 import  {Request, Response} from 'express'
 import Persona, {IPersona} from '../models/Persona';
 import jwt from 'jsonwebtoken';
-
-
 //funcion del token 
 function   createToken(persona:IPersona){
     return jwt.sign({id:persona.id, Email:persona.Email},process.env.TOKKEN_SCRET||'tokendidactico',{
         expiresIn: '1d'
     });
 }
-
-
 // para registrar usuario
 export const signup = async (req:Request, res:Response)=>{
     // guardando un nuevo usuario
@@ -31,8 +27,6 @@ export const signup = async (req:Request, res:Response)=>{
     } catch (error) {
      console.log(error);   
     }
-    
-
 };
 //para el login
 export const signin =  async (req:Request, res:Response)  =>{
@@ -48,9 +42,6 @@ export const signin =  async (req:Request, res:Response)  =>{
    //if(isMatch)  return res.json({'token':createToken(persona)});//forma insegura de enviar el token
    if(isMatch)  return res.json(persona);
 } 
-
-
-
 // datos del usuario
 export const profile    =  async (req: Request, res:Response)=>{
         const user = await  Persona.findById(req.personaId,{password:0});
@@ -60,4 +51,13 @@ export const profile    =  async (req: Request, res:Response)=>{
 // rompecabeza
 export const rompeacabezaAdmn = async (req:Request,res:Response)=>{
  //   const rommpecabezasave = await rompeacabezaAdmn.save()
+}
+
+export const perfiles = async (req:Request, res:Response) => {
+    try {
+        const users = await Persona.find({},{'createdAt':0, 'updatedAt':0, 'Password':0});
+        res.json(users);
+    } catch (error) {
+        res.json(error);
+    }
 }
