@@ -82,6 +82,7 @@ const  salt = await bcrypt.genSalt(10)
 
 });
 
+
 //comprobar si coincide la contraseña guardada
 schemaPerson.methods.compararPassword = async function( password: string) : Promise<boolean>{
    return await bcrypt.compare(password,this.Password)

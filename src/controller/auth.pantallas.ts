@@ -16,6 +16,5 @@ export const personaPantalla = async (req:Request, res:Response) => {
     } catch (error) {
        res.json(error);
     }
-    
 }
 

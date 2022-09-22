@@ -1,6 +1,7 @@
 import { Schema, Document,model  } from "mongoose";
 export interface IRompecabeza extends Document{
     Nombre:string,
+    Pieza:number,
     FileBlanco:string,
     FileColor:string,
     Estado:string
@@ -11,6 +12,12 @@ const rompecabezaSchema = new Schema({
         type:String,
         require:true,
         trim:true
+    },
+    Pieza:{
+        type:Number,
+        require:true,
+        trim:true
+
     },
     FileBlanco:{
         type:String,

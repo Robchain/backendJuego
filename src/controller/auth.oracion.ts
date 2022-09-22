@@ -2,9 +2,6 @@ import Oracion,{IRecursosOracion} from  '../models/RecursosOracion';
 import { Request, Response} from "express";
 
 
-
-
-
 export const subirOracion = async (req:Request, res:Response) => {
     try {
         const oracion:IRecursosOracion  = new  Oracion({
@@ -20,17 +17,17 @@ export const subirOracion = async (req:Request, res:Response) => {
             Estado:req.body.Estado
         })
         const guardarOracion   =    await   oracion.save();
-        res.json(guardarOracion);
-    } catch (error) {
-        res.json(error)
+        res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
+    } catch (error:any) {
+        res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})
     }
 }
 export const borrarOracion  =   async (req:Request,res:Response) => {
     try {
         const data = await Oracion.deleteMany({Oracion:req.body.Oracion})
-        res.json(data);
+        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
     } catch (error) {
-        res.json(error);
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
 } 
 //muestra Oracion Todas
@@ -38,8 +35,8 @@ export const mostrarOracTodos = async (req:Request, res:Response) => {
     try {
         const Data= await   Oracion.find({},{"createdAt":0,"updatedAt":0});
         res.json(Data);
-    } catch (error) {
-        res.json(error)
+    } catch (error) {   
+        res.json({"titulo":"Error","respuesta":`Algo salio mal`, "type":"error"});
     }    
 }
 //muestra Oracion por coincidencia
@@ -52,6 +49,30 @@ try {
 }    
 }
 
+export const editarOracion =async (req:Request, res:Response) => {
+    try {
+        const Data = await Oracion.findByIdAndUpdate(
+            {
+         _id:req.body._id
+            },{
+        $set:{
+            Categoria:req.body.Categoria,
+            Oracion:req.body.Oracion,
+            Verbo:req.body.Verbo,
+            FileSujetoImagen:req.body.FileSujetoImagen,
+            FileAdjetivoImagen:req.body.FileAdjetivoImagen,
+            FileVideoPreguntaQue:req.body.FileVideoPreguntaQue,
+            FileVideoPreguntaQuien:req.body.FileVideoPreguntaQuien,
+            FileVideoPreguntaCompleja:req.body.FileVideoPreguntaCompleja,
+            FileVideoMuestra:req.body.FileVideoMuestra,
+            Estado:req.body.Estado
+        }
+    })
+    res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+    }
+}
 
 /*
 export const example = async (req:Request, res:Response) => {

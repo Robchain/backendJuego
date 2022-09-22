@@ -23,9 +23,10 @@ export const signup = async (req:Request, res:Response)=>{
     })
     try {
         const personaSave = await persona.save();
-        res.json(personaSave);
-    } catch (error) {
-     console.log(error);   
+        res.json({"titulo":"Excelente","respuesta":'guardado con exito',"type":"success"});
+    } catch (e:any) {
+    res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(e.keyPattern)} ya existe`, "type":"error"})
+    /*res.json(Object.keys(e.keyPattern))  */    
     }
 };
 //para el login
@@ -60,4 +61,54 @@ export const perfiles = async (req:Request, res:Response) => {
     } catch (error) {
         res.json(error);
     }
+}
+export const borrarPerfiles =  async (req:Request, res:Response) => {
+    try {
+        const usersd= await Persona.deleteMany({Identificacion:req.body.Identificacion})
+        res.json({"titulo":"Excelente","respuesta":'Borrado con exito',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
+export const editarUser =async (req:Request, res:Response) => {
+    try {
+        const Data  = await Persona.findByIdAndUpdate({
+            _id:req.body._id
+        },{
+            $set:{
+                Nombre: req.body.Nombre,
+                Apellido:req.body.Apellido,
+                Email:req.body.Email,
+                Usuario:req.body.Usuario,
+                FotoPerfil:req.body.FotoPerfil,
+                Password:req.body.Password,
+                TipoUsuario:req.body.TipoUsuario,
+                Identificacion:req.body.Identificacion,
+                Estado:req.body.Estado
+            }
+        })
+        res.json("Actualizado")
+    } catch (error) {
+        res.json("Error de Actualizacion")
+    }
+}
+export const test =async (req:Request,res:Response) => {
+    
+        const Data = await Persona.findById(req.body._id)
+        if(Data){
+            Data.Nombre = req.body.Nombre
+            Data.Apellido   =  req.body.Apellido
+            Data.Email  =   req.body.Email,
+            Data. Usuario    =   req.body.Usuario,
+            Data.FotoPerfil  = req.body.FotoPerfil,
+            Data.Password    =   req.body.Password,
+            Data.TipoUsuario =   req.body.TipoUsuario,
+            Data.Identificacion  =   req.body.Identificacion,
+            Data.Estado  =   req.body.Estado
+            Data.save()
+                res.json({"titulo":"Excelente","respuesta":'Actualizado con exito',"type":"success"})
+        }else{
+            res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"})
+        }
+        
 }
