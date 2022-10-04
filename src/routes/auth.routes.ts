@@ -6,6 +6,7 @@ import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, edi
 import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion } from '../controller/Administrador/auth.oracion';
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}    from '../controller/Administrador/auth.equipo';
+import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
 const router : Router = Router();
 router.post('/signup',signup);
 router.post('/signin',signin);
@@ -46,7 +47,7 @@ router.post('/Equipo', CrearEquipo)
 router.delete('/Equipo/Eliminar',EliminarEquipo)
 router.post('/Equipo/editar',editarEquipo)
 //test de llamadas
-
+router.get('/CallMatch',ArmandoPartida )
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno
 
 export default router;

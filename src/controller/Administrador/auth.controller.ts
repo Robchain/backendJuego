@@ -46,7 +46,7 @@ export const signin =  async (req:Request, res:Response)  =>{
 } 
 // datos del usuario
 export const profile    =  async (req: Request, res:Response)=>{
-        const user = await  Persona.findById(req.personaId,{password:0});
+        const user = await  Persona.findById(req.body.personaId,{password:0});
     if(!user)   return res.status(400).json('no User Found');
     res.json(user);
 }
