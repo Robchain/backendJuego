@@ -1,4 +1,4 @@
-import Categoria,{ICategoria} from "../models/Categoria";
+import Categoria,{ICategoria} from "../../models/Administrador/Categoria";
 import {Request,Response} from 'express';
 
 

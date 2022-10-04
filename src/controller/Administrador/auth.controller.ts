@@ -1,5 +1,5 @@
 import  {Request, Response} from 'express'
-import Persona, {IPersona} from '../models/Persona';
+import Persona, {IPersona} from '../../models/Administrador/Persona';
 import jwt from 'jsonwebtoken';
 
 //funcion del token 

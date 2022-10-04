@@ -1,4 +1,4 @@
-import Rompecabeza,{IRompecabeza} from "../models/RecursosRompecabeza";
+import Rompecabeza,{IRompecabeza} from "../../models/Administrador/RecursosRompecabeza";
 import { Request, Response } from "express";
 export const subirRom= async (req:Request, res:Response) =>{
     try {

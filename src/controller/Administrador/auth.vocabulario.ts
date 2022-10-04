@@ -1,4 +1,4 @@
-import Vocabulario,{IRecursosVocabulario} from "../models/RecursosVocabulario";
+import Vocabulario,{IRecursosVocabulario} from "../../models/Administrador/RecursosVocabulario";
 import { Request, Response } from "express";
 
 export const subirVocabulario =async (req:Request, res:Response) => {    

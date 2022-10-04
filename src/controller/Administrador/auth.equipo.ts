@@ -1,6 +1,6 @@
-import Equipo, {IEquipo} from '../models/Equipo'
+import Equipo, {IEquipo} from '../../models/Administrador/Equipo'
 import { Request, Response } from 'express'
-import Persona from '../models/Persona'
+import Persona from '../../models/Administrador/Persona'
 
 export const CrearEquipo = async (req:Request, res:Response) => {
     try {

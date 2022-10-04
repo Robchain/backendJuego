@@ -1,4 +1,4 @@
-import Pantalla,{IPantalla} from "../models/Pantalla";
+import Pantalla,{IPantalla} from "../../models/Administrador/Pantalla";
 import {Response, Request} from 'express';
 
 

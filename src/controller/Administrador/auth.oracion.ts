@@ -1,4 +1,4 @@
-import Oracion,{IRecursosOracion} from  '../models/RecursosOracion';
+import Oracion,{IRecursosOracion} from  '../../models/Administrador/RecursosOracion';
 import { Request, Response} from "express";
 
 

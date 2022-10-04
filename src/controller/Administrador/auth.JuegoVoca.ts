@@ -1,6 +1,6 @@
-import Rompecabeza,{IRompecabeza} from "../models/RecursosRompecabeza";
-import Vocabulario,{IRecursosVocabulario} from "../models/RecursosVocabulario";
-import EstudianteRompecabeza, {IEstudianteRompecabeza} from "../models/EstudianteRompecabeza";
+import Rompecabeza,{IRompecabeza} from "../../models/Administrador/RecursosRompecabeza";
+import Vocabulario,{IRecursosVocabulario} from "../../models/Administrador/RecursosVocabulario";
+import EstudianteRompecabeza, {IEstudianteRompecabeza} from "../../models/Administrador/EstudianteRompecabeza";
 import { Request, Response } from "express";
 
 export const example = async (req:Request, res:Response) => {
