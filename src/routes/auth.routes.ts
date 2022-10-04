@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
-import { signup, signin,profile,perfiles,borrarPerfiles,editarUser,test } from "../controller/auth.controller";
+import { signup, signin,profile,perfilesActivos,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales } from "../controller/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza} from '../controller/auth.rompecabeza';
 import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario} from '../controller/auth.vocabulario';
 import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion } from '../controller/auth.oracion';
@@ -10,7 +10,9 @@ const router : Router = Router();
 router.post('/signup',signup);
 router.post('/signin',signin);
 router.get('/profile',profile);
-router.get('/verRegistrados',perfiles)
+router.get('/verRegistrados',perfilesActivos)
+router.get('/perfilesNoActivos',perfilesNoActivos)
+router.get('/perfilesTotales',perfilesTotales)
 router.delete('/BorrarUsario', borrarPerfiles)
 router.post('/EditarUsuario',test)
 //rompecabeza
@@ -45,8 +47,7 @@ router.delete('/Equipo/Eliminar',EliminarEquipo)
 router.post('/Equipo/editar',editarEquipo)
 //test de llamadas
 
-//revisar los get y post, ver cual seria mejor o cuando usar cada uno
-
+//revisar los get y post, ver cual seria   mejor o cuando usar cada uno
 
 export default router;
 

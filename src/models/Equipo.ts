@@ -1,5 +1,5 @@
 import mongoose, {Schema, model, Document} from 'mongoose'
-import Persona from './Persona';
+
 
 export interface IEquipo extends Document{
     Nombre:string,

@@ -1,6 +1,7 @@
 import  {Request, Response} from 'express'
 import Persona, {IPersona} from '../models/Persona';
 import jwt from 'jsonwebtoken';
+
 //funcion del token 
 function   createToken(persona:IPersona){
     return jwt.sign({id:persona.id, Email:persona.Email},process.env.TOKKEN_SCRET||'tokendidactico',{
@@ -54,7 +55,24 @@ export const rompeacabezaAdmn = async (req:Request,res:Response)=>{
  //   const rommpecabezasave = await rompeacabezaAdmn.save()
 }
 
-export const perfiles = async (req:Request, res:Response) => {
+export const perfilesActivos = async (req:Request, res:Response) => {
+    try {
+        const users = await Persona.find({Estado:"ACTIVO"},{'createdAt':0, 'updatedAt':0, 'Password':0});
+        res.json(users);
+    } catch (error) {
+        res.json(error);
+    }
+}
+//perfiles no activos
+export const perfilesNoActivos = async (req:Request, res:Response) => {
+    try {
+        const users = await Persona.find({Estado:"DESACTIVADO"},{'createdAt':0, 'updatedAt':0, 'Password':0});
+        res.json(users);
+    } catch (error) {
+        res.json(error);
+    }
+}
+export const perfilesTotales = async (req:Request, res:Response) => {
     try {
         const users = await Persona.find({},{'createdAt':0, 'updatedAt':0, 'Password':0});
         res.json(users);
