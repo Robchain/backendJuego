@@ -66,4 +66,15 @@ export const editarVocabulario =async (req:Request, res:Response) => {
     res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
   }
 }
+// test
+export const testvi =async (req:Request, res:Response) => {
+    try {
+      const Data = await Vocabulario.findOne({Palabra:'PAN'})
+      res.json(Data)
+    } catch (error) {
+      res.json("error al conectarse")
+    }
+}
+
+
 

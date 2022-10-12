@@ -2,7 +2,7 @@ import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
 import { signup, signin,profile,perfilesActivos,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales } from "../controller/Administrador/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
-import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario} from '../controller/Administrador/auth.vocabulario';
+import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi} from '../controller/Administrador/auth.vocabulario';
 import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion } from '../controller/Administrador/auth.oracion';
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}    from '../controller/Administrador/auth.equipo';
@@ -48,6 +48,7 @@ router.delete('/Equipo/Eliminar',EliminarEquipo)
 router.post('/Equipo/editar',editarEquipo)
 //test de llamadas
 router.get('/CallMatch',ArmandoPartida )
+router.get('/testa',testvi)
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno
 
 export default router;
