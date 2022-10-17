@@ -3,4 +3,3 @@ export interface RSI{
     respuesta:string,
     type:string
 }
-
