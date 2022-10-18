@@ -6,16 +6,18 @@ import RecursosRompecabeza, {IRompecabeza} from '../models/Administrador/Recurso
 import Categoria from '../models/Administrador/Categoria';
 
 export const LlamadoTest =async (req:Request, res:Response) => {
-    
     try {
       let data;
+      
         let partida:number= 0
         const rompecabeza= await RecursosRompecabeza.aggregate([{'$sample':{size:1}}])
+        rompecabeza.map(i=>{if(i.Pieza){
+          partida = parseInt(i.Pieza) + 1
+        }})
         const categoria = await Categoria.aggregate([{'$sample':{size:1}}])
         categoria.map(i=>{if(i.NombreCategoria){
            data =  i.NombreCategoria.toString()
         }})
-        console.log(data)
         const opciones = await Vocabulario.aggregate([
             {
               '$match': {
@@ -36,10 +38,12 @@ export const LlamadoTest =async (req:Request, res:Response) => {
             Respuesta:'Correcta',
             Rompecabeza:rompecabeza,
             Categoria:categoria,
-            Partida:partida,
+            Partidas:{
+            Juego:partida,
             Opciones:opciones,
             Correcta:correcta
-        }
+            }
+        }//corregir esto, terminarlo hoy
         res.json(resa);
     } catch (error) {
         res.json(error);

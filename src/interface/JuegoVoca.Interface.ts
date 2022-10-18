@@ -2,11 +2,18 @@ import { IRecursosVocabulario } from "../models/Administrador/RecursosVocabulari
 import { IRompecabeza } from '../models/Administrador/RecursosRompecabeza';
 import { ICategoria } from '../models/Administrador/Categoria';
 export interface IPieza {
-    Respuesta:string,
-    Rompecabeza:IRompecabeza[],
-    Categoria:ICategoria[],
-    Partida:number,
-    Opciones:IRecursosVocabulario[],
-    Correcta:IRecursosVocabulario[],
+    Respuesta:string;
+    Rompecabeza:IRompecabeza[];
+    Categoria:ICategoria[];
+    Partidas?:Partida;
+}
+
+
+
+export interface Partida{
+    Juego:number;
+    Opciones:IRecursosVocabulario[];
+    Correcta:IRecursosVocabulario[];
+
 }
 
