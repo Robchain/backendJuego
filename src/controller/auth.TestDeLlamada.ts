@@ -8,13 +8,18 @@ import Categoria from '../models/Administrador/Categoria';
 export const LlamadoTest =async (req:Request, res:Response) => {
     
     try {
+      let data;
         let partida:number= 0
         const rompecabeza= await RecursosRompecabeza.aggregate([{'$sample':{size:1}}])
         const categoria = await Categoria.aggregate([{'$sample':{size:1}}])
+        categoria.map(i=>{if(i.NombreCategoria){
+           data =  i.NombreCategoria.toString()
+        }})
+        console.log(data)
         const opciones = await Vocabulario.aggregate([
             {
               '$match': {
-                'Categoria': 'PLANTA'
+                'Categoria': data
               }
             },
             {'$sample':{size:2}}
@@ -22,7 +27,7 @@ export const LlamadoTest =async (req:Request, res:Response) => {
           const correcta = await Vocabulario.aggregate([
             {
               '$match': {
-                'Categoria': 'PLANTA'
+                'Categoria':data
               }
             },
             {'$sample':{size:1}}
@@ -40,4 +45,5 @@ export const LlamadoTest =async (req:Request, res:Response) => {
         res.json(error);
     }
 }
+
 

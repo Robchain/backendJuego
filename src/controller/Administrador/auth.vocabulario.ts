@@ -18,7 +18,6 @@ export const subirVocabulario =async (req:Request, res:Response) => {
    } catch (error:any) {
     res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})
    }
-
 }
 
 //borrar todas las coincidencias 
