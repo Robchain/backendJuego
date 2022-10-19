@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
-import { signup, signin,profile,perfilesActivos,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales } from "../controller/Administrador/auth.controller";
+import { SoloEstudiantes,signup, signin,profile,perfilesActivos,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales } from "../controller/Administrador/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
 import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi} from '../controller/Administrador/auth.vocabulario';
 import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion } from '../controller/Administrador/auth.oracion';
@@ -51,6 +51,7 @@ router.post('/Equipo/editar',editarEquipo)
 router.get('/CallMatch',ArmandoPartida )
 router.get('/testa',testvi)
 router.get('/llamado',LlamadoTest)
+router.get('/Listado-Estudiante', SoloEstudiantes)
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno
 
 export default router;
