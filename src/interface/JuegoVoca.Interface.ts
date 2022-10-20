@@ -12,4 +12,3 @@ export interface IPieza {
     Assets:IVocabulary[];
 }
 
-
