@@ -10,3 +10,5 @@ export interface IPieza {
     Correcta:IRecursosVocabulario[],
 }
 
+
+
