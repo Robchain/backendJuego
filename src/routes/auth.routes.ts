@@ -7,12 +7,12 @@ import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOraci
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
-import { LlamadoTest } from '../controller/auth.TestDeLlamada';
+import { LlamadoTest, RecibirJson } from '../controller/auth.TestDeLlamada';
 const router : Router = Router();
 router.post('/signup',signup);
 router.post('/signin',signin);
 router.get('/profile',profile);
-router.get('/verRegistrados',perfilesActivos)
+router.get('/Ver-Registrados-Activos',perfilesActivos)
 router.get('/perfilesNoActivos',perfilesNoActivos)
 router.get('/perfilesTotales',perfilesTotales)
 router.delete('/BorrarUsario', borrarPerfiles)
@@ -52,6 +52,7 @@ router.get('/CallMatch',ArmandoPartida )
 router.get('/testa',testvi)
 router.get('/llamado',LlamadoTest)
 router.get('/Listado-Estudiante', SoloEstudiantes)
+router.post('/RecibidoPrueba',RecibirJson)
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno
 
 export default router;

@@ -51,4 +51,18 @@ export const LlamadoTest =  async (req:Request, res:Response) => {
         res.json(error);
     }
 }
+//adasdasdasd
 
+export const RecibirJson = async (req:Request, res:Response) => {
+  
+    try {
+      const data = {Primero:req.body.primero,
+                     Segundo:req.body.segundo,
+                    Tercero:req.body.tercero,
+                    Cuarto:req.body.cuarto }
+      res.json(data)
+      console.log(data)
+    } catch (error) {
+      res.json(error)
+    }
+}
