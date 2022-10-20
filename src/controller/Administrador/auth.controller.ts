@@ -130,3 +130,13 @@ export const test =async (req:Request,res:Response) => {
         }
         
 }
+
+
+export const SoloEstudiantes =async (req:Request,res:Response) => {
+    try {
+        const users = await Persona.find({TipoUsuario:"ESTUDIANTE"},{'createdAt':0, 'updatedAt':0, 'Password':0});
+        res.json(users);
+    } catch (error) {
+        res.json(error)
+    }
+}
