@@ -8,6 +8,7 @@ import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,Editar
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
 import { LlamadoTest, RecibirJson } from '../controller/auth.TestDeLlamada';
+import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 const router : Router = Router();
 router.post('/signup',signup);
 router.post('/signin',signin);
@@ -47,6 +48,9 @@ router.get('/Equipo/mostrartodo',MostrarEquipo);
 router.post('/Equipo', CrearEquipo)
 router.delete('/Equipo/Eliminar',EliminarEquipo)
 router.post('/Equipo/editar',editarEquipo)
+//MultiJugador
+router.post('/MultiJugador', CrearEvento)
+router.get('/MultiJugador/Presentacion', PEvento)
 //test de llamadas
 router.get('/CallMatch',ArmandoPartida )
 router.get('/testa',testvi)

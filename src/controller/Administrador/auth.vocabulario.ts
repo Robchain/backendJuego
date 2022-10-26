@@ -71,7 +71,7 @@ export const testvi =async (req:Request, res:Response) => {
       const Data = await Vocabulario.findOne({Palabra:'PAN'})
       res.json(Data)
     } catch (error) {
-      res.json("error al conectarse")
+      res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
     }
 }
 

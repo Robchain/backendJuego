@@ -29,6 +29,7 @@ export const signup = async (req:Request, res:Response)=>{
     res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(e.keyPattern)} ya existe`, "type":"error"})
     /*res.json(Object.keys(e.keyPattern))  */    
     }
+    
 };
 //para el login
 export const signin =  async (req:Request, res:Response)  =>{
