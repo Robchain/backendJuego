@@ -41,7 +41,7 @@ export const signin =  async (req:Request, res:Response)  =>{
    const isMatch:boolean = await persona.compararPassword(req.body.Password)
    if(!isMatch) return res.json({'respuesta':"Contraseña incorrecta"});//res.status(400).json('Contraseña incorrecta');
 //crea el token
-   //if(isMatch)  return res.header('t', createToken(persona)).json({});//lo envia 
+   if(isMatch)  return res.header('t', createToken(persona)).json({});//lo envia 
    //if(isMatch)  return res.json({'token':createToken(persona)});//forma insegura de enviar el token
    if(isMatch)  return res.json(persona);
 } 

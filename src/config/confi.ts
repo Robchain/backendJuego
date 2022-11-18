@@ -3,6 +3,6 @@ export default  {
         URI: "mongodb+srv://robertrrr:Roro2069@robertrr.wuxak.mongodb.net/Testi"
     },
     SECRET:{
-        
+        code:'ProjectoBlipBla2022_'
     }
 }

@@ -10,10 +10,10 @@ import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
 import { LlamadoTest, RecibirJson } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 const router : Router = Router();
-router.post('/signup',signup);
+router.post('/signup' ,signup);
 router.post('/signin',signin);
 router.get('/profile',profile);
-router.get('/Ver-Registrados-Activos',perfilesActivos)
+router.get('/Ver-Registrados-Activos', validarToken,perfilesActivos)
 router.get('/perfilesNoActivos',perfilesNoActivos)
 router.get('/perfilesTotales',perfilesTotales)
 router.delete('/BorrarUsario', borrarPerfiles)

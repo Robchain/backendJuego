@@ -10,7 +10,7 @@ export const validarToken =  (req:Request, res:Response, next:NextFunction)  =>{
 
     const Token =  req.header('token'); 
 
-    if(!Token) return res.status(401).json("denegado");
+    if(!Token) return res.status(401).json({"titulo":"Error","respuesta":`Falta Token`, "type":"error"});
 
     const payload   =   jwt.verify(Token, process.env.TOKKEN_SCRET||'tokendidactico')as IPayload;
     
