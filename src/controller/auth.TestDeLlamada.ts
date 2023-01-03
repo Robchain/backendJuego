@@ -1,27 +1,57 @@
 import {Request, Response} from 'express';
-import { ICategory } from '../interface/Categoria.interface';
-import { IVocabulary } from '../interface/Vocabulario.Interface';
-import Vocabulario, {IRecursosVocabulario} from '../models/Administrador/RecursosVocabulario'
-import { IJuegoV, IPrePartida, IVocabularioP, Palabra1Class } from '../interface/JuegoVoca.Interface';
-import RecursosRompecabeza, {IRompecabeza} from '../models/Administrador/RecursosRompecabeza';
-import Persona, {IPersona} from '../models/Administrador/Persona';
+import Vocabulario from '../models/Administrador/RecursosVocabulario'
+import PartidaVocabuario, {IPartidaVocabulario} from '../models/Juego/Vocabulario/PartidaVocabulario'
 import Categoria from '../models/Administrador/Categoria';
-import { IPuzzle } from '../interface/Rompecabeza.Interface';
 import Rompecabeza from '../models/Administrador/RecursosRompecabeza';
 
-//adasdasdasd
 
 export const RecibirJson = async (req:Request, res:Response) => { 
   try {
+    let juego1 ={}
+      let juego2 ={}
+      let juego3 ={}
+      let juego4 ={}
+      let juego5 ={}
+      let juego6={}
+      let juego7={}
     let rompecabeza = await rompecabezas();
-    let juego1 = await partidas5();  
-    let juego2 = await partidas5();
-    let juego3 = await partidas5();
-    let juego4 = await partidas5();
-    let juego5 = await partidas5();
-
-    res.json({rompecabeza,juego1, juego2, juego3, juego4, juego5})
-
+    if(rompecabeza.Pieza === 4){
+       juego1 = await partidas5();  
+       juego2 = await partidas5();
+       juego3 = await partidas5();
+       juego4 = await partidas5();
+       juego5 = await partidas5();
+       const PartidaVocabuarioN:IPartidaVocabulario  = new  PartidaVocabuario({
+        Rompecabeza:rompecabeza,
+        Juego1:juego1,
+        Juego2:juego2,
+        Juego3:juego3,
+        Juego4:juego4,
+        Juego5:juego5,
+    })
+    PartidaVocabuarioN.save();
+      res.json({rompecabeza,juego1, juego2, juego3, juego4, juego5})
+    }else if(rompecabeza.Pieza===6){
+      juego1 = await partidas5();  
+      juego2 = await partidas5();
+      juego3 = await partidas5();
+      juego4 = await partidas5();
+      juego5 = await partidas5();
+      juego6=await partidas5();
+      juego7=await partidas5();
+      const PartidaVocabuarioN:IPartidaVocabulario  = new   PartidaVocabuario({
+        Rompecabeza:rompecabeza,
+        Juego1:juego1,
+        Juego2:juego2,
+        Juego3:juego3,
+        Juego4:juego4,
+        Juego5:juego5,
+        Juego6:juego6,
+        Juego7:juego7
+    })
+    PartidaVocabuarioN.save();
+      res.json({rompecabeza,juego1, juego2, juego3, juego4, juego5, juego6, juego7})
+    }
     } catch (error) {
       res.json(error)
     }
@@ -77,19 +107,21 @@ const partidas5 = async () =>  {
 
   let final = {
     categoria : categoria[0],
-    vocabulario :{correcto:vocabulario[0].correcto[0],incorrecto1:vocabulario[0].incorrecto[0]}
+    vocabulario :{correcto:vocabulario[0].correcto[0],incorrecto1:vocabulario[0].incorrecto[0], incorrecto2:vocabulario[0].incorrecto[1]}
 
   }
-
 return final;    
 }
-
-
 const rompecabezas =async () => {
   let rompecabeza  = [];
   
   rompecabeza = await Rompecabeza.aggregate([
     {
+      '$match':{
+        "Estado":true
+      }
+    }
+    ,{
       '$sample': {
         'size': 1
       }
@@ -147,18 +179,23 @@ export const testas = async (req:Request, res:Response) =>  {
       }
     },
     {
-      $project: {
-        correcto: {
-          $arrayElemAt: ["$correcto", 0]
-        },
-        incorrecto: {
-          $arrayElemAt: ["$incorrecto", 0]
-        }
-      }
-    }
+      $unwind: "$correcto"
+    },
   ]);
   res.json( vocabulario);
-
-
 }
 
+export const partidaEstudiante =async (req:Request, res:Response) => {
+  try { 
+ const respuesta = await  PartidaVocabuario.aggregate([
+  {
+    '$sample': {
+      'size': 6
+    }
+  }
+]);
+res.json({Juego1:respuesta[0],Juego2:respuesta[1],Juego3:respuesta[2],Juego4:respuesta[3],Juego5:respuesta[4],Juego6:respuesta[5],}) 
+  } catch (error) { 
+    res.json(error)
+  }
+}
