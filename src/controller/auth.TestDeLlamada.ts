@@ -58,60 +58,80 @@ export const RecibirJson = async (req:Request, res:Response) => {
 }
 
 const partidas5 = async () =>  { 
-  let vocabulario = [];
-    let categoria = []; 
-  
-  categoria = await Categoria.aggregate([
+  let vocabulario: any[] = [];
+  let categoria = []; 
+  let Palabras=[];
+
+categoria = await Categoria.aggregate([
+{
+  '$sample': {
+    'size': 1
+  }
+}, {
+  '$limit': 1
+}
+]);
+vocabulario = await  Vocabulario.aggregate([
   {
-    '$sample': {
-      'size': 1
+    '$match': {
+      'Categoria': categoria[0].NombreCategoria
     }
   }, {
-    '$limit': 1
-  }
+    '$sample': {
+      'size': 3
+    }
+  },  {
+    $facet: {
+      correcto: [
+        {
+          $addFields: {
+            Respuesta: "CORRECTO"
+          }
+        },
+        {
+          $limit: 1
+        }
+      ],
+      incorrecto: [
+        {
+          $addFields: {
+            Respuesta: "INCORRECTO"
+          }
+        },
+        {
+          $skip: 1
+        }
+      ]
+    }
+  },
 ]);
- vocabulario = await  Vocabulario.aggregate([
-    {
-      '$match': {
-        'Categoria': categoria[0].NombreCategoria
-      }
-    }, {
-      '$sample': {
-        'size': 3
-      }
-    },  {
-      $facet: {
-        correcto: [
-          {
-            $addFields: {
-              Respuesta: "CORRECTO"
-            }
-          },
-          {
-            $limit: 1
-          }
-        ],
-        incorrecto: [
-          {
-            $addFields: {
-              Respuesta: "INCORRECTO"
-            }
-          },
-          {
-            $skip: 1
-          }
-        ]
-      }
-    },
-  ]);
+if(vocabulario[0].correcto[0]){
+  let arrayId = [vocabulario[0].correcto[0]._id.toString(), vocabulario[0].incorrecto[0]._id.toString(),vocabulario[0].incorrecto[1]._id.toString()]
+  arrayId.sort();
+  console.log(arrayId);
+  Palabras = arrayId.map( x =>{
+    if(vocabulario[0].correcto[0]._id.toString() === x){
+      return vocabulario[0].correcto[0];
+    }
+    if(vocabulario[0].incorrecto[0]._id.toString() === x){
+      return vocabulario[0].incorrecto[0];
+    }
+    if(vocabulario[0].incorrecto[1]._id.toString() === x){
+      return vocabulario[0].incorrecto[1];
+    }
+  })
+}
 
-  let final = {
-    categoria : categoria[0],
-    vocabulario :{correcto:vocabulario[0].correcto[0],incorrecto1:vocabulario[0].incorrecto[0], incorrecto2:vocabulario[0].incorrecto[1]}
-
-  }
+let final = {
+  categoria : categoria[0],
+  vocabulario:{
+  Palabra1:Palabras[0],
+  Palabra2:Palabras[1],
+  Palabra3:Palabras[2],
+}}
 return final;    
 }
+//--------------------------
 const rompecabezas =async () => {
   let rompecabeza  = [];
   
@@ -198,4 +218,79 @@ res.json({Juego1:respuesta[0],Juego2:respuesta[1],Juego3:respuesta[2],Juego4:res
   } catch (error) { 
     res.json(error)
   }
+}
+
+
+export const prueba = async (req:Request, res:Response) =>  { 
+  let vocabulario: any[] = [];
+    let categoria = []; 
+    let Palabras=[];
+  
+  categoria = await Categoria.aggregate([
+  {
+    '$sample': {
+      'size': 1
+    }
+  }, {
+    '$limit': 1
+  }
+]);
+ vocabulario = await  Vocabulario.aggregate([
+    {
+      '$match': {
+        'Categoria': categoria[0].NombreCategoria
+      }
+    }, {
+      '$sample': {
+        'size': 3
+      }
+    },  {
+      $facet: {
+        correcto: [
+          {
+            $addFields: {
+              Respuesta: "CORRECTO"
+            }
+          },
+          {
+            $limit: 1
+          }
+        ],
+        incorrecto: [
+          {
+            $addFields: {
+              Respuesta: "INCORRECTO"
+            }
+          },
+          {
+            $skip: 1
+          }
+        ]
+      }
+    },
+  ]);
+  if(vocabulario[0].correcto[0]){
+    let arrayId = [vocabulario[0].correcto[0]._id.toString(), vocabulario[0].incorrecto[0]._id.toString(),vocabulario[0].incorrecto[1]._id.toString()]
+    arrayId.sort();
+    console.log(arrayId);
+    Palabras = arrayId.map( x =>{
+      if(vocabulario[0].correcto[0]._id.toString() === x){
+        return vocabulario[0].correcto[0];
+      }
+      if(vocabulario[0].incorrecto[0]._id.toString() === x){
+        return vocabulario[0].incorrecto[0];
+      }
+      if(vocabulario[0].incorrecto[1]._id.toString() === x){
+        return vocabulario[0].incorrecto[1];
+      }
+    })
+  }
+
+  let final = {
+    categoria : categoria[0],
+    Palabra1:Palabras[0],
+    Palabra2:Palabras[1],
+    Palabra3:Palabras[2],
+  }
+res.json(final);    
 }
