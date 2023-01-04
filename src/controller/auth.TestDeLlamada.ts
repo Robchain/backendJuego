@@ -108,7 +108,6 @@ vocabulario = await  Vocabulario.aggregate([
 if(vocabulario[0].correcto[0]){
   let arrayId = [vocabulario[0].correcto[0]._id.toString(), vocabulario[0].incorrecto[0]._id.toString(),vocabulario[0].incorrecto[1]._id.toString()]
   arrayId.sort();
-  console.log(arrayId);
   Palabras = arrayId.map( x =>{
     if(vocabulario[0].correcto[0]._id.toString() === x){
       return vocabulario[0].correcto[0];
