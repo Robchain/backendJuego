@@ -53,6 +53,11 @@ router.post('/MultiJugador', CrearEvento)
 router.get('/MultiJugador/Presentacion', PEvento)
 //armar partidas
 router.get('/partidaVocabularioInicial',testas)
+//Juego Vocabulario
+
+
+
+
 //test de llamadas
 router.get('/CallMatch',ArmandoPartida )
 router.get('/testa',testvi)
