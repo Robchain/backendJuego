@@ -1,7 +1,8 @@
 import {Schema, Document, model} from "mongoose";
+import { IRompecabeza } from "../../Administrador/RecursosRompecabeza";
 
 export interface IPartidaVocabulario extends Document{
-    Rompecabeza:object,
+    Rompecabeza:IRompecabeza,
     Juego1:object,
     Juego2:object,
     Juego3:object,

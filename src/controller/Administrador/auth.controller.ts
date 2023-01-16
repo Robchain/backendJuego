@@ -1,6 +1,9 @@
 import  {Request, Response} from 'express'
 import Persona, {IPersona} from '../../models/Administrador/Persona';
 import jwt from 'jsonwebtoken';
+import PartidaVocabulario from '../../models/Juego/Vocabulario/PartidaVocabulario';
+import JugadoresConVocabularios, {IJugadoresConVocabulario} from '../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
+import { modeloPartida } from '../auth.TestDeLlamada';
 
 //funcion del token 
 function   createToken(persona:IPersona){
@@ -24,7 +27,69 @@ export const signup = async (req:Request, res:Response)=>{
     })
     try {
         const personaSave = await persona.save();
-        res.json({"titulo":"Excelente","respuesta":'guardado con exito',"type":"success"});
+        const partidaI = await PartidaVocabulario.find().limit(6);
+        const juegosVocabulario:IJugadoresConVocabulario = new JugadoresConVocabularios({
+            Estudiante:{id:personaSave._id,
+                Nombre:personaSave.Nombre,
+                Usuario:personaSave.Usuario,
+            },
+            Partida:partidaI[0],
+            Avance:modeloPartida(partidaI[0].Rompecabeza.Pieza),
+        });
+        juegosVocabulario.save();
+//dos
+const juegosVocabulario2:IJugadoresConVocabulario = new JugadoresConVocabularios({
+    Estudiante:{id:personaSave._id,
+        Nombre:personaSave.Nombre,
+        Usuario:personaSave.Usuario,
+    },
+    Partida:partidaI[1],
+    Avance:modeloPartida(partidaI[1].Rompecabeza.Pieza),
+});
+juegosVocabulario2.save();
+//tres
+const juegosVocabulario3:IJugadoresConVocabulario = new JugadoresConVocabularios({
+    Estudiante:{id:personaSave._id,
+        Nombre:personaSave.Nombre,
+        Usuario:personaSave.Usuario,
+    },
+    Partida:partidaI[2],
+    Avance:modeloPartida(partidaI[2].Rompecabeza.Pieza),
+});
+juegosVocabulario3.save();
+//cuatro
+const juegosVocabulario4:IJugadoresConVocabulario = new JugadoresConVocabularios({
+    Estudiante:{id:personaSave._id,
+        Nombre:personaSave.Nombre,
+        Usuario:personaSave.Usuario,
+    },
+    Partida:partidaI[3],
+    Avance:modeloPartida(partidaI[3].Rompecabeza.Pieza),
+});
+juegosVocabulario4.save();
+
+//cinco
+const juegosVocabulario5:IJugadoresConVocabulario = new JugadoresConVocabularios({
+    Estudiante:{id:personaSave._id,
+        Nombre:personaSave.Nombre,
+        Usuario:personaSave.Usuario,
+    },
+    Partida:partidaI[4],
+    Avance:modeloPartida(partidaI[4].Rompecabeza.Pieza),
+});
+juegosVocabulario5.save();
+//seis
+const juegosVocabulario6:IJugadoresConVocabulario = new JugadoresConVocabularios({
+    Estudiante:{id:personaSave._id,
+        Nombre:personaSave.Nombre,
+        Usuario:personaSave.Usuario,
+    },
+    Partida:partidaI[5],
+    Avance:modeloPartida(partidaI[5].Rompecabeza.Pieza),
+});
+juegosVocabulario6.save();
+res.json({"titulo":"Excelente","respuesta":'guardado con exito',"type":"success"});
+
     } catch (e:any) {
     res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(e.keyPattern)} ya existe`, "type":"error"})
     /*res.json(Object.keys(e.keyPattern))  */    
@@ -35,13 +100,13 @@ export const signup = async (req:Request, res:Response)=>{
 export const signin =  async (req:Request, res:Response)  =>{
     if(!req.body.Password||!req.body.Email)   return res.status(400).json({'respuesta':'falta correo y contraseña'})
 
-    const persona = await Persona.findOne({Email:req.body.Email})
+    const persona = await Persona.findOne({"Email":req.body.Email})
     
     if(!persona)    return res.json({'respuesta':'Correo o contraseña incorrecta'}); 
    const isMatch:boolean = await persona.compararPassword(req.body.Password)
    if(!isMatch) return res.json({'respuesta':"Contraseña incorrecta"});//res.status(400).json('Contraseña incorrecta');
 //crea el token
-   if(isMatch)  return res.header('t', createToken(persona)).json({});//lo envia 
+   //if(isMatch)  return res.header('t', createToken(persona)).json({});//lo envia 
    //if(isMatch)  return res.json({'token':createToken(persona)});//forma insegura de enviar el token
    if(isMatch)  return res.json(persona);
 } 

@@ -7,7 +7,7 @@ import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOraci
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
-import { /*partidaVocabularioInicial,*/ RecibirJson, testas,partidaEstudiante, prueba } from '../controller/auth.TestDeLlamada';
+import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario /*modeloPartida*/  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 const router : Router = Router();
 router.post('/signup' ,signup);
@@ -54,6 +54,7 @@ router.get('/MultiJugador/Presentacion', PEvento)
 //armar partidas
 router.get('/partidaVocabularioInicial',testas)
 //Juego Vocabulario
+router.post("/llamadaPartidaVocabulario",  llamadaPartidaVocabulario)
 
 
 
@@ -63,8 +64,9 @@ router.get('/CallMatch',ArmandoPartida )
 router.get('/testa',testvi)
 router.get('/Listado-Estudiante', SoloEstudiantes)
 router.get('/RecibidoPrueba',RecibirJson)
-router.get('/partidaEstudiante',partidaEstudiante);
+/*router.get('/partidaEstudiante',partidaEstudiante);*/
 router.get('/prueba',prueba);
+
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno
 
 export default router;
