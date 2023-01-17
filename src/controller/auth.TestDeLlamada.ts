@@ -3,8 +3,7 @@ import Vocabulario from '../models/Administrador/RecursosVocabulario'
 import PartidaVocabuario, {IPartidaVocabulario} from '../models/Juego/Vocabulario/PartidaVocabulario'
 import Categoria from '../models/Administrador/Categoria';
 import Rompecabeza from '../models/Administrador/RecursosRompecabeza';
-import { IModeloPartida } from '../interface/ModeloPartida';
-import JugadoresConVocabularios from '../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
+import JugadoresConVocabularios, {IJugadoresConVocabulario} from '../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
 
 
 export const RecibirJson = async (req:Request, res:Response) => { 
@@ -325,6 +324,7 @@ export const modeloPartida =(rompecabeza:number)=>{
     PalabraCorrecta:"",
     PalabraSeleccionada:"",
     Resultado:"",
+    Terminado:false
   };
   let Juego1={};
   let Juego2={};
@@ -386,4 +386,22 @@ export const llamadaPartidaVocabulario = async (req:Request, res:Response)=>{
 
   }
 }
+
+// actualizacion
+
+export const UpdateTerminadoVocabulario =async (req:Request, res:Response) => {
+  
+  try {
+   const dad= await  JugadoresConVocabularios.updateMany({id:req.body.id}, {
+      "Avance.Juego1.PalabraCorrecta":req.body.PalabraCorrecta,
+      "Avance.Juego1.PalabraSeleccionada":req.body.PalabraSeleccionada,
+      "Avance.Juego1.Resultado":req.body.Resultado.Resultado,
+      "Avance.Juego1.Terminado":req.body.Resultado.Terminado
+    })
+    res.json(dad);
+  } catch (error) {
+    
+  }
+} 
+
 

@@ -7,7 +7,7 @@ import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOraci
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
-import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario /*modeloPartida*/  } from '../controller/auth.TestDeLlamada';
+import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario /*modeloPartida*/  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 const router : Router = Router();
 router.post('/signup' ,signup);
@@ -64,6 +64,7 @@ router.get('/CallMatch',ArmandoPartida )
 router.get('/testa',testvi)
 router.get('/Listado-Estudiante', SoloEstudiantes)
 router.get('/RecibidoPrueba',RecibirJson)
+router.post("/UpdateTerminadoVocabulario", UpdateTerminadoVocabulario)
 /*router.get('/partidaEstudiante',partidaEstudiante);*/
 router.get('/prueba',prueba);
 
