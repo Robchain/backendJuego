@@ -7,7 +7,7 @@ import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOraci
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
-import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario /*modeloPartida*/  } from '../controller/auth.TestDeLlamada';
+import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 const router : Router = Router();
 router.post('/signup' ,signup);
@@ -55,16 +55,19 @@ router.get('/MultiJugador/Presentacion', PEvento)
 router.get('/partidaVocabularioInicial',testas)
 //Juego Vocabulario
 router.post("/llamadaPartidaVocabulario",  llamadaPartidaVocabulario)
-
-
-
+router.post("/UpdateTerminadoVocabulario1", UpdateTerminadoVocabulario1)
+router.post("/UpdateTerminadoVocabulario2", UpdateTerminadoVocabulario2);
+router.post("/UpdateTerminadoVocabulario3", UpdateTerminadoVocabulario3);
+router.post("/UpdateTerminadoVocabulario4", UpdateTerminadoVocabulario4);
+router.post("/UpdateTerminadoVocabulario5", UpdateTerminadoVocabulario5);
+router.post("/UpdateTerminadoVocabulario6", UpdateTerminadoVocabulario6);
+router.post("/UpdateTerminadoVocabulario7", UpdateTerminadoVocabulario7);
 
 //test de llamadas
 router.get('/CallMatch',ArmandoPartida )
 router.get('/testa',testvi)
 router.get('/Listado-Estudiante', SoloEstudiantes)
 router.get('/RecibidoPrueba',RecibirJson)
-router.post("/UpdateTerminadoVocabulario", UpdateTerminadoVocabulario)
 /*router.get('/partidaEstudiante',partidaEstudiante);*/
 router.get('/prueba',prueba);
 

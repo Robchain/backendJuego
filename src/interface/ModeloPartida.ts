@@ -14,4 +14,5 @@ export interface Juego {
     PalabraCorrecta:     string;
     PalabraSeleccionada: string;
     Resultado:           string;
+    Terminado:           boolean;
 }
