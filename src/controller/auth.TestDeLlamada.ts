@@ -5,7 +5,6 @@ import Categoria from '../models/Administrador/Categoria';
 import Rompecabeza from '../models/Administrador/RecursosRompecabeza';
 import JugadoresConVocabularios, {IJugadoresConVocabulario} from '../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
 
-
 export const RecibirJson = async (req:Request, res:Response) => { 
   try {
     let juego1 ={}

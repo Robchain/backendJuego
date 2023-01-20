@@ -28,6 +28,7 @@ export const signup = async (req:Request, res:Response)=>{
     try {
         const personaSave = await persona.save();
         const partidaI = await PartidaVocabulario.find().limit(6);
+        //UNO
         const juegosVocabulario:IJugadoresConVocabulario = new JugadoresConVocabularios({
             Estudiante:{id:personaSave._id,
                 Nombre:personaSave.Nombre,
