@@ -7,7 +7,7 @@ import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOraci
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
-import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7  } from '../controller/auth.TestDeLlamada';
+import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7, UpdateTerminadoVocabularioFinal  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 const router : Router = Router();
 router.post('/signup' ,signup);
@@ -62,6 +62,7 @@ router.post("/UpdateTerminadoVocabulario4", UpdateTerminadoVocabulario4);
 router.post("/UpdateTerminadoVocabulario5", UpdateTerminadoVocabulario5);
 router.post("/UpdateTerminadoVocabulario6", UpdateTerminadoVocabulario6);
 router.post("/UpdateTerminadoVocabulario7", UpdateTerminadoVocabulario7);
+router.post("UpdateTerminadoVocabularioFinal",UpdateTerminadoVocabularioFinal);
 
 //test de llamadas
 router.get('/CallMatch',ArmandoPartida )
