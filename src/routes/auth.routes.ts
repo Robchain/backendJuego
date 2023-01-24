@@ -62,7 +62,8 @@ router.post("/UpdateTerminadoVocabulario4", UpdateTerminadoVocabulario4);
 router.post("/UpdateTerminadoVocabulario5", UpdateTerminadoVocabulario5);
 router.post("/UpdateTerminadoVocabulario6", UpdateTerminadoVocabulario6);
 router.post("/UpdateTerminadoVocabulario7", UpdateTerminadoVocabulario7);
-router.post("UpdateTerminadoVocabularioFinal",UpdateTerminadoVocabularioFinal);
+router.post("/UpdateTerminadoVocabularioFinal",UpdateTerminadoVocabularioFinal);
+//Juego Oracion
 
 //test de llamadas
 router.get('/CallMatch',ArmandoPartida )

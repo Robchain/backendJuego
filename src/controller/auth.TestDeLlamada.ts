@@ -497,7 +497,7 @@ export const UpdateTerminadoVocabulario7 =async (req:Request, res:Response) => {
 export const UpdateTerminadoVocabularioFinal =async (req:Request, res:Response) => {
   try {
      const dad= await  JugadoresConVocabularios.updateOne({_id:req.body.id}, {
-    'Avance.Terminado':req.body.Terminado,
+    'Avance.Terminado':req.body.Terminado
     });
     res.json(dad);
   } catch (error) {
