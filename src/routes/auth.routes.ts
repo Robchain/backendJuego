@@ -9,6 +9,8 @@ import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
 import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7, UpdateTerminadoVocabularioFinal  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
+import { uniendoPartida } from '../controller/Juego/OracionPartidas';
+
 const router : Router = Router();
 router.post('/signup' ,signup);
 router.post('/signin',signin);
@@ -64,6 +66,8 @@ router.post("/UpdateTerminadoVocabulario6", UpdateTerminadoVocabulario6);
 router.post("/UpdateTerminadoVocabulario7", UpdateTerminadoVocabulario7);
 router.post("/UpdateTerminadoVocabularioFinal",UpdateTerminadoVocabularioFinal);
 //Juego Oracion
+router.get("/uniendoPartida",uniendoPartida);
+
 
 //test de llamadas
 router.get('/CallMatch',ArmandoPartida )
