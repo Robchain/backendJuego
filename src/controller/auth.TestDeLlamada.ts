@@ -503,5 +503,3 @@ export const UpdateTerminadoVocabularioFinal = async (req: Request, res: Respons
 
   }
 }
-
-

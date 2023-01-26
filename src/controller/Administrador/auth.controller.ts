@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import PartidaVocabulario from '../../models/Juego/Vocabulario/PartidaVocabulario';
 import JugadoresConVocabularios, {IJugadoresConVocabulario} from '../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
 import { modeloPartida } from '../auth.TestDeLlamada';
+import { UnirUsuarioConOraciones } from '../Juego/OracionPartidas';
 
 //funcion del token 
 function   createToken(persona:IPersona){
@@ -28,6 +29,7 @@ export const signup = async (req:Request, res:Response)=>{
     try {
         const personaSave = await persona.save();
         const partidaI = await PartidaVocabulario.find().limit(6);
+        UnirUsuarioConOraciones(personaSave);
         //UNO
         const juegosVocabulario:IJugadoresConVocabulario = new JugadoresConVocabularios({
             Estudiante:{id:personaSave._id,

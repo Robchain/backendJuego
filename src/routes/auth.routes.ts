@@ -9,7 +9,8 @@ import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
 import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7, UpdateTerminadoVocabularioFinal  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
-import { uniendoPartida } from '../controller/Juego/OracionPartidas';
+import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion } from '../controller/Juego/OracionPartidas';
+import { crearCategoriasOraciones } from '../controller/Administrador/CategoriaOracionesController';
 
 const router : Router = Router();
 router.post('/signup' ,signup);
@@ -44,6 +45,8 @@ router.delete('/Categoria/borrar',borrarCategoria);
 router.get('/Categoria/mostrartodo',mostrarCateTodos);
 router.get('/Categoria/buscarU',mostrarCatePala);
 router.post('/Categoria/Editar',EditarCategoria)
+//categoria de oraciones *CREAR EL RESTO DEL CRUD*
+router.post("/CategoriaOracionesCreate", crearCategoriasOraciones);
 //Equipo
 router.get('/Equipo/automatico', CrearEquipoAuto);
 router.get('/Equipo/mostrartodo',MostrarEquipo);
@@ -66,7 +69,13 @@ router.post("/UpdateTerminadoVocabulario6", UpdateTerminadoVocabulario6);
 router.post("/UpdateTerminadoVocabulario7", UpdateTerminadoVocabulario7);
 router.post("/UpdateTerminadoVocabularioFinal",UpdateTerminadoVocabularioFinal);
 //Juego Oracion
-router.get("/uniendoPartida",uniendoPartida);
+router.get("/uniendoPartida",armandoJuegosOracionesPorPiezas);
+router.post("/llamadaPartidaOracion",llamadaPartidaOracion);
+
+
+
+
+
 
 
 //test de llamadas

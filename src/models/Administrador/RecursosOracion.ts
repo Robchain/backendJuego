@@ -1,15 +1,15 @@
-import mongoose, {Schema, model, Document} from 'mongoose'
+import {Schema, model, Document} from 'mongoose'
 
 export interface IRecursosOracion extends Document{
     //Categoria:mongoose.Types.ObjectId,
     Categoria:string,
     Oracion:string,
     Verbo:string,
+    Adverbio:string
     FileSujetoImagen:string,
     FileAdjetivoImagen:string,
     FileVideoPreguntaQue:string,
     FileVideoPreguntaQuien:string,
-    FileVideoPreguntaCompleja:string,
     FileVideoMuestra:string,
     Estado:string
 }
@@ -30,10 +30,13 @@ const schemaRecursosOracion = new Schema({
         type:String,
         require:true,
         trim:true
+    },Adverbio:{
+        type:String,
+        require:true,
+        trim:true
     },
     FileSujetoImagen:{
         type:String,
-        
         trim:true
     },
     FileAdjetivoImagen:{
@@ -42,22 +45,14 @@ const schemaRecursosOracion = new Schema({
     },
     FileVideoPreguntaQue:{
         type:String,
-        
         trim:true
     },
     FileVideoPreguntaQuien:{
         type:String,
-        
-        trim:true
-    },
-    FileVideoPreguntaCompleja:{
-        type:String,
-        
         trim:true
     },
     FileVideoMuestra:{
         type:String,
-        
         trim:true
     },
     Estado:{
