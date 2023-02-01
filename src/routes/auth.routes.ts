@@ -72,12 +72,6 @@ router.post("/UpdateTerminadoVocabularioFinal",UpdateTerminadoVocabularioFinal);
 router.get("/uniendoPartida",armandoJuegosOracionesPorPiezas);
 router.post("/llamadaPartidaOracion",llamadaPartidaOracion);
 
-
-
-
-
-
-
 //test de llamadas
 router.get('/CallMatch',ArmandoPartida )
 router.get('/testa',testvi)

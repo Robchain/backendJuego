@@ -126,7 +126,7 @@ oraciones = await RecursosOracion.aggregate([
       
       
       let final = {
-        categoria: categoriaOra[0],
+        Categoria: categoriaOra[0],
         Oraciones: {
           Oracion1: Palabras[0],
           Oracion2: Palabras[1],
