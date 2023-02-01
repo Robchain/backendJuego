@@ -122,13 +122,17 @@ oraciones = await RecursosOracion.aggregate([
           }
         })
       }
+      
+      
+      
       let final = {
         categoria: categoriaOra[0],
         Oraciones: {
           Oracion1: Palabras[0],
           Oracion2: Palabras[1],
           Oracion3: Palabras[2],
-        }
+        },
+        TipoPregunta:Seleccion(Palabras[0])
       }
      return final;
 }
@@ -233,3 +237,37 @@ export const llamadaPartidaOracion = async (req: Request, res: Response) => {
   
     }
   }
+
+
+
+  const Seleccion =(palabra:IRecursosOracion)=>{
+let opc=0;
+    opc = randomBetween(1,4)
+    if(palabra.Adverbio){
+    switch (opc) {
+      case 1:
+        return "QUIEN";
+        case 2:
+        return "QUE";
+    case 3 :
+      return "ADVERBIO";
+      case 4:
+        return "TODOS";
+      default:
+        break;
+    }
+  }else{
+    switch (opc) {
+      case 1:
+        return "QUIEN";
+        case 2:
+        return "QUE";
+      default:
+        return "TODOS";
+  }
+  }
+}
+  function randomBetween(a:number, b:number) {
+    return Math.floor(Math.random() * (b - a + 1) + a);
+  }
+  
