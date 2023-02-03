@@ -271,3 +271,104 @@ let opc=0;
     return Math.floor(Math.random() * (b - a + 1) + a);
   }
   
+  export const UpdateTerminadoOracion1 = async (req: Request, res: Response) => {
+    try {
+const dad = await JugadoresConOracion.updateOne({ _id: req.body.id }, {
+        'Avance.Juego1.PalabraCorrecta': req.body.PalabraCorrecta,
+        'Avance.Juego1.PalabraSeleccionada': req.body.PalabraSeleccionada,
+        'Avance.Juego1.Resultado': req.body.Resultado,
+        'Avance.Juego1.Terminado': req.body.Terminado
+      });
+      res.json(dad);
+    } catch (error) {
+  
+    }
+  }
+  export const UpdateTerminadoOracion2 = async (req: Request, res: Response) => {
+    try {
+const dad = await JugadoresConOracion.updateOne({ _id: req.body.id }, {
+        'Avance.Juego2.PalabraCorrecta': req.body.PalabraCorrecta,
+        'Avance.Juego2.PalabraSeleccionada': req.body.PalabraSeleccionada,
+        'Avance.Juego2.Resultado': req.body.Resultado,
+        'Avance.Juego2.Terminado': req.body.Terminado
+      });
+      res.json(dad);
+    } catch (error) {
+  
+    }
+  }
+  export const UpdateTerminadoOracion3 = async (req: Request, res: Response) => {
+    try {
+const dad = await JugadoresConOracion.updateOne({ _id: req.body.id }, {
+        'Avance.Juego3.PalabraCorrecta': req.body.PalabraCorrecta,
+        'Avance.Juego3.PalabraSeleccionada': req.body.PalabraSeleccionada,
+        'Avance.Juego3.Resultado': req.body.Resultado,
+        'Avance.Juego3.Terminado': req.body.Terminado
+      });
+      res.json(dad);
+    } catch (error) {
+  
+    }
+  }
+  export const UpdateTerminadoOracion4 = async (req: Request, res: Response) => {
+    try {
+const dad = await JugadoresConOracion.updateOne({ _id: req.body.id }, {
+        'Avance.Juego4.PalabraCorrecta': req.body.PalabraCorrecta,
+        'Avance.Juego4.PalabraSeleccionada': req.body.PalabraSeleccionada,
+        'Avance.Juego4.Resultado': req.body.Resultado,
+        'Avance.Juego4.Terminado': req.body.Terminado
+      });
+      res.json(dad);
+    } catch (error) {
+  
+    }
+  }
+  export const UpdateTerminadoOracion5 = async (req: Request, res: Response) => {
+    try {
+const dad = await JugadoresConOracion.updateOne({ _id: req.body.id }, {
+        'Avance.Juego5.PalabraCorrecta': req.body.PalabraCorrecta,
+        'Avance.Juego5.PalabraSeleccionada': req.body.PalabraSeleccionada,
+        'Avance.Juego5.Resultado': req.body.Resultado,
+        'Avance.Juego5.Terminado': req.body.Terminado
+      });
+      res.json(dad);
+    } catch (error) {
+  
+    }
+  }
+  export const UpdateTerminadoOracion6 = async (req: Request, res: Response) => {
+    try {
+const dad = await JugadoresConOracion.updateOne({ _id: req.body.id }, {
+        'Avance.Juego6.PalabraCorrecta': req.body.PalabraCorrecta,
+        'Avance.Juego6.PalabraSeleccionada': req.body.PalabraSeleccionada,
+        'Avance.Juego6.Resultado': req.body.Resultado,
+        'Avance.Juego6.Terminado': req.body.Terminado
+      });
+      res.json(dad);
+    } catch (error) {
+  
+    }
+  }
+  export const UpdateTerminadoOracion7 = async (req: Request, res: Response) => {
+    try {
+const dad = await JugadoresConOracion.updateOne({ _id: req.body.id }, {
+        'Avance.Juego7.PalabraCorrecta': req.body.PalabraCorrecta,
+        'Avance.Juego7.PalabraSeleccionada': req.body.PalabraSeleccionada,
+        'Avance.Juego7.Resultado': req.body.Resultado,
+        'Avance.Juego7.Terminado': req.body.Terminado
+      });
+      res.json(dad);
+    } catch (error) {
+  
+    }
+  }
+  export const UpdateTerminadoOracionFinal = async (req: Request, res: Response) => {
+    try {
+      const dad = await JugadoresConOracion.updateOne({ _id: req.body.id }, {
+        'Avance.Terminado': req.body.Terminado
+      });
+      res.json(dad);
+    } catch (error) {
+  
+    }
+  }

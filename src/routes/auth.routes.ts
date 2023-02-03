@@ -9,7 +9,7 @@ import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
 import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7, UpdateTerminadoVocabularioFinal  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
-import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion } from '../controller/Juego/OracionPartidas';
+import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, UpdateTerminadoOracion1, UpdateTerminadoOracion2, UpdateTerminadoOracion3, UpdateTerminadoOracion4, UpdateTerminadoOracion5, UpdateTerminadoOracion6, UpdateTerminadoOracion7, UpdateTerminadoOracionFinal } from '../controller/Juego/OracionPartidas';
 import { crearCategoriasOraciones } from '../controller/Administrador/CategoriaOracionesController';
 
 const router : Router = Router();
@@ -71,9 +71,16 @@ router.post("/UpdateTerminadoVocabularioFinal",UpdateTerminadoVocabularioFinal);
 //Juego Oracion
 router.get("/uniendoPartida",armandoJuegosOracionesPorPiezas);
 router.post("/llamadaPartidaOracion",llamadaPartidaOracion);
-
+router.post("/UpdateTerminadoOracion1", UpdateTerminadoOracion1)
+router.post("/UpdateTerminadoOracion2", UpdateTerminadoOracion2);
+router.post("/UpdateTerminadoOracion3", UpdateTerminadoOracion3);
+router.post("/UpdateTerminadoOracion4", UpdateTerminadoOracion4);
+router.post("/UpdateTerminadoOracion5", UpdateTerminadoOracion5);
+router.post("/UpdateTerminadoOracion6", UpdateTerminadoOracion6);
+router.post("/UpdateTerminadoOracion7", UpdateTerminadoOracion7);
+router.post("/UpdateTerminadoOracionFinal",UpdateTerminadoOracionFinal);
 //test de llamadas
-router.get('/CallMatch',ArmandoPartida )
+router.get('/CallMatch',ArmandoPartida)
 router.get('/testa',testvi)
 router.get('/Listado-Estudiante', SoloEstudiantes)
 router.get('/RecibidoPrueba',RecibirJson)
