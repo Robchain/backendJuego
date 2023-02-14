@@ -16,7 +16,7 @@ const router : Router = Router();
 router.post('/signup' ,signup);
 router.post('/signin',signin);
 router.get('/profile',profile);
-router.get('/Ver-Registrados-Activos', validarToken,perfilesActivos)
+router.get('/Ver-Registrados-Activos',perfilesActivos)
 router.get('/perfilesNoActivos',perfilesNoActivos)
 router.get('/perfilesTotales',perfilesTotales)
 router.delete('/BorrarUsario', borrarPerfiles)
