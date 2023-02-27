@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import MultiJugador, {IMultiJuga} from '../../models/Administrador/MultiJugador';
+import { CrearModeloInicialSinJuegos } from '../Multijugador/Fase1';
 
 
 export const CrearEvento = async (req:Request, res:Response) => {
@@ -11,6 +12,16 @@ export const CrearEvento = async (req:Request, res:Response) => {
             Estado:req.body.Estado
         })
         const guardarmulti   =    await   multiJugador.save();
+
+        let NumeroDeIntegrantes =  guardarmulti.Grupos.integrantes.value;
+        let FechaIncial = guardarmulti.Fecha.DateGameM[0];
+        let FechaFinal = guardarmulti.Fecha.DateGameM[1];
+        
+
+
+
+        CrearModeloInicialSinJuegos(guardarmulti);
+
         res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});

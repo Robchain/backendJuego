@@ -1,9 +1,20 @@
 import {model, Schema, Document} from 'mongoose'
-
+interface IIntegrantess{
+    value:string
+    label:string
+}
+interface IFechas{
+    DateGameM:Date[]
+}
+interface IGruposAqui{
+    grupos:object,
+    equipos:object,
+    integrantes:IIntegrantess
+}
 export interface IMultiJuga extends Document{
-    Grupos:object,
+    Grupos:IGruposAqui,
     Equipos:object,
-   Fecha:object,
+   Fecha:IFechas,
    Estado:string
 }
 

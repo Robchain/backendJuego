@@ -1,47 +1,41 @@
-import {Schema, Document, model} from "mongoose";
+import {Schema, Document, model, Date} from "mongoose";
+import { IEquipoMult } from "../../../interface/Multijugador/Grupos.Interface";
 
 
 export interface IGrupoDeTrabajo extends Document{
-    NombreEquipo:object,
-    ImagenDelEquipo:String,
-    Integrantes:object,
+    Equipo:IEquipoMult,
+    Integrantes:Object,
     Juegos:object,
-    FechaDeInicio:object,
-    FechaDeFin:object,
+    Avance:object,
+    FechaDeInicio:Date,
+    FechaDeFin:Date,
 }
 
 
 const schemaPartidaGrupoDeTrabjo = new Schema({
-    Rompecabeza:{
+    Equipo:{
+        type:Object,
+    },
+    Integrantes:{
         type:Object,
         require:true,
     },
-    Juego1:{
+    Juegos:{
+        type:Object,
+        
+    },
+    Avance:{
         type:Object,
         require:true,
     },
-    Juego2:{
+    FechaDeInicio:{
         type:Object,
         require:true,
     },
-    Juego3:{
+    FechaDeFin:{
         type:Object,
         require:true,
     },
-    Juego4:{
-        type:Object,
-        require:true,
-    },
-    Juego5:{
-        type:Object,
-        require:true,
-    },
-    Juego6:{
-        type:Object,
-    },
-    Juego7:{
-        type:Object,
-    }
 },{
     timestamps:true,
     versionKey:false
