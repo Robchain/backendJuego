@@ -60,7 +60,7 @@ export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Respons
   }
 
 //une oraciones por categoria
-const uniendoOracionesPorCategoria= async ()=>{
+export const uniendoOracionesPorCategoria= async ()=>{
    let categoriaOra = [];
    let oraciones:any[]=[];
    let Palabras = [];

@@ -16,11 +16,11 @@ export const RecibirJson = async (req: Request, res: Response) => {
     let juego7 = {}
     let rompecabeza = await rompecabezas();
     if (rompecabeza.Pieza === 4) {
-      juego1 = await partidas5();
-      juego2 = await partidas5();
-      juego3 = await partidas5();
-      juego4 = await partidas5();
-      juego5 = await partidas5();
+      juego1 = await CreaciondePartidasIndividualesVocabulario();
+      juego2 = await CreaciondePartidasIndividualesVocabulario();
+      juego3 = await CreaciondePartidasIndividualesVocabulario();
+      juego4 = await CreaciondePartidasIndividualesVocabulario();
+      juego5 = await CreaciondePartidasIndividualesVocabulario();
       const PartidaVocabuarioN: IPartidaVocabulario = new PartidaVocabuario({
         Rompecabeza: rompecabeza,
         Juego1: juego1,
@@ -32,13 +32,13 @@ export const RecibirJson = async (req: Request, res: Response) => {
       PartidaVocabuarioN.save();
       res.json({ rompecabeza, juego1, juego2, juego3, juego4, juego5 })
     } else if (rompecabeza.Pieza === 6) {
-      juego1 = await partidas5();
-      juego2 = await partidas5();
-      juego3 = await partidas5();
-      juego4 = await partidas5();
-      juego5 = await partidas5();
-      juego6 = await partidas5();
-      juego7 = await partidas5();
+      juego1 = await CreaciondePartidasIndividualesVocabulario();
+      juego2 = await CreaciondePartidasIndividualesVocabulario();
+      juego3 = await CreaciondePartidasIndividualesVocabulario();
+      juego4 = await CreaciondePartidasIndividualesVocabulario();
+      juego5 = await CreaciondePartidasIndividualesVocabulario();
+      juego6 = await CreaciondePartidasIndividualesVocabulario();
+      juego7 = await CreaciondePartidasIndividualesVocabulario();
       const PartidaVocabuarioN: IPartidaVocabulario = new PartidaVocabuario({
         Rompecabeza: rompecabeza,
         Juego1: juego1,
@@ -57,7 +57,7 @@ export const RecibirJson = async (req: Request, res: Response) => {
   }
 }
 //-------------------------------
-const partidas5 = async () => {
+export const CreaciondePartidasIndividualesVocabulario = async () => {
   let vocabulario: any[] = [];
   let categoria = [];
   let Palabras = [];
