@@ -1,34 +1,24 @@
 import { Request, Response } from 'express'
 import MultiJugador, {IMultiJuga} from '../../models/Administrador/MultiJugador';
-import { CreaRelacionEntreEquipoYJuegos, CrearModeloInicialSinJuegos } from '../Multijugador/Fase1';
+import { GuardarRelacionEntreEquipoYJuegos } from '../Multijugador/Fase1';
 
 
 export const CrearEvento = async (req:Request, res:Response) => {
     try {
         const multiJugador:IMultiJuga  = new  MultiJugador({
-            Grupos:req.body.Primero,
-            Equipos:req.body.Segundo,
-            Fecha:req.body.Tercero,
-            Estado:req.body.Estado
+            NombreDeEquipos:req.body.NombreDeEquipo,
+            NumeroDeGrupos:req.body.NumeroDeGrupos,
+            NumeroDeIntegrantes:req.body.NumeroDeIntegrantes,
+            IntegrantesPorGrupos:req.body.Segundo,
+            Fecha:req.body.picker,
+            Estado:req.body.Estado,
         })
         const guardarmulti   =    await   multiJugador.save();
-
-
-        let NumeroDeIntegrantes =  guardarmulti.Grupos.integrantes.value;
-        let FechaIncial = guardarmulti.Fecha.DateGameM[0];
-        let FechaFinal = guardarmulti.Fecha.DateGameM[1];
-        
-
-
-        //crear el modelo base y lo guarda
-        CrearModeloInicialSinJuegos(guardarmulti);
-
-        
-        CreaRelacionEntreEquipoYJuegos();
-
-
-
-        res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
+        //crear EquipoConJuego
+        GuardarRelacionEntreEquipoYJuegos(guardarmulti);
+              //crear el modelo base y lo guarda
+       // CrearModeloInicialSinJuegos(guardarmulti);        
+                res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
     }

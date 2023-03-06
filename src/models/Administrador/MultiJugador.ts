@@ -1,36 +1,39 @@
 import {model, Schema, Document} from 'mongoose'
-interface IIntegrantess{
-    value:string
-    label:string
-}
-interface IFechas{
-    DateGameM:Date[]
-}
-interface IGruposAqui{
-    grupos:object,
-    equipos:object,
-    integrantes:IIntegrantess
-}
+import { IFechas, IIntegrantesPorGrupos, INombreDeEquipos, INumeroDeGrupos, INumeroDeIntegrantes } from '../../interface/Multijugador/Grupos.Interface'
+
 export interface IMultiJuga extends Document{
-    Grupos:IGruposAqui,
-    Equipos:object,
-   Fecha:IFechas,
+    NombreDeEquipos:INombreDeEquipos[],
+    NumeroDeGrupos:INumeroDeGrupos,
+    NumeroDeIntegrantes:INumeroDeIntegrantes,
+    IntegrantesPorGrupos:IIntegrantesPorGrupos,
+   Fecha:IFechas[],
    Estado:string
 }
 
 const multiJugador = new Schema({    
-    Grupos:{
+    NombreDeEquipos:{
+        type:Array,
+        require:true,
+        trim:true
+    },
+    NumeroDeGrupos:{
         type:Object,
         require:true,
         trim:true
     },
-    Equipos:{
+    
+    NumeroDeIntegrantes:{
+        type:Object,
+        require:true,
+        trim:true
+    },
+    IntegrantesPorGrupos:{
         type:Object,
         require:true,
         trim:true
     },
     Fecha:{
-        type: Object,
+        type: Array,
         require:true,
         trim:true
     },

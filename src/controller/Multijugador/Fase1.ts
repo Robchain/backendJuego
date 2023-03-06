@@ -3,7 +3,9 @@ import Grupos, { IGrupoDeTrabajo } from "../../models/Juego/Multijugador/Grupos"
 import MultiJugador, { IMultiJuga } from '../../models/Administrador/MultiJugador';
 import { CreaciondePartidasIndividualesVocabulario } from '../auth.TestDeLlamada';
 import { uniendoOracionesPorCategoria } from '../Juego/OracionPartidas';
-
+import { IPartidaMulti } from '../../interface/Multijugador/Grupos.Interface';
+import EquipoConJuegos, { IEquipoConJuego } from '../../models/Administrador/EquipoConJuegos';
+import EquipoBase, { IEquipo } from '../../models/Administrador/Equipo';
 
 //creacion de partida
 export const CrearModeloInicialSinJuegos =(BaseMulti:IMultiJuga)=>{
@@ -32,16 +34,37 @@ export const CrearModeloInicialSinJuegos =(BaseMulti:IMultiJuga)=>{
 }
 //aqui guarda en base, la relacion entre juegos y Equipo
 
-export const GuardarRelacionEntreEquipoYJuegos =async () => {
+export const GuardarRelacionEntreEquipoYJuegos =async (inputObject:IMultiJuga) => {
+    let IdDeLaAsignacion:string ;
+    let Equipo:IEquipo;
     
+    let fecha;
+    let Estado:string = "ACTIVO";
+try {
     
-    
-    CreaRelacionEntreEquipoYJuegos();
-
-
-
- 
-
+    IdDeLaAsignacion = inputObject.id;
+        inputObject
+        fecha = inputObject.Fecha;
+     inputObject.NombreDeEquipos.length;
+     for (let i = 0; i < inputObject.NombreDeEquipos.length; i++){
+        let Juegos=[];
+        let idactual = inputObject.NombreDeEquipos[i].value;
+       const data =  await EquipoBase.find({_id:idactual},{"createdAt":0,"updatedAt":0})
+        for(let i = 0; i < parseInt(inputObject.NumeroDeIntegrantes.value); i++){
+      Juegos.push(await Los5Juegos());   
+        }
+        const  equipo:IEquipoConJuego  = new  EquipoConJuegos({
+            IdDeLaAsignacion:IdDeLaAsignacion,
+        Equipo:data[0],
+        Juegos:Juegos,
+            Fecha:fecha,
+            Estado:Estado,
+        })
+        equipo.save()
+     }
+} catch (error) {
+    return null;
+}
     
 }
 
@@ -49,33 +72,32 @@ export const GuardarRelacionEntreEquipoYJuegos =async () => {
 
 
  
-export const  CreaRelacionEntreEquipoYJuegos = async ()=>{
-    let juego1 = {}
-    let juego2 = {}
-    let juego3 = {}
-    let juego4 = {}
-    let juego5 = {}
-
+export const  Los5Juegos = async  ()=>{
+    let Juego1 = {}
+    let Juego2 = {}
+    let Juego3 = {}
+    let Juego4 = {}
+    let Juego5 = {}
+    let modeloFinal:IPartidaMulti ;
     try {
-      juego1 =  await  CreaciondePartidasIndividualesVocabulario();
-      juego2 =  await  CreaciondePartidasIndividualesVocabulario();
-      juego3 =  await  CreaciondePartidasIndividualesVocabulario();
-      juego4 =  await  uniendoOracionesPorCategoria();
-      juego5 =  await uniendoOracionesPorCategoria();
+      Juego1 =  await  CreaciondePartidasIndividualesVocabulario();
+      Juego2 =  await  CreaciondePartidasIndividualesVocabulario();
+      Juego3 =  await  CreaciondePartidasIndividualesVocabulario();
+      Juego4 =  await  uniendoOracionesPorCategoria();
+      Juego5 =  await uniendoOracionesPorCategoria();
     
-
-      let modeloFinal:any = {
-        juego1,
-        juego2,
-        juego3,
-        juego4,
-        juego5,
+      modeloFinal = {
+        Juego1,
+        Juego2,
+        Juego3,
+        Juego4,
+        Juego5,
       }
       return modeloFinal;
 
     } catch (error) {
-     
-        return error;
+        
+        return null;
     }
 }
 
