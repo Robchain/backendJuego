@@ -1,5 +1,3 @@
-
-
 export interface IEquipoMult {
     _id:string;
     Nombre:string;
@@ -25,15 +23,15 @@ export interface INumeroDeIntegrantes{
     value:string;
 }
 export interface IIntegrantesPorGrupos{
-    equipo0:IEquipo[];
-    equipo1?:IEquipo[];
-    equipo2?:IEquipo[];
-    equipo3?:IEquipo[];
-    equipo4?:IEquipo[];
-    equipo5?:IEquipo[];
+    equipo0:IEquipoInterno[];
+    equipo1?:IEquipoInterno[];
+    equipo2?:IEquipoInterno[];
+    equipo3?:IEquipoInterno[];
+    equipo4?:IEquipoInterno[];
+    equipo5?:IEquipoInterno[];
 }
 
-export interface IEquipo{
+export interface IEquipoInterno{
     label:string,
     value:string,
 }
@@ -51,6 +49,20 @@ export  interface IPartidaMulti{
     Juego4:object;
     Juego5:object;
 }
+export interface IAvenceArriba{
+    Juego1:IAvanceInter;
+    Juego2:IAvanceInter;
+    Juego3:IAvanceInter;
+    Juego4:IAvanceInter;
+    Juego5:IAvanceInter;
+    Terminado:Boolean;
+}
 
 
+export interface IAvanceInter{
+    PalabraCorrecta: String,
+    PalabraSeleccionada:String,
+    Resultado:String,
+    Terminado: false
+}
 

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import MultiJugador, {IMultiJuga} from '../../models/Administrador/MultiJugador';
-import { GuardarRelacionEntreEquipoYJuegos } from '../Multijugador/Fase1';
+import { GuardarRelacionEntreEquipoYJuegos, CrearModeloInicialSinJuegos } from '../Multijugador/Fase1';
 
 
 export const CrearEvento = async (req:Request, res:Response) => {
@@ -14,10 +14,11 @@ export const CrearEvento = async (req:Request, res:Response) => {
             Estado:req.body.Estado,
         })
         const guardarmulti   =    await   multiJugador.save();
-        //crear EquipoConJuego
+        CrearModeloInicialSinJuegos(guardarmulti); 
+        //crear EquipoConJuego y lo guarda
         GuardarRelacionEntreEquipoYJuegos(guardarmulti);
               //crear el modelo base y lo guarda
-       // CrearModeloInicialSinJuegos(guardarmulti);        
+                     
                 res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});

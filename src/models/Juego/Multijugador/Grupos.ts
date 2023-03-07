@@ -1,44 +1,52 @@
-import {Schema, Document, model, Date} from "mongoose";
+import { Schema, Document, model, Date } from "mongoose";
 import { IEquipoMult } from "../../../interface/Multijugador/Grupos.Interface";
 
 
-export interface IGrupoDeTrabajo extends Document{
-    Equipo:IEquipoMult,
-    Integrantes:Object,
-    Juegos:object,
-    Avance:object,
-    FechaDeInicio:Date,
-    FechaDeFin:Date,
+export interface IGrupoDeTrabajo extends Document {
+    IdDeLaAsignacion: string,
+    Equipo: IEquipoMult,
+    Integrantes: object,
+    Juegos: object,
+    Avance: object,
+    FechaDeInicio: Date,
+    FechaDeFin: Date,
+    Estado:string
 }
 
 
 const schemaPartidaGrupoDeTrabjo = new Schema({
-    Equipo:{
-        type:Object,
+    IdDeLaAsignacion: {
+        type: String,
+        require: true
     },
-    Integrantes:{
-        type:Object,
-        require:true,
+    Equipo: {
+        type: Object,
     },
-    Juegos:{
-        type:Object,
-        
+    Integrantes: {
+        type: Object,
+        require: true,
     },
-    Avance:{
-        type:Object,
-        require:true,
+    Juegos: {
+        type: Object,
     },
-    FechaDeInicio:{
-        type:Object,
-        require:true,
+    Avance: {
+        type: Object,
     },
-    FechaDeFin:{
-        type:Object,
-        require:true,
+    FechaDeInicio: {
+        type: Object,
+        require: true,
     },
-},{
-    timestamps:true,
-    versionKey:false
+    FechaDeFin: {
+        type: Object,
+        require: true,
+    },
+    Estado:{
+        type:String,
+        require:true
+    }
+}, {
+    timestamps: true,
+    versionKey: false
 })
 
-export default model<IGrupoDeTrabajo>('gruposdetrabajo',schemaPartidaGrupoDeTrabjo);
+export default model<IGrupoDeTrabajo>('equiposdetrabajoMulti', schemaPartidaGrupoDeTrabjo);

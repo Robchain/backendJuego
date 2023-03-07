@@ -1,11 +1,12 @@
 import {model, Schema, Document} from 'mongoose'
-import { IFechas, IPartidaMulti } from '../../interface/Multijugador/Grupos.Interface'
+import { IAvenceArriba, IFechas, IPartidaMulti } from '../../interface/Multijugador/Grupos.Interface'
 import { IEquipo } from './Equipo';
 
 export interface IEquipoConJuego extends Document{
     IdDeLaAsignacion:string,
     Equipo:IEquipo,
     Juegos:IPartidaMulti[],
+    Avance:IAvenceArriba[],
    Fecha:IFechas[],
    Estado:string
 }
@@ -19,18 +20,18 @@ const EquipoConJuego = new Schema({
     Equipo:{
         type:Object,
         require:true,
-        trim:true
     },
-    
     Juegos:{
         type:Array,
         require:true,
-        trim:true
+    },
+    Avance:{
+        type:Object,
+        require:true,
     },
     Fecha:{
         type: Array,
         require:true,
-        trim:true
     },
     Estado:{
         type: String,
