@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
-import { SoloEstudiantes,signup, signin,profile,perfilesActivos,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales } from "../controller/Administrador/auth.controller";
+import { SoloEstudiantes,signup, signin,profile,perfilesActivos,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos } from "../controller/Administrador/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
 import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi} from '../controller/Administrador/auth.vocabulario';
 import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion } from '../controller/Administrador/auth.oracion';
@@ -11,6 +11,7 @@ import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, UpdateTerminadoOracion1, UpdateTerminadoOracion2, UpdateTerminadoOracion3, UpdateTerminadoOracion4, UpdateTerminadoOracion5, UpdateTerminadoOracion6, UpdateTerminadoOracion7, UpdateTerminadoOracionFinal } from '../controller/Juego/OracionPartidas';
 import { crearCategoriasOraciones } from '../controller/Administrador/CategoriaOracionesController';
+import { DevuelveLaPosicionDentroDelArray } from '../controller/Multijugador/Fase1';
 
 const router : Router = Router();
 router.post('/signup' ,signup);
@@ -21,6 +22,7 @@ router.get('/perfilesNoActivos',perfilesNoActivos)
 router.get('/perfilesTotales',perfilesTotales)
 router.delete('/BorrarUsario', borrarPerfiles)
 router.post('/EditarUsuario',test)
+router.post('/MostrarEstudianteConSusEstudiantes', MostrarMaestrosConSusEstudiantesPorCursos),
 //rompecabeza
 router.post('/rompecabezaAdmi',subirRom);
 router.get('/rompecabezaAdmi/buscarU',mostrarRom);
@@ -86,7 +88,8 @@ router.get('/Listado-Estudiante', SoloEstudiantes)
 router.get('/RecibidoPrueba',RecibirJson)
 /*router.get('/partidaEstudiante',partidaEstudiante);*/
 router.get('/prueba',prueba);
-
+/* Mutlijugador */
+router.post('/LlamadainicalDelJugagor',DevuelveLaPosicionDentroDelArray)
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno
 
 export default router;

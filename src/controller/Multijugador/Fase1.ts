@@ -83,7 +83,7 @@ export const GuardarRelacionEntreEquipoYJuegos = async (inputObject: IMultiJuga)
 }
 
 
-export const Los5Juegos = async () => {
+const Los5Juegos = async () => {
     let Juego1 = {}
     let Juego2 = {}
     let Juego3 = {}
@@ -148,12 +148,29 @@ const creacionDeAvance = async () => {
 
 
 
-export const MostrandoGruposConUsuarioInicial = (req: Request, res: Response) => {
+export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Response) => {
     try {
+     let  value= req.body.value;
+       let label=  req.body.label;
+       let objetoaBuscar = {label:label,value:value}
+       const data = await Grupos.find({"Integrantes":{
+        $elemMatch: {
+            label:label,
+            value: value
+        }
+      },}, { 'createdAt': 0, 'updatedAt': 0});
 
-
-
-        res.json("mostrar");
+    let pos = data[0].Integrantes.findIndex(obj =>JSON.stringify(obj) === JSON.stringify(objetoaBuscar));
+        res.json({ _id:data[0].id,
+            IdDeLaAsignacion:data[0].IdDeLaAsignacion,
+            Equipo: data[0].Equipo,
+            Integrantes:data[0].Integrantes,
+            Juegos: data[0].Juegos,
+            Avance: data[0].Avance,
+            FechaDeInicio: data[0].FechaDeInicio,
+            FechaDeFin: data[0].FechaDeFin,
+            Estado:data[0].Estado,
+            posicion:pos});
     } catch (error) {
         res.json(error);
     }

@@ -1,11 +1,11 @@
 import { Schema, Document, model, Date } from "mongoose";
-import { IEquipoMult } from "../../../interface/Multijugador/Grupos.Interface";
+import { IEquipoMult, IIntegrantes } from "../../../interface/Multijugador/Grupos.Interface";
 
 
 export interface IGrupoDeTrabajo extends Document {
     IdDeLaAsignacion: string,
     Equipo: IEquipoMult,
-    Integrantes: object,
+    Integrantes:IIntegrantes[],
     Juegos: object,
     Avance: object,
     FechaDeInicio: Date,
@@ -23,7 +23,7 @@ const schemaPartidaGrupoDeTrabjo = new Schema({
         type: Object,
     },
     Integrantes: {
-        type: Object,
+        type: Array,
         require: true,
     },
     Juegos: {

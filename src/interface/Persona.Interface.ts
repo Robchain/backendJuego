@@ -9,3 +9,15 @@ export interface IPerson{
     Identificacion:string,
     Estado:string,
 }
+
+
+
+export interface IParalelo{
+    label:string;
+    value:string;
+}
+
+export interface ICurso{
+    label:string;
+    value:string;
+}

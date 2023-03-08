@@ -14,7 +14,9 @@ function createToken(persona: IPersona) {
 }
 // para registrar usuario
 export const signup = async (req: Request, res: Response) => {
-    // guardando un nuevo usuario
+  
+    try {
+          // guardando un nuevo usuario
     const persona: IPersona = new Persona({
         Nombre: req.body.Nombre,
         Apellido: req.body.Apellido,
@@ -24,79 +26,82 @@ export const signup = async (req: Request, res: Response) => {
         Password: req.body.Password,
         TipoUsuario: req.body.TipoUsuario,
         Identificacion: req.body.Identificacion,
+        Curso:req.body.Curso,
+        Paralelo:req.body.Paralelo,
         Estado: req.body.Estado
     })
-    try {
         const personaSave = await persona.save();
-        const partidaI = await PartidaVocabulario.find().limit(6);
-        UnirUsuarioConOraciones(personaSave);
-        //UNO
-        const juegosVocabulario: IJugadoresConVocabulario = new JugadoresConVocabularios({
-            Estudiante: {
-                id: personaSave._id,
-                Nombre: personaSave.Nombre,
-                Usuario: personaSave.Usuario,
-            },
-            Partida: partidaI[0],
-            Avance: modeloPartida(partidaI[0].Rompecabeza.Pieza),
-        });
-        juegosVocabulario.save();
-        //dos
-        const juegosVocabulario2: IJugadoresConVocabulario = new JugadoresConVocabularios({
-            Estudiante: {
-                id: personaSave._id,
-                Nombre: personaSave.Nombre,
-                Usuario: personaSave.Usuario,
-            },
-            Partida: partidaI[1],
-            Avance: modeloPartida(partidaI[1].Rompecabeza.Pieza),
-        });
-        juegosVocabulario2.save();
-        //tres
-        const juegosVocabulario3: IJugadoresConVocabulario = new JugadoresConVocabularios({
-            Estudiante: {
-                id: personaSave._id,
-                Nombre: personaSave.Nombre,
-                Usuario: personaSave.Usuario,
-            },
-            Partida: partidaI[2],
-            Avance: modeloPartida(partidaI[2].Rompecabeza.Pieza),
-        });
-        juegosVocabulario3.save();
-        //cuatro
-        const juegosVocabulario4: IJugadoresConVocabulario = new JugadoresConVocabularios({
-            Estudiante: {
-                id: personaSave._id,
-                Nombre: personaSave.Nombre,
-                Usuario: personaSave.Usuario,
-            },
-            Partida: partidaI[3],
-            Avance: modeloPartida(partidaI[3].Rompecabeza.Pieza),
-        });
-        juegosVocabulario4.save();
-
-        //cinco
-        const juegosVocabulario5: IJugadoresConVocabulario = new JugadoresConVocabularios({
-            Estudiante: {
-                id: personaSave._id,
-                Nombre: personaSave.Nombre,
-                Usuario: personaSave.Usuario,
-            },
-            Partida: partidaI[4],
-            Avance: modeloPartida(partidaI[4].Rompecabeza.Pieza),
-        });
-        juegosVocabulario5.save();
-        //seis
-        const juegosVocabulario6: IJugadoresConVocabulario = new JugadoresConVocabularios({
-            Estudiante: {
-                id: personaSave._id,
-                Nombre: personaSave.Nombre,
-                Usuario: personaSave.Usuario,
-            },
-            Partida: partidaI[5],
-            Avance: modeloPartida(partidaI[5].Rompecabeza.Pieza),
-        });
-        juegosVocabulario6.save();
+        if(personaSave.TipoUsuario === "ESTUDIANTE"){
+            const partidaI = await PartidaVocabulario.find().limit(6);
+            UnirUsuarioConOraciones(personaSave);
+            //UNO
+            const juegosVocabulario: IJugadoresConVocabulario = new JugadoresConVocabularios({
+                Estudiante: {
+                    id: personaSave._id,
+                    Nombre: personaSave.Nombre,
+                    Usuario: personaSave.Usuario,
+                },
+                Partida: partidaI[0],
+                Avance: modeloPartida(partidaI[0].Rompecabeza.Pieza),
+            });
+            juegosVocabulario.save();
+            //dos
+            const juegosVocabulario2: IJugadoresConVocabulario = new JugadoresConVocabularios({
+                Estudiante: {
+                    id: personaSave._id,
+                    Nombre: personaSave.Nombre,
+                    Usuario: personaSave.Usuario,
+                },
+                Partida: partidaI[1],
+                Avance: modeloPartida(partidaI[1].Rompecabeza.Pieza),
+            });
+            juegosVocabulario2.save();
+            //tres
+            const juegosVocabulario3: IJugadoresConVocabulario = new JugadoresConVocabularios({
+                Estudiante: {
+                    id: personaSave._id,
+                    Nombre: personaSave.Nombre,
+                    Usuario: personaSave.Usuario,
+                },
+                Partida: partidaI[2],
+                Avance: modeloPartida(partidaI[2].Rompecabeza.Pieza),
+            });
+            juegosVocabulario3.save();
+            //cuatro
+            const juegosVocabulario4: IJugadoresConVocabulario = new JugadoresConVocabularios({
+                Estudiante: {
+                    id: personaSave._id,
+                    Nombre: personaSave.Nombre,
+                    Usuario: personaSave.Usuario,
+                },
+                Partida: partidaI[3],
+                Avance: modeloPartida(partidaI[3].Rompecabeza.Pieza),
+            });
+            juegosVocabulario4.save();
+    
+            //cinco
+            const juegosVocabulario5: IJugadoresConVocabulario = new JugadoresConVocabularios({
+                Estudiante: {
+                    id: personaSave._id,
+                    Nombre: personaSave.Nombre,
+                    Usuario: personaSave.Usuario,
+                },
+                Partida: partidaI[4],
+                Avance: modeloPartida(partidaI[4].Rompecabeza.Pieza),
+            });
+            juegosVocabulario5.save();
+            //seis
+            const juegosVocabulario6: IJugadoresConVocabulario = new JugadoresConVocabularios({
+                Estudiante: {
+                    id: personaSave._id,
+                    Nombre: personaSave.Nombre,
+                    Usuario: personaSave.Usuario,
+                },
+                Partida: partidaI[5],
+                Avance: modeloPartida(partidaI[5].Rompecabeza.Pieza),
+            });
+            juegosVocabulario6.save();
+        }
         res.json({ "titulo": "Excelente", "respuesta": 'guardado con exito', "type": "success" });
 
     } catch (e: any) {
@@ -124,10 +129,6 @@ export const profile = async (req: Request, res: Response) => {
     const user = await Persona.findById(req.body.personaId, { password: 0 });
     if (!user) return res.status(400).json('no User Found');
     res.json(user);
-}
-// rompecabeza
-export const rompeacabezaAdmn = async (req: Request, res: Response) => {
-    //   const rommpecabezasave = await rompeacabezaAdmn.save()
 }
 
 export const perfilesActivos = async (req: Request, res: Response) => {
@@ -177,6 +178,8 @@ export const editarUser = async (req: Request, res: Response) => {
                 Password: req.body.Password,
                 TipoUsuario: req.body.TipoUsuario,
                 Identificacion: req.body.Identificacion,
+                Curso:req.body.Curso,
+                Paralelo:req.body.Paralelo,
                 Estado: req.body.Estado
             }
         })
@@ -214,4 +217,29 @@ export const SoloEstudiantes = async (req: Request, res: Response) => {
     } catch (error) {
         res.json(error)
     }
+}
+
+
+export const MostrarMaestrosConSusEstudiantesPorCursos =async (req:Request, res:Response) => {
+    
+try {
+    const data = await Persona.find({
+        TipoUsuario: "ESTUDIANTE",
+         Curso: {
+            $elemMatch: {
+                label: req.body.Curso.label,
+                value: req.body.Curso.value
+            }
+          },
+          Paralelo: {
+            $elemMatch: {
+                label: req.body.Paralelo.label,
+                value: req.body.Paralelo.value
+            }
+          }        
+    },{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 } )
+    res.json(data);
+} catch (error) {
+ res.json(error)   
+}
 }

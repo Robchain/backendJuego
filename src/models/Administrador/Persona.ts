@@ -1,5 +1,6 @@
 import {Schema, model,Document} from 'mongoose';
 import bcrypt from 'bcrypt';
+import { ICurso, IParalelo } from '../../interface/Persona.Interface';
 
 //  interface
 export interface IPersona extends Document{
@@ -10,6 +11,8 @@ export interface IPersona extends Document{
     FotoPerfil:string;
     Password:string;
     TipoUsuario:string;
+    Curso:ICurso[];
+    Paralelo:IParalelo[];
     Identificacion:string;
     Estado:string;
     compararPassword(password:string): Promise<boolean>;
@@ -51,6 +54,13 @@ const schemaPerson = new Schema({
     },
     TipoUsuario:{
         type:String,
+        trim:true
+    },
+    Curso:{
+        type:Array,
+        trim:true
+    },Paralelo:{
+        type:Array,
         trim:true
     },Estado:{
         type:String,

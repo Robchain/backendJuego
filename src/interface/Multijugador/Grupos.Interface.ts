@@ -22,6 +22,10 @@ export interface INumeroDeIntegrantes{
     label:string;
     value:string;
 }
+export interface IIntegrantes{
+    label:string;
+    value:string;
+}
 export interface IIntegrantesPorGrupos{
     equipo0:IEquipoInterno[];
     equipo1?:IEquipoInterno[];
