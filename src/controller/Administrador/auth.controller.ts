@@ -5,6 +5,7 @@ import PartidaVocabulario from '../../models/Juego/Vocabulario/PartidaVocabulari
 import JugadoresConVocabularios, { IJugadoresConVocabulario } from '../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
 import { modeloPartida } from '../auth.TestDeLlamada';
 import { UnirUsuarioConOraciones } from '../Juego/OracionPartidas';
+import ActividadesHablitado, { IActividadesHabilitadas } from '../../models/Administrador/HabilitandoActividades';
 
 //funcion del token 
 function createToken(persona: IPersona) {
@@ -14,24 +15,33 @@ function createToken(persona: IPersona) {
 }
 // para registrar usuario
 export const signup = async (req: Request, res: Response) => {
-  
+
     try {
-          // guardando un nuevo usuario
-    const persona: IPersona = new Persona({
-        Nombre: req.body.Nombre,
-        Apellido: req.body.Apellido,
-        Email: req.body.Email,
-        Usuario: req.body.Usuario,
-        FotoPerfil: req.body.FotoPerfil,
-        Password: req.body.Password,
-        TipoUsuario: req.body.TipoUsuario,
-        Identificacion: req.body.Identificacion,
-        Curso:req.body.Curso,
-        Paralelo:req.body.Paralelo,
-        Estado: req.body.Estado
-    })
+        // guardando un nuevo usuario
+        const persona: IPersona = new Persona({
+            Nombre: req.body.Nombre,
+            Apellido: req.body.Apellido,
+            Email: req.body.Email,
+            Usuario: req.body.Usuario,
+            FotoPerfil: req.body.FotoPerfil,
+            Password: req.body.Password,
+            TipoUsuario: req.body.TipoUsuario,
+            Identificacion: req.body.Identificacion,
+            Curso: req.body.Curso,
+            Paralelo: req.body.Paralelo,
+            Estado: req.body.Estado
+        })
         const personaSave = await persona.save();
-        if(personaSave.TipoUsuario === "ESTUDIANTE"){
+
+        if (personaSave.TipoUsuario === "ESTUDIANTE") {
+            const habilitadoInical: IActividadesHabilitadas = new ActividadesHablitado({
+                Estudiante: personaSave,
+                Vocabulario: true,
+                Oracion: false,
+                MultiJugador: false,
+                Estado: "ACTIVO",
+            })
+           const habi =  await habilitadoInical.save();
             const partidaI = await PartidaVocabulario.find().limit(6);
             UnirUsuarioConOraciones(personaSave);
             //UNO
@@ -78,7 +88,7 @@ export const signup = async (req: Request, res: Response) => {
                 Avance: modeloPartida(partidaI[3].Rompecabeza.Pieza),
             });
             juegosVocabulario4.save();
-    
+
             //cinco
             const juegosVocabulario5: IJugadoresConVocabulario = new JugadoresConVocabularios({
                 Estudiante: {
@@ -178,8 +188,8 @@ export const editarUser = async (req: Request, res: Response) => {
                 Password: req.body.Password,
                 TipoUsuario: req.body.TipoUsuario,
                 Identificacion: req.body.Identificacion,
-                Curso:req.body.Curso,
-                Paralelo:req.body.Paralelo,
+                Curso: req.body.Curso,
+                Paralelo: req.body.Paralelo,
                 Estado: req.body.Estado
             }
         })
@@ -220,26 +230,26 @@ export const SoloEstudiantes = async (req: Request, res: Response) => {
 }
 
 
-export const MostrarMaestrosConSusEstudiantesPorCursos =async (req:Request, res:Response) => {
-    
-try {
-    const data = await Persona.find({
-        TipoUsuario: "ESTUDIANTE",
-         Curso: {
-            $elemMatch: {
-                label: req.body.Curso.label,
-                value: req.body.Curso.value
+export const MostrarMaestrosConSusEstudiantesPorCursos = async (req: Request, res: Response) => {
+
+    try {
+        const data = await Persona.find({
+            TipoUsuario: "ESTUDIANTE",
+            Curso: {
+                $elemMatch: {
+                    label: req.body.Curso.label,
+                    value: req.body.Curso.value
+                }
+            },
+            Paralelo: {
+                $elemMatch: {
+                    label: req.body.Paralelo.label,
+                    value: req.body.Paralelo.value
+                }
             }
-          },
-          Paralelo: {
-            $elemMatch: {
-                label: req.body.Paralelo.label,
-                value: req.body.Paralelo.value
-            }
-          }        
-    },{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 } )
-    res.json(data);
-} catch (error) {
- res.json(error)   
-}
+        }, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 })
+        res.json(data);
+    } catch (error) {
+        res.json(error)
+    }
 }

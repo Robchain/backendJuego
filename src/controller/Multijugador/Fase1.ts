@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import Grupos, { IGrupoDeTrabajo } from "../../models/Juego/Multijugador/Grupos"
-import MultiJugador, { IMultiJuga } from '../../models/Administrador/MultiJugador';
+import { IMultiJuga } from '../../models/Administrador/MultiJugador';
 import { CreaciondePartidasIndividualesVocabulario } from '../auth.TestDeLlamada';
 import { uniendoOracionesPorCategoria } from '../Juego/OracionPartidas';
-import { IAvanceInter, IAvenceArriba, IEquipoInterno, IPartidaMulti } from '../../interface/Multijugador/Grupos.Interface';
+import { IAvanceInter, IAvenceArriba, IPartidaMulti } from '../../interface/Multijugador/Grupos.Interface';
 import EquipoConJuegos, { IEquipoConJuego } from '../../models/Administrador/EquipoConJuegos';
-import EquipoBase, { IEquipo } from '../../models/Administrador/Equipo';
+import EquipoBase from '../../models/Administrador/Equipo';
 
 //creacion de partida
 export const CrearModeloInicialSinJuegos = async (BaseMulti: IMultiJuga) => {
@@ -170,10 +170,116 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
             FechaDeInicio: data[0].FechaDeInicio,
             FechaDeFin: data[0].FechaDeFin,
             Estado:data[0].Estado,
-            posicion:pos});
+            Posicion:pos});
     } catch (error) {
         res.json(error);
     }
 }
 
+export const UneIntegrantesConJuegos =async (req:Request, res:Response) => {
+try {
+       let input =  req.body.BaseUno as IEquipoConJuego;
+       const data  = await  Grupos.updateOne({_id:req.body.idDeBase},{
+        'Equipo':input.Equipo,
+        'Juegos':input.Juegos,
+        'Avance':input.Avance
+       })
+    res.json(data);
+} catch (error) {
+    res.json(error);
+}
 
+}
+export const actualizarJuego1 =async (req:Request, res:Response) => {
+    
+    try {
+        let   indice = req.body.indice as number;
+        
+       const data  = await  Grupos.updateOne({_id:req.body.idOutput},{
+        $set:{
+            [`Avance.${indice}.Juego1.PalabraCorrecta`]:req.body.PalabraCorrecta,
+            [`Avance.${indice}.Juego1.PalabraSeleccionada`]:req.body.PalabraSeleccionada,
+            [`Avance.${indice}.Juego1.Resultado`]:req.body.Resultado,
+            [`Avance.${indice}.Juego1.Terminado`]:req.body.Terminado
+           }})
+        res.json(data)
+    } catch (error) {
+        res.json(error)
+    }
+}
+export const actualizarJuego2 =async (req:Request, res:Response) => {
+    
+    try {
+        let   indice = req.body.indice as Number;
+        const data  = await  Grupos.updateOne({_id:req.body.idOutput},{
+            $set:{
+                [`Avance.${indice}.Juego2.PalabraCorrecta`]:req.body.PalabraCorrecta,
+                [`Avance.${indice}.Juego2.PalabraSeleccionada`]:req.body.PalabraSeleccionada,
+                [`Avance.${indice}.Juego2.Resultado`]:req.body.Resultado,
+                [`Avance.${indice}.Juego2.Terminado`]:req.body.Terminado
+               }})
+            res.json(data)
+    } catch (error) {
+        res.json(error)
+    }
+}
+export const actualizarJuego3 =async (req:Request, res:Response) => {
+    
+    try {
+        let   indice = req.body.indice as Number;
+        const data  = await  Grupos.updateOne({_id:req.body.idOutput},{
+            $set:{
+                [`Avance.${indice}.Juego3.PalabraCorrecta`]:req.body.PalabraCorrecta,
+                [`Avance.${indice}.Juego3.PalabraSeleccionada`]:req.body.PalabraSeleccionada,
+                [`Avance.${indice}.Juego3.Resultado`]:req.body.Resultado,
+                [`Avance.${indice}.Juego3.Terminado`]:req.body.Terminado
+               }})
+            res.json(data)
+    } catch (error) {
+        res.json(error)
+    }
+}
+export const actualizarJuego4 =async (req:Request, res:Response) => {
+    
+    try {
+        let   indice = req.body.indice as Number;
+        const data  = await  Grupos.updateOne({_id:req.body.idOutput},{
+            $set:{
+                [`Avance.${indice}.Juego4.PalabraCorrecta`]:req.body.PalabraCorrecta,
+                [`Avance.${indice}.Juego4.PalabraSeleccionada`]:req.body.PalabraSeleccionada,
+                [`Avance.${indice}.Juego4.Resultado`]:req.body.Resultado,
+                [`Avance.${indice}.Juego4.Terminado`]:req.body.Terminado
+               }})
+            res.json(data)
+    } catch (error) {
+        res.json(error)
+    }
+}
+export const actualizarJuego5 =async (req:Request, res:Response) => {
+    
+    try {
+        let   indice = req.body.indice as Number;
+        const data  = await  Grupos.updateOne({_id:req.body.idOutput},{
+            $set:{
+                [`Avance.${indice}.Juego5.PalabraCorrecta`]:req.body.PalabraCorrecta,
+                [`Avance.${indice}.Juego5.PalabraSeleccionada`]:req.body.PalabraSeleccionada,
+                [`Avance.${indice}.Juego5.Resultado`]:req.body.Resultado,
+                [`Avance.${indice}.Juego5.Terminado`]:req.body.Terminado
+               }})
+            res.json(data)
+    } catch (error) {
+        res.json(error)
+    }
+}
+export const actualizarJuegoTerminado =async (req:Request, res:Response) => {
+    try {
+        let   indice = req.body.indice as Number;
+        const data  = await  Grupos.updateOne({_id:req.body.idOutput},{
+            $set:{
+                [`Avance.${indice}.Terminado`]:req.body.Terminado,
+               }})
+            res.json(data)
+    } catch (error) {
+        res.json(error)
+    }
+}

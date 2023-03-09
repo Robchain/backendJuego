@@ -1,13 +1,13 @@
 import { Schema, Document, model, Date } from "mongoose";
-import { IEquipoMult, IIntegrantes } from "../../../interface/Multijugador/Grupos.Interface";
+import { IAvenceArriba, IEquipoMult, IIntegrantes, IPartidaMulti } from "../../../interface/Multijugador/Grupos.Interface";
 
 
 export interface IGrupoDeTrabajo extends Document {
     IdDeLaAsignacion: string,
     Equipo: IEquipoMult,
     Integrantes:IIntegrantes[],
-    Juegos: object,
-    Avance: object,
+    Juegos: IPartidaMulti[],
+    Avance: IAvenceArriba[],
     FechaDeInicio: Date,
     FechaDeFin: Date,
     Estado:string
