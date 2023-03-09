@@ -158,7 +158,7 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
             label:label,
             value: value
         }
-      },}, { 'createdAt': 0, 'updatedAt': 0});
+      }}, { 'createdAt': 0, 'updatedAt': 0});
 
     let pos = data[0].Integrantes.findIndex(obj =>JSON.stringify(obj) === JSON.stringify(objetoaBuscar));
         res.json({ _id:data[0].id,
