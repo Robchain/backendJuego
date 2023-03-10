@@ -7,6 +7,7 @@ export interface IEquipoConJuego extends Document{
     Equipo:IEquipo,
     Juegos:IPartidaMulti[],
     Avance:IAvenceArriba[],
+    YaAsignado:boolean,
    Fecha:IFechas[],
    Estado:string
 }
@@ -28,6 +29,10 @@ const EquipoConJuego = new Schema({
     Avance:{
         type:Object,
         require:true,
+    },
+    YaAsignado:{
+        type:Boolean,
+        require:true
     },
     Fecha:{
         type: Array,

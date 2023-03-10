@@ -11,7 +11,7 @@ import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, UpdateTerminadoOracion1, UpdateTerminadoOracion2, UpdateTerminadoOracion3, UpdateTerminadoOracion4, UpdateTerminadoOracion5, UpdateTerminadoOracion6, UpdateTerminadoOracion7, UpdateTerminadoOracionFinal } from '../controller/Juego/OracionPartidas';
 import { crearCategoriasOraciones } from '../controller/Administrador/CategoriaOracionesController';
-import { actualizarJuego1, actualizarJuego2, actualizarJuego3, actualizarJuego4, actualizarJuego5, actualizarJuegoTerminado, DevuelveLaPosicionDentroDelArray, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
+import { actualizarJuego1, actualizarJuego2, actualizarJuego3, actualizarJuego4, actualizarJuego5, actualizarJuegoTerminado, DevuelveLaPosicionDentroDelArray, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
 
 const router : Router = Router();
 router.post('/signup' ,signup);
@@ -90,7 +90,7 @@ router.get('/RecibidoPrueba',RecibirJson)
 router.get('/prueba',prueba);
 /* Mutlijugador */
 router.post('/LlamadainicalDelJugagor',DevuelveLaPosicionDentroDelArray)
-router.post('/LlamadaDeJuegosBasesPorAsignar');
+router.post('/LlamadaDeJuegosBasesPorAsignar', LlamadaDeJuegosBasesPorAsignar);
 router.post('/UneIntegrantesConJuegos',UneIntegrantesConJuegos)
 router.post('/actualizarJuegoUno', actualizarJuego1)
 router.post('/actualizarJuegoDos',actualizarJuego2)
