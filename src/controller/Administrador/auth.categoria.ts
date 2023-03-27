@@ -1,14 +1,24 @@
 import Categoria,{ICategoria} from "../../models/Administrador/Categoria";
 import {Request,Response} from 'express';
+import CategoriaOraciones, { ICategoriaOraciones } from "../../models/Administrador/CategoriaOraciones";
 
 
 export const crearCategorias =async (req:Request,res:Response) => {
     try {
-        const categoria:ICategoria = new Categoria({
-            NombreCategoria:req.body.NombreCategoria,
-            Estado:req.body.Estado
-        })
-        const guardar=categoria.save();
+        let Juego = req.body.Juego
+        if(Juego.value==="Vocabulario"){
+            const categoria:ICategoria = new Categoria({
+                NombreCategoria:req.body.NombreCategoria,
+                Estado:"ACTIVO"
+            })
+            categoria.save();
+        }else if(Juego.value==="Oracion"){
+            const categoria: ICategoriaOraciones = new CategoriaOraciones({
+                NombreCategoria: req.body.NombreCategoria,
+                Estado:"ACTIVO"
+            })
+            categoria.save();
+        }
         res.json({"titulo":"Excelente","respuesta":'Categoria creada con exito',"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})

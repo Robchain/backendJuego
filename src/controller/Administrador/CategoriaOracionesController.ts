@@ -4,14 +4,10 @@ import CategoriaOraciones, { ICategoriaOraciones } from "../../models/Administra
 
 export const crearCategoriasOraciones = async (req: Request, res: Response) => {
     try {
-        const categoria: ICategoriaOraciones = new CategoriaOraciones({
-            NombreCategoria: req.body.NombreCategoria,
-            Estado: req.body.Estado
-        })
-        const guardar = categoria.save();
-        res.json({ "titulo": "Excelente", "respuesta": 'Categoria creada con exito', "type": "success" })
+        const categoria  = CategoriaOraciones.find({Estado: "ACTIVO"},{"createdAt":0,"updatedAt":0});
+        res.json(categoria);
     } catch (error: any) {
-        res.json({ "titulo": "Error", "respuesta": `el dato: ${Object.keys(error.keyPattern)} ya existe`, "type": "error" })
+        res.json(null);
     }
 }
 // crear el resto del crud

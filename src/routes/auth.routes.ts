@@ -48,7 +48,7 @@ router.get('/Categoria/mostrartodo',mostrarCateTodos);
 router.get('/Categoria/buscarU',mostrarCatePala);
 router.post('/Categoria/Editar',EditarCategoria)
 //categoria de oraciones *CREAR EL RESTO DEL CRUD*
-router.post("/CategoriaOracionesCreate", crearCategoriasOraciones);
+router.get("/CategoriaOraciones", crearCategoriasOraciones);
 //Equipo
 router.get('/Equipo/automatico', CrearEquipoAuto);
 router.get('/Equipo/mostrartodo',MostrarEquipo);
