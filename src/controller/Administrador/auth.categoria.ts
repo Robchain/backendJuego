@@ -27,7 +27,7 @@ export const crearCategorias =async (req:Request,res:Response) => {
 
 export const borrarCategoria    =  async (req:Request, res:Response) => {
     try {
-        const borrar = await Categoria.deleteMany({NombreCategoria:req.body.NombreCategoria});
+        const borrar = await Categoria.deleteOne({_id:req.body._id});
         res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});

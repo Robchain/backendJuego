@@ -7,7 +7,7 @@ export const subirRom= async (req:Request, res:Response) =>{
             Pieza:req.body.Pieza,
             FileBlanco:req.body.FileBlanco,
             FileColor:req.body.FileColor,
-            Estado:req.body.Estado
+            Estado:"ACTIVO"
         }) 
         const rompecabezaGuardar = await rompecabeza.save();
         res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
@@ -18,7 +18,7 @@ export const subirRom= async (req:Request, res:Response) =>{
 //borra todas las coincidencia
 export const borrarRom =async (req:Request,res:Response)=>{
     try {
-        const imagen = await Rompecabeza.deleteMany({Nombre:req.body.Nombre});
+        const data = await Rompecabeza.deleteOne({_id:req.body._id});
         res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
@@ -30,7 +30,7 @@ export const mostrarRom    =   async (req:Request,res:Response)=>{
         const imagenM = await Rompecabeza.find({Nombre:req.body.Nombre});
         res.json(imagenM);
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`Algo salio mal`, "type":"error"});
+        res.json([]);
     }
 }
 //muestra todos
@@ -39,7 +39,7 @@ export const mostrarRomTodos    =   async (req:Request,res:Response)=>{
         const imagenM = await Rompecabeza.find({},{"createdAt":0,"updatedAt":0});
         res.json(imagenM);
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`Algo salio mal`, "type":"error"});
+        res.json([]);
     }
 }
 

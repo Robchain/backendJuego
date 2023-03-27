@@ -10,7 +10,7 @@ import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
 import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7, UpdateTerminadoVocabularioFinal  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, UpdateTerminadoOracion1, UpdateTerminadoOracion2, UpdateTerminadoOracion3, UpdateTerminadoOracion4, UpdateTerminadoOracion5, UpdateTerminadoOracion6, UpdateTerminadoOracion7, UpdateTerminadoOracionFinal } from '../controller/Juego/OracionPartidas';
-import { crearCategoriasOraciones } from '../controller/Administrador/CategoriaOracionesController';
+import { borrarCategoriaOracion, crearCategoriasOraciones, EditarCategoriaOracion } from '../controller/Administrador/CategoriaOracionesController';
 import { actualizarJuego1, actualizarJuego2, actualizarJuego3, actualizarJuego4, actualizarJuego5, actualizarJuegoTerminado, DevuelveLaPosicionDentroDelArray, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
 
 const router : Router = Router();
@@ -26,34 +26,36 @@ router.post('/MostrarEstudianteConSusEstudiantes', MostrarMaestrosConSusEstudian
 //rompecabeza
 router.post('/rompecabezaAdmi',subirRom);
 router.get('/rompecabezaAdmi/buscarU',mostrarRom);
-router.delete('/rompecabezaAdmi/borrar',borrarRom);
+router.post('/rompecabezaAdmi/borrar',borrarRom);
 router.get('/rompecabezaAdmi/mostrartodo',mostrarRomTodos);
 router.post('/rompecabeza/Editar',EditarRompecabeza);
 //vocabulario
 router.post('/vocabularioAdmi',subirVocabulario);
 router.get('/VocabularioAdmi/mostrartodo',mostrarVocaTodos);
 router.get('/VocabularioAdmi/buscarU',mostrarVocaPala);
-router.delete('/vocabularioAdmi/borrar',borrarVocabulario);
+router.post('/vocabularioAdmi/borrar',borrarVocabulario);
 router.post('/vocabulario/Editar',editarVocabulario)
 //Oracion
 router.post('/OracionAdmi',subirOracion);
-router.delete('/OracionAdmi/borrar',borrarOracion);
+router.post('/OracionAdmi/borrar',borrarOracion);
 router.get('/OracionAdmi/mostrartodo',mostrarOracTodos);
 router.get('/OracionAdmi/buscarU',mostrarOracPala);
 router.post('/OracionAdmi/Editar',editarOracion);
 //categoria
 router.post('/Categoria',crearCategorias);
-router.delete('/Categoria/borrar',borrarCategoria);
+router.post('/Categoria/borrar',borrarCategoria);
 router.get('/Categoria/mostrartodo',mostrarCateTodos);
 router.get('/Categoria/buscarU',mostrarCatePala);
 router.post('/Categoria/Editar',EditarCategoria)
 //categoria de oraciones *CREAR EL RESTO DEL CRUD*
-router.get("/CategoriaOraciones", crearCategoriasOraciones);
+router.get("/Categoria/Mostartodos/Oracion", crearCategoriasOraciones);
+router.post("/Categoria/Borrar/OracionCategoria", borrarCategoriaOracion);
+router.post("/Categoria/Editar/OracionCategoria",EditarCategoriaOracion)
 //Equipo
 router.get('/Equipo/automatico', CrearEquipoAuto);
 router.get('/Equipo/mostrartodo',MostrarEquipo);
 router.post('/Equipo', CrearEquipo)
-router.delete('/Equipo/Eliminar',EliminarEquipo)
+router.post('/Equipo/Eliminar',EliminarEquipo)
 router.post('/Equipo/editar',editarEquipo)
 //MultiJugador
 router.post('/MultiJugador', CrearEvento)
