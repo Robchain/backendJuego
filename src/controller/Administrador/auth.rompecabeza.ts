@@ -61,4 +61,20 @@ export const EditarRompecabeza =async (req:Request, res:Response) => {
             res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
         }
 }
+export const EditarRompecabezaSinArchivo =async (req:Request, res:Response) => {
+    try {
+        const data = await Rompecabeza.findByIdAndUpdate({
+            _id:req.body._id
+        },{ 
+        $set:{
+            Nombre:req.body.Nombre,
+            Pieza:req.body.Pieza,
+            Estado:req.body.Estado
+        }
+    })
+    res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+    }
+}
 

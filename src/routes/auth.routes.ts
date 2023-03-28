@@ -1,11 +1,11 @@
 import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
 import { SoloEstudiantes,signup, signin,profile,perfilesActivos,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos } from "../controller/Administrador/auth.controller";
-import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
+import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza, EditarRompecabezaSinArchivo} from '../controller/Administrador/auth.rompecabeza';
 import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi} from '../controller/Administrador/auth.vocabulario';
 import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion } from '../controller/Administrador/auth.oracion';
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria } from '../controller/Administrador/auth.categoria';
-import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo}    from '../controller/Administrador/auth.equipo';
+import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo, DesibilitarEquipo, HabilitarEquipo}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
 import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7, UpdateTerminadoVocabularioFinal  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
@@ -29,6 +29,7 @@ router.get('/rompecabezaAdmi/buscarU',mostrarRom);
 router.post('/rompecabezaAdmi/borrar',borrarRom);
 router.get('/rompecabezaAdmi/mostrartodo',mostrarRomTodos);
 router.post('/rompecabeza/Editar',EditarRompecabeza);
+router.post("/rompecabeza/EditarSinArchivo",EditarRompecabezaSinArchivo)
 //vocabulario
 router.post('/vocabularioAdmi',subirVocabulario);
 router.get('/VocabularioAdmi/mostrartodo',mostrarVocaTodos);
@@ -54,9 +55,11 @@ router.post("/Categoria/Editar/OracionCategoria",EditarCategoriaOracion)
 //Equipo
 router.get('/Equipo/automatico', CrearEquipoAuto);
 router.get('/Equipo/mostrartodo',MostrarEquipo);
-router.post('/Equipo', CrearEquipo)
-router.post('/Equipo/Eliminar',EliminarEquipo)
-router.post('/Equipo/editar',editarEquipo)
+router.post('/Equipo/Crear', CrearEquipo);
+router.post('/Equipo/Eliminar',EliminarEquipo);
+router.post('/Equipo/editar',editarEquipo);
+router.post("/Equipo/Desibilitar", DesibilitarEquipo);
+router.post("/Equipo/Habiltar",HabilitarEquipo);
 //MultiJugador
 router.post('/MultiJugador', CrearEvento)
 router.get('/MultiJugador/Presentacion', PEvento)
@@ -91,7 +94,7 @@ router.get('/RecibidoPrueba',RecibirJson)
 /*router.get('/partidaEstudiante',partidaEstudiante);*/
 router.get('/prueba',prueba);
 /* Mutlijugador */
-router.post('/LlamadainicalDelJugagor',DevuelveLaPosicionDentroDelArray)
+router.post('/LlamadainicalDelJugagor',DevuelveLaPosicionDentroDelArray);
 router.post('/LlamadaDeJuegosBasesPorAsignar', LlamadaDeJuegosBasesPorAsignar);
 router.post('/UneIntegrantesConJuegos',UneIntegrantesConJuegos)
 router.post('/actualizarJuegoUno', actualizarJuego1)

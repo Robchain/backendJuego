@@ -7,7 +7,7 @@ export const CrearEquipo = async (req:Request, res:Response) => {
         const equipo    = new Equipo({
             Nombre:req.body.Nombre,
             Imagen:req.body.Imagen,
-            Estado:req.body.Estado,
+            Estado:"ACTIVO",
         })
         const data = equipo.save();
         res.json({"titulo":"Excelente","respuesta":'Equipo creada con exito',"type":"success"})
@@ -27,8 +27,30 @@ export const MostrarEquipo =async (req:Request, res:Response) => {
 
 export const EliminarEquipo =async (req:Request, res:Response) => {
     try {
-        const data = await Equipo.deleteMany({Nombre:req.body.Nombre})
+        const data = await Equipo.deleteOne({_id:req.body._id})
         res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
+export const DesibilitarEquipo =async (req:Request, res:Response) => {
+    try {
+        const data = await Equipo.findByIdAndUpdate({_id:req.body._id},
+            {$set:
+            {  Estado:"INACTIVO"  
+            }})
+        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
+export const HabilitarEquipo =async (req:Request, res:Response) => {
+    try {
+        const data = await Equipo.findByIdAndUpdate({_id:req.body._id},
+            {$set:
+            {  Estado:"ACTIVO"  
+            }})
+        res.json({"titulo":"Excelente","respuesta":'Item Restaurado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
