@@ -79,7 +79,6 @@ export const editarEquipo = async (req:Request, res:Response) => {
         {$set:
         {   Nombre:req.body.Nombre,
             Imagen:req.body.Imagen,
-            Estado:req.body.Estado  
         }})
             res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
     } catch (error) {

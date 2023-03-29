@@ -9,8 +9,6 @@ console.log("Base de datos", db.connection.name);
     } catch (error) {
         console.log(error)
     }
-
-
 })()
  
  

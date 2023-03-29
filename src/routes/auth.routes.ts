@@ -1,33 +1,36 @@
 import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
-import { SoloEstudiantes,signup, signin,profile,perfilesActivos,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos } from "../controller/Administrador/auth.controller";
-import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza, EditarRompecabezaSinArchivo} from '../controller/Administrador/auth.rompecabeza';
-import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi} from '../controller/Administrador/auth.vocabulario';
-import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion } from '../controller/Administrador/auth.oracion';
-import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria } from '../controller/Administrador/auth.categoria';
+import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros } from "../controller/Administrador/auth.controller";
+import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza, EditarRompecabezaSinArchivo, DesibilitarRompecabeza, HabilitarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
+import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi, DesibilitarVocabulario, HabilitarVocabulario, editarVocabularioSinArchivos} from '../controller/Administrador/auth.vocabulario';
+import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion, DesibilitarOracion, HabilitarOracion } from '../controller/Administrador/auth.oracion';
+import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria, DesibilitarCategoriaVocabulario, HabilitarCategoriaVocabulario } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo, DesibilitarEquipo, HabilitarEquipo}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
 import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7, UpdateTerminadoVocabularioFinal  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, UpdateTerminadoOracion1, UpdateTerminadoOracion2, UpdateTerminadoOracion3, UpdateTerminadoOracion4, UpdateTerminadoOracion5, UpdateTerminadoOracion6, UpdateTerminadoOracion7, UpdateTerminadoOracionFinal } from '../controller/Juego/OracionPartidas';
-import { borrarCategoriaOracion, crearCategoriasOraciones, EditarCategoriaOracion } from '../controller/Administrador/CategoriaOracionesController';
+import { borrarCategoriaOracion, crearCategoriasOraciones, DesibilitarCategoriaOraciones, EditarCategoriaOracion, HabilitarCategoriaOraciones } from '../controller/Administrador/CategoriaOracionesController';
 import { actualizarJuego1, actualizarJuego2, actualizarJuego3, actualizarJuego4, actualizarJuego5, actualizarJuegoTerminado, DevuelveLaPosicionDentroDelArray, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
 
 const router : Router = Router();
 router.post('/signup' ,signup);
 router.post('/signin',signin);
 router.get('/profile',profile);
-router.get('/Ver-Registrados-Activos',perfilesActivos)
+router.get('/Ver-Registrados-Activos',perfilesActivosEstudiantes)
 router.get('/perfilesNoActivos',perfilesNoActivos)
 router.get('/perfilesTotales',perfilesTotales)
 router.delete('/BorrarUsario', borrarPerfiles)
 router.post('/EditarUsuario',test)
+router.get("/perfilesActivosMaestros",perfilesActivosMaestros)
 router.post('/MostrarEstudianteConSusEstudiantes', MostrarMaestrosConSusEstudiantesPorCursos),
 //rompecabeza
 router.post('/rompecabezaAdmi',subirRom);
 router.get('/rompecabezaAdmi/buscarU',mostrarRom);
 router.post('/rompecabezaAdmi/borrar',borrarRom);
 router.get('/rompecabezaAdmi/mostrartodo',mostrarRomTodos);
+router.post('/rompecabeza/Desabilitar',DesibilitarRompecabeza);
+router.post('/rompecabeza/habilitar',HabilitarRompecabeza);
 router.post('/rompecabeza/Editar',EditarRompecabeza);
 router.post("/rompecabeza/EditarSinArchivo",EditarRompecabezaSinArchivo)
 //vocabulario
@@ -36,18 +39,27 @@ router.get('/VocabularioAdmi/mostrartodo',mostrarVocaTodos);
 router.get('/VocabularioAdmi/buscarU',mostrarVocaPala);
 router.post('/vocabularioAdmi/borrar',borrarVocabulario);
 router.post('/vocabulario/Editar',editarVocabulario)
+router.post('/vacabulario/EditarSinArchivo', editarVocabularioSinArchivos);
+router.post("/vocabulario/Desabilitar",DesibilitarVocabulario);
+router.post("/vocabulario/Habilitar",HabilitarVocabulario);
 //Oracion
 router.post('/OracionAdmi',subirOracion);
 router.post('/OracionAdmi/borrar',borrarOracion);
 router.get('/OracionAdmi/mostrartodo',mostrarOracTodos);
 router.get('/OracionAdmi/buscarU',mostrarOracPala);
 router.post('/OracionAdmi/Editar',editarOracion);
+router.post('/OracionAdmi/Desabilitar',DesibilitarOracion);
+router.post('/OracionAdmi/Desabilitar',HabilitarOracion)
 //categoria
 router.post('/Categoria',crearCategorias);
 router.post('/Categoria/borrar',borrarCategoria);
 router.get('/Categoria/mostrartodo',mostrarCateTodos);
 router.get('/Categoria/buscarU',mostrarCatePala);
 router.post('/Categoria/Editar',EditarCategoria)
+router.post("/Categoria/desabilitarCategoriaVocabulario",DesibilitarCategoriaVocabulario);
+router.post("/Categoria/habilitarCategoriaVocabulrio",HabilitarCategoriaVocabulario);
+router.post('/Categoria/DesabilitarCategoriaOracion',DesibilitarCategoriaOraciones)
+router.post('/Categoria/HabilitarCategoriaOracion',HabilitarCategoriaOraciones)
 //categoria de oraciones *CREAR EL RESTO DEL CRUD*
 router.get("/Categoria/Mostartodos/Oracion", crearCategoriasOraciones);
 router.post("/Categoria/Borrar/OracionCategoria", borrarCategoriaOracion);
@@ -78,7 +90,7 @@ router.post("/UpdateTerminadoVocabularioFinal",UpdateTerminadoVocabularioFinal);
 //Juego Oracion
 router.get("/uniendoPartida",armandoJuegosOracionesPorPiezas);
 router.post("/llamadaPartidaOracion",llamadaPartidaOracion);
-router.post("/UpdateTerminadoOracion1", UpdateTerminadoOracion1)
+router.post("/UpdateTerminadoOracion1", UpdateTerminadoOracion1);
 router.post("/UpdateTerminadoOracion2", UpdateTerminadoOracion2);
 router.post("/UpdateTerminadoOracion3", UpdateTerminadoOracion3);
 router.post("/UpdateTerminadoOracion4", UpdateTerminadoOracion4);
@@ -100,7 +112,7 @@ router.post('/UneIntegrantesConJuegos',UneIntegrantesConJuegos)
 router.post('/actualizarJuegoUno', actualizarJuego1)
 router.post('/actualizarJuegoDos',actualizarJuego2)
 router.post('/actualizarJuegoTres',actualizarJuego3)
-router.post('/actualizarJuegoCuatro',actualizarJuego4)
+router.post('/actualizarJuegoCuatro',actualizarJuego4 )
 router.post('/actualizarJuegoCinco',actualizarJuego5)
 router.post('/actualizarJuegoTerminadoMulti', actualizarJuegoTerminado);
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno

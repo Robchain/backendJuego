@@ -29,7 +29,7 @@ export const signup = async (req: Request, res: Response) => {
             Identificacion: req.body.Identificacion,
             Curso: req.body.Curso,
             Paralelo: req.body.Paralelo,
-            Estado: req.body.Estado
+            Estado: "ACTIVO"
         })
         const personaSave = await persona.save();
 
@@ -141,9 +141,17 @@ export const profile = async (req: Request, res: Response) => {
     res.json(user);
 }
 
-export const perfilesActivos = async (req: Request, res: Response) => {
+export const perfilesActivosEstudiantes = async (req: Request, res: Response) => {
     try {
-        const users = await Persona.find({ TipoUsuario: "ESTUDIANTE", Estado: "ACTIVO" }, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+        const users = await Persona.find({ TipoUsuario: "ESTUDIANTE"}, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+        res.json(users);
+    } catch (error) {
+        res.json(error);
+    }
+}
+export const perfilesActivosMaestros = async (req: Request, res: Response) => {
+    try {
+        const users = await Persona.find({ TipoUsuario: "MAESTRO"}, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
         res.json(users);
     } catch (error) {
         res.json(error);
@@ -152,7 +160,7 @@ export const perfilesActivos = async (req: Request, res: Response) => {
 //perfiles no activos
 export const perfilesNoActivos = async (req: Request, res: Response) => {
     try {
-        const users = await Persona.find({/*Estado:"DESACTIVADO"*/ }, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+        const users = await Persona.find({}, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
         res.json(users);
     } catch (error) {
         res.json(error);
@@ -190,7 +198,6 @@ export const editarUser = async (req: Request, res: Response) => {
                 Identificacion: req.body.Identificacion,
                 Curso: req.body.Curso,
                 Paralelo: req.body.Paralelo,
-                Estado: req.body.Estado
             }
         })
         res.json("Actualizado")

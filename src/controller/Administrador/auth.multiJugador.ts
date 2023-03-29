@@ -11,7 +11,7 @@ export const CrearEvento = async (req:Request, res:Response) => {
             NumeroDeIntegrantes:req.body.NumeroDeIntegrantes,
             IntegrantesPorGrupos:req.body.Segundo,
             Fecha:req.body.picker,
-            Estado:req.body.Estado,
+            Estado:"ACTIVO"
         })
         const guardarmulti   =    await   multiJugador.save();
         CrearModeloInicialSinJuegos(guardarmulti); 

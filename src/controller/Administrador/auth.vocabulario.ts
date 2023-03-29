@@ -10,7 +10,7 @@ export const subirVocabulario =async (req:Request, res:Response) => {
       FileMuestra:req.body.FileMuestra,
       FilePregunta:req.body.FilePregunta,
       FileImagen:req.body.FileImagen,
-      Estado:req.body.Estado
+      Estado:"ACTIVO"
     })
 
    const vocabularioGuardar = await vocabulario.save();
@@ -57,7 +57,20 @@ export const editarVocabulario =async (req:Request, res:Response) => {
         FileMuestra:req.body.FileMuestra,
         FilePregunta:req.body.FilePregunta,
         FileImagen:req.body.FileImagen,
-        Estado:req.body.Estado
+      }
+    })
+    res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
+  } catch (error) {
+    res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+  }
+}
+export const editarVocabularioSinArchivos =async (req:Request, res:Response) => {
+  try {
+    const Data= await Vocabulario.findByIdAndUpdate({_id:req.body._id}, 
+      { $set:
+        {Categoria:req.body.Categoria,
+        Palabra:req.body.Palabra,
+        Silaba:req.body.Silaba,
       }
     })
     res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
@@ -75,5 +88,28 @@ export const testvi =async (req:Request, res:Response) => {
     }
 }
 
+
+export const DesibilitarVocabulario =async (req:Request, res:Response) => {
+  try {
+      const data = await Vocabulario.findByIdAndUpdate({_id:req.body._id},
+          {$set:
+          {  Estado:"INACTIVO"  
+          }})
+      res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+  } catch (error) {
+      res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+  }
+}
+export const HabilitarVocabulario =async (req:Request, res:Response) => {
+  try {
+      const data = await Vocabulario.findByIdAndUpdate({_id:req.body._id},
+          {$set:
+          {  Estado:"ACTIVO"  
+          }})
+      res.json({"titulo":"Excelente","respuesta":'Item Restaurado',"type":"success"})
+  } catch (error) {
+      res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+  }
+}
 
 

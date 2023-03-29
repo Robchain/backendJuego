@@ -33,6 +33,28 @@ export const borrarCategoria    =  async (req:Request, res:Response) => {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
 }
+export const DesibilitarCategoriaVocabulario =async (req:Request, res:Response) => {
+    try {
+        const data = await Categoria.findByIdAndUpdate({_id:req.body._id},
+            {$set:
+            {  Estado:"INACTIVO"  
+            }})
+        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
+export const HabilitarCategoriaVocabulario =async (req:Request, res:Response) => {
+    try {
+        const data = await Categoria.findByIdAndUpdate({_id:req.body._id},
+            {$set:
+            {  Estado:"ACTIVO"  
+            }})
+        res.json({"titulo":"Excelente","respuesta":'Item Restaurado',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
 //mostrar todos
 export const mostrarCateTodos  =async (req:Request, res:Response) => {
 try {
@@ -60,7 +82,6 @@ export const EditarCategoria = async (req:Request, res:Response) => {
         },{
             $set:{
                 NombreCategoria:req.body.NombreCategoria,
-                Estado:req.body.Estado
             }
         })
         res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})

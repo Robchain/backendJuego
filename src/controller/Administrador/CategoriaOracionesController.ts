@@ -4,7 +4,7 @@ import CategoriaOraciones, { ICategoriaOraciones } from "../../models/Administra
 
 export const crearCategoriasOraciones = async (req: Request, res: Response) => {
     try {
-        const categoria  = await  CategoriaOraciones.find({Estado:"ACTIVO"},{"createdAt":0,"updatedAt":0});
+        const categoria  = await  CategoriaOraciones.find({},{"createdAt":0,"updatedAt":0});
         res.json(categoria);
     } catch (error: any) {
         res.json([]);
@@ -27,7 +27,6 @@ export const EditarCategoriaOracion = async (req:Request, res:Response) => {
         },{
             $set:{
                 NombreCategoria:req.body.NombreCategoria,
-                Estado:req.body.Estado
             }
         })
         res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
@@ -36,6 +35,27 @@ export const EditarCategoriaOracion = async (req:Request, res:Response) => {
     }
 }
 
-
+export const DesibilitarCategoriaOraciones =async (req:Request, res:Response) => {
+    try {
+        const data = await CategoriaOraciones.findByIdAndUpdate({_id:req.body._id},
+            {$set:
+            {  Estado:"INACTIVO"  
+            }})
+        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
+export const HabilitarCategoriaOraciones =async (req:Request, res:Response) => {
+    try {
+        const data = await CategoriaOraciones.findByIdAndUpdate({_id:req.body._id},
+            {$set:
+            {  Estado:"ACTIVO"  
+            }})
+        res.json({"titulo":"Excelente","respuesta":'Item Restaurado',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
 
 

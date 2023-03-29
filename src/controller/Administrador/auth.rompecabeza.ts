@@ -42,6 +42,29 @@ export const mostrarRomTodos    =   async (req:Request,res:Response)=>{
         res.json([]);
     }
 }
+export const DesibilitarRompecabeza =async (req:Request, res:Response) => {
+    try {
+        const data = await Rompecabeza.findByIdAndUpdate({_id:req.body._id},
+            {$set:
+            {  Estado:"INACTIVO"  
+            }})
+        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
+export const HabilitarRompecabeza =async (req:Request, res:Response) => {
+    try {
+        const data = await Rompecabeza.findByIdAndUpdate({_id:req.body._id},
+            {$set:
+            {  Estado:"ACTIVO"  
+            }})
+        res.json({"titulo":"Excelente","respuesta":'Item Restaurado',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
+
 
 export const EditarRompecabeza =async (req:Request, res:Response) => {
         try {
@@ -53,7 +76,6 @@ export const EditarRompecabeza =async (req:Request, res:Response) => {
                 Pieza:req.body.Pieza,
                 FileBlanco:req.body.FileBlanco,
                 FileColor:req.body.FileColor,
-                Estado:req.body.Estado
             }
         })
         res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
@@ -69,7 +91,6 @@ export const EditarRompecabezaSinArchivo =async (req:Request, res:Response) => {
         $set:{
             Nombre:req.body.Nombre,
             Pieza:req.body.Pieza,
-            Estado:req.body.Estado
         }
     })
     res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})

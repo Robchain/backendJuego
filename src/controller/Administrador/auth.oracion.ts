@@ -14,7 +14,7 @@ export const subirOracion = async (req:Request, res:Response) => {
             FileVideoPreguntaQue:req.body.FileVideoPreguntaQue,
             FileVideoPreguntaQuien:req.body.FileVideoPreguntaQuien,
             FileVideoMuestra:req.body.FileVideoMuestra,
-            Estado:req.body.Estado
+            Estado:"ACTIVO"
         })
         const guardarOracion   =    await   oracion.save();
         res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
@@ -65,7 +65,6 @@ export const editarOracion =async (req:Request, res:Response) => {
             FileVideoPreguntaQuien:req.body.FileVideoPreguntaQuien,
             FileVideoPreguntaCompleja:req.body.FileVideoPreguntaCompleja,
             FileVideoMuestra:req.body.FileVideoMuestra,
-            Estado:req.body.Estado
         }
     })
     res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
@@ -75,3 +74,26 @@ export const editarOracion =async (req:Request, res:Response) => {
 }
 
 
+
+export const DesibilitarOracion =async (req:Request, res:Response) => {
+    try {
+        const data = await Oracion.findByIdAndUpdate({_id:req.body._id},
+            {$set:
+            {  Estado:"INACTIVO"  
+            }})
+        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
+export const HabilitarOracion =async (req:Request, res:Response) => {
+    try {
+        const data = await Oracion.findByIdAndUpdate({_id:req.body._id},
+            {$set:
+            {  Estado:"ACTIVO"  
+            }})
+        res.json({"titulo":"Excelente","respuesta":'Item Restaurado',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    }
+}
