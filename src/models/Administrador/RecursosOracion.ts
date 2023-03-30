@@ -32,27 +32,31 @@ const schemaRecursosOracion = new Schema({
         trim:true
     },Adverbio:{
         type:String,
-        require:true,
         trim:true
     },
     FileSujetoImagen:{
         type:String,
+        require:true,
         trim:true
     },
     FileAdjetivoImagen:{
         type:String,
+        require:true,
         trim:true
     },
     FileVideoPreguntaQue:{
         type:String,
+        require:true,
         trim:true
     },
     FileVideoPreguntaQuien:{
         type:String,
+        require:true,
         trim:true
     },
     FileVideoMuestra:{
         type:String,
+        require:true,
         trim:true
     },
     Estado:{

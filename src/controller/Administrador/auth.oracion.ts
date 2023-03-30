@@ -59,6 +59,7 @@ export const editarOracion =async (req:Request, res:Response) => {
             Categoria:req.body.Categoria,
             Oracion:req.body.Oracion,
             Verbo:req.body.Verbo,
+            Adverbio:req.body.Adverbio,
             FileSujetoImagen:req.body.FileSujetoImagen,
             FileAdjetivoImagen:req.body.FileAdjetivoImagen,
             FileVideoPreguntaQue:req.body.FileVideoPreguntaQue,
@@ -73,7 +74,24 @@ export const editarOracion =async (req:Request, res:Response) => {
     }
 }
 
-
+export const editarOracionSinArchivo =async (req:Request, res:Response) => {
+    try {
+        const Data = await Oracion.findByIdAndUpdate(
+            {
+         _id:req.body._id
+            },{
+        $set:{
+            Categoria:req.body.Categoria,
+            Oracion:req.body.Oracion,
+            Verbo:req.body.Verbo,
+            Adverbio:req.body.Adverbio,
+        }
+    })
+    res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+    }
+}
 
 export const DesibilitarOracion =async (req:Request, res:Response) => {
     try {

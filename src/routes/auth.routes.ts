@@ -3,7 +3,7 @@ import {validarToken}   from '../lib/verifyToken';
 import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros } from "../controller/Administrador/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza, EditarRompecabezaSinArchivo, DesibilitarRompecabeza, HabilitarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
 import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi, DesibilitarVocabulario, HabilitarVocabulario, editarVocabularioSinArchivos} from '../controller/Administrador/auth.vocabulario';
-import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion, DesibilitarOracion, HabilitarOracion } from '../controller/Administrador/auth.oracion';
+import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion, DesibilitarOracion, HabilitarOracion, editarOracionSinArchivo } from '../controller/Administrador/auth.oracion';
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria, DesibilitarCategoriaVocabulario, HabilitarCategoriaVocabulario } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo, DesibilitarEquipo, HabilitarEquipo}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
@@ -49,7 +49,8 @@ router.get('/OracionAdmi/mostrartodo',mostrarOracTodos);
 router.get('/OracionAdmi/buscarU',mostrarOracPala);
 router.post('/OracionAdmi/Editar',editarOracion);
 router.post('/OracionAdmi/Desabilitar',DesibilitarOracion);
-router.post('/OracionAdmi/Desabilitar',HabilitarOracion)
+router.post('/OracionAdmi/Habilitar',HabilitarOracion)
+router.post("/OracionAdmi/EditarSinImagenes",editarOracionSinArchivo)
 //categoria
 router.post('/Categoria',crearCategorias);
 router.post('/Categoria/borrar',borrarCategoria);
