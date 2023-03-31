@@ -1,7 +1,8 @@
-import './Conection';
-import app from './App'
 import dotenv from 'dotenv';
 dotenv.config();
+import './Conection';
+import app from './App'
+
 
  
 

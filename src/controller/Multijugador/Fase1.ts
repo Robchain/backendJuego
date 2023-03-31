@@ -179,22 +179,25 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
                 }
             }
         }, { 'createdAt': 0, 'updatedAt': 0 });
-
-        let pos = data[0].Integrantes.findIndex(obj => JSON.stringify(obj) === JSON.stringify(objetoaBuscar));
-        res.json({
-            _id: data[0].id,
-            IdDeLaAsignacion: data[0].IdDeLaAsignacion,
-            Equipo: data[0].Equipo,
-            Integrantes: data[0].Integrantes,
-            Juegos: data[0].Juegos,
-            Avance: data[0].Avance,
-            FechaDeInicio: data[0].FechaDeInicio,
-            FechaDeFin: data[0].FechaDeFin,
-            Estado: data[0].Estado,
-            Posicion: pos
-        });
+if(data.length!==0){
+    let pos = data[0].Integrantes.findIndex(obj => JSON.stringify(obj) === JSON.stringify(objetoaBuscar));
+    res.json({
+        _id: data[0].id,
+        IdDeLaAsignacion: data[0].IdDeLaAsignacion,
+        Equipo: data[0].Equipo,
+        Integrantes: data[0].Integrantes,
+        Juegos: data[0].Juegos,
+        Avance: data[0].Avance,
+        FechaDeInicio: data[0].FechaDeInicio,
+        FechaDeFin: data[0].FechaDeFin,
+        Estado: data[0].Estado,
+        Posicion: pos
+    });
+}else {
+    res.json(null);
+} 
     } catch (error) {
-        res.json(error);
+        res.json(null);
     }
 }
 

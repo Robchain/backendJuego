@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
-import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros } from "../controller/Administrador/auth.controller";
+import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUser,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros, activarPersonas, desabilitarPersonas, getBase } from "../controller/Administrador/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza, EditarRompecabezaSinArchivo, DesibilitarRompecabeza, HabilitarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
 import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi, DesibilitarVocabulario, HabilitarVocabulario, editarVocabularioSinArchivos} from '../controller/Administrador/auth.vocabulario';
 import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion, DesibilitarOracion, HabilitarOracion, editarOracionSinArchivo } from '../controller/Administrador/auth.oracion';
@@ -14,11 +14,14 @@ import { borrarCategoriaOracion, crearCategoriasOraciones, DesibilitarCategoriaO
 import { actualizarJuego1, actualizarJuego2, actualizarJuego3, actualizarJuego4, actualizarJuego5, actualizarJuegoTerminado, DevuelveLaPosicionDentroDelArray, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
 
 const router : Router = Router();
+router.get("/",getBase)
 router.post('/signup' ,signup);
 router.post('/signin',signin);
 router.get('/profile',profile);
 router.get('/Ver-Registrados-Activos',perfilesActivosEstudiantes)
 router.get('/perfilesNoActivos',perfilesNoActivos)
+router.post("/Perfiles/desabilitar",desabilitarPersonas)
+router.post("/Perfiles/habilitar",activarPersonas)
 router.get('/perfilesTotales',perfilesTotales)
 router.delete('/BorrarUsario', borrarPerfiles)
 router.post('/EditarUsuario',test)
@@ -113,7 +116,7 @@ router.post('/UneIntegrantesConJuegos',UneIntegrantesConJuegos)
 router.post('/actualizarJuegoUno', actualizarJuego1)
 router.post('/actualizarJuegoDos',actualizarJuego2)
 router.post('/actualizarJuegoTres',actualizarJuego3)
-router.post('/actualizarJuegoCuatro',actualizarJuego4 )
+router.post('/actualizarJuegoCuatro',actualizarJuego4)
 router.post('/actualizarJuegoCinco',actualizarJuego5)
 router.post('/actualizarJuegoTerminadoMulti', actualizarJuegoTerminado);
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno

@@ -13,6 +13,9 @@ function createToken(persona: IPersona) {
         expiresIn: '1d'
     });
 }
+export const getBase = (req:Request, res:Response)=>{
+res.json("BIENVENIDO BLIPBLAP SERVICIO")
+}
 // para registrar usuario
 export const signup = async (req: Request, res: Response) => {
 
@@ -146,7 +149,7 @@ export const perfilesActivosEstudiantes = async (req: Request, res: Response) =>
         const users = await Persona.find({ TipoUsuario: "ESTUDIANTE"}, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
         res.json(users);
     } catch (error) {
-        res.json(error);
+        res.json([]);
     }
 }
 export const perfilesActivosMaestros = async (req: Request, res: Response) => {
@@ -157,6 +160,7 @@ export const perfilesActivosMaestros = async (req: Request, res: Response) => {
         res.json(error);
     }
 }
+
 //perfiles no activos
 export const perfilesNoActivos = async (req: Request, res: Response) => {
     try {
@@ -201,6 +205,30 @@ export const editarUser = async (req: Request, res: Response) => {
             }
         })
         res.json("Actualizado")
+    } catch (error) {
+        res.json("Error de Actualizacion")
+    }
+}
+export const desabilitarPersonas = async (req: Request, res: Response) => {
+    try {
+        const Data = await Persona.findByIdAndUpdate({
+            _id: req.body._id
+        }, {$set: {
+                Estado:"INACTIVO"
+            }})
+            res.json({ "titulo": "Excelente", "respuesta": 'Actualizado con exito', "type": "success" })
+    } catch (error) {
+        res.json("Error de Actualizacion")
+    }
+}
+export const activarPersonas = async (req: Request, res: Response) => {
+    try {
+        const Data = await Persona.findByIdAndUpdate({
+            _id: req.body._id
+        }, {$set: {
+                Estado:"ACTIVO"
+            }})
+            res.json({ "titulo": "Excelente", "respuesta": 'Actualizado con exito', "type": "success" })
     } catch (error) {
         res.json("Error de Actualizacion")
     }

@@ -232,9 +232,13 @@ juegosOracion6.save();
 export const llamadaPartidaOracion = async (req: Request, res: Response) => {
     try {
       const objetos = await JugadoresConOracion.find({ "Estudiante.Usuario": req.body.Usuario }).limit(6);
-      res.json({ Juego1: objetos[0], Juego2: objetos[1], Juego3: objetos[2], Juego4: objetos[3], Juego5: objetos[4], Juego6: objetos[5] })
+      if(objetos.length >=1){
+        res.json({ Juego1: objetos[0], Juego2: objetos[1], Juego3: objetos[2], Juego4: objetos[3], Juego5: objetos[4], Juego6: objetos[5] })
+      }else{
+        res.json(null)
+      }
     } catch (error) {
-  
+      res.json(null);
     }
   }
 

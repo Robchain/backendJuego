@@ -1,14 +1,16 @@
+import * as dotenv from 'dotenv' 
+dotenv.config()
 import mongoose  from "mongoose";
-import config from './config/confi';
+
 
 
 (async () =>{
     try {
-       const db = await mongoose.connect(`${config.db.URI}`);
+       const db = await mongoose.connect(`${process.env.DATABASE_URI}`);
 console.log("Base de datos", db.connection.name); 
     } catch (error) {
         console.log(error)
     }
-})()
+})()    
  
  
