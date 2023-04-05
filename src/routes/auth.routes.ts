@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
-import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUserConArchivo,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros, activarPersonas, desabilitarPersonas, getBase, EditarsinArchivoUsuario, ActualizarContraseña } from "../controller/Administrador/auth.controller";
+import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUserConArchivo,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros, activarPersonas, desabilitarPersonas, getBase, EditarsinArchivoUsuario, ActualizarContraseña, BuscarPorCursoYParalelo } from "../controller/Administrador/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza, EditarRompecabezaSinArchivo, DesibilitarRompecabeza, HabilitarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
 import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi, DesibilitarVocabulario, HabilitarVocabulario, editarVocabularioSinArchivos} from '../controller/Administrador/auth.vocabulario';
 import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion, DesibilitarOracion, HabilitarOracion, editarOracionSinArchivo, ActivarJuegoConEstudianteOracion } from '../controller/Administrador/auth.oracion';
@@ -20,6 +20,7 @@ router.post('/signup' ,signup);
 router.post('/signin',signin);
 router.get('/profile',profile);
 router.get('/Ver-Registrados-Activos',perfilesActivosEstudiantes)
+router.post("/Perfiles/BuscarPorCursoYParalelo", BuscarPorCursoYParalelo)
 router.get('/perfilesNoActivos',perfilesNoActivos)
 router.post("/Perfiles/EditarconImagen",editarUserConArchivo)
 router.post("/Perfiles/EditarSinImagen",EditarsinArchivoUsuario)

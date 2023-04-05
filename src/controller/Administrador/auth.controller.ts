@@ -1,11 +1,6 @@
 import { Request, Response } from 'express'
 import Persona, { IPersona } from '../../models/Administrador/Persona';
 import jwt from 'jsonwebtoken';
-import PartidaVocabulario from '../../models/Juego/Vocabulario/PartidaVocabulario';
-import JugadoresConVocabularios, { IJugadoresConVocabulario } from '../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
-import { modeloPartida } from '../auth.TestDeLlamada';
-import { UnirUsuarioConOraciones } from '../Juego/OracionPartidas';
-import ActividadesHablitado, { IActividadesHabilitadas } from '../../models/Administrador/HabilitandoActividades';
 
 //funcion del token 
 function createToken(persona: IPersona) {
@@ -143,6 +138,22 @@ export const profile = async (req: Request, res: Response) => {
     const user = await Persona.findById(req.body.personaId, { password: 0 });
     if (!user) return res.status(400).json('no User Found');
     res.json(user);
+}
+export const BuscarPorCursoYParalelo =async (req:Request, res:Response) => {
+    try {
+            const user = await Persona.find({Curso:req.body.Curso, Paralelo:req.body.Paralelo}, {password:0});
+            if(user.length === 0){
+                res.json([{value:"NO HAY ESTUDIANTES",label:"NO HAY ESTUDIANTES"}]);
+            }else{
+            let respuesta = user.map((item) => ({
+            value: item._id,
+            label: `${item.Nombre} ${item.Apellido}`
+          }));
+            res.json(respuesta);
+        }    
+    } catch (error) {
+    res.status(500).json([{value:"NO HAY INFORMACION",label:"NO HAY INFORMACION"}]);
+    }
 }
 
 export const perfilesActivosEstudiantes = async (req: Request, res: Response) => {
