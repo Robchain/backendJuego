@@ -36,7 +36,7 @@ export const signup = async (req: Request, res: Response) => {
         })
         const personaSave = await persona.save();
 
-        if (personaSave.TipoUsuario === "ESTUDIANTE") {
+        /* if (personaSave.TipoUsuario === "ESTUDIANTE") {
             const habilitadoInical: IActividadesHabilitadas = new ActividadesHablitado({
                 Estudiante: personaSave,
                 Vocabulario: true,
@@ -45,8 +45,9 @@ export const signup = async (req: Request, res: Response) => {
                 Estado: "ACTIVO",
             })
            const habi =  await habilitadoInical.save();
+          UnirUsuarioConOraciones(personaSave);
             const partidaI = await PartidaVocabulario.find().limit(6);
-            UnirUsuarioConOraciones(personaSave);
+            
             //UNO
             const juegosVocabulario: IJugadoresConVocabulario = new JugadoresConVocabularios({
                 Estudiante: {
@@ -114,7 +115,7 @@ export const signup = async (req: Request, res: Response) => {
                 Avance: modeloPartida(partidaI[5].Rompecabeza.Pieza),
             });
             juegosVocabulario6.save();
-        }
+        }*/
         res.json({ "titulo": "Excelente", "respuesta": 'guardado con exito', "type": "success" });
 
     } catch (e: any) {
@@ -186,7 +187,7 @@ export const borrarPerfiles = async (req: Request, res: Response) => {
         res.json({ "titulo": "Error", "respuesta": `no se puedo borrar`, "type": "error" });
     }
 }
-export const editarUser = async (req: Request, res: Response) => {
+export const editarUserConArchivo = async (req: Request, res: Response) => {
     try {
         const Data = await Persona.findByIdAndUpdate({
             _id: req.body._id
@@ -197,18 +198,41 @@ export const editarUser = async (req: Request, res: Response) => {
                 Email: req.body.Email,
                 Usuario: req.body.Usuario,
                 FotoPerfil: req.body.FotoPerfil,
-                Password: req.body.Password,
                 TipoUsuario: req.body.TipoUsuario,
                 Identificacion: req.body.Identificacion,
                 Curso: req.body.Curso,
                 Paralelo: req.body.Paralelo,
             }
         })
-        res.json("Actualizado")
+        res.json({ "titulo": "Excelente", "respuesta": 'Actualizado con exito', "type": "success" })
     } catch (error) {
-        res.json("Error de Actualizacion")
+        res.json({ "titulo": "Error", "respuesta": `no se puedo actualizar`, "type": "error" })
     }
 }
+
+export const EditarsinArchivoUsuario = async (req: Request, res: Response) => {
+    try {
+        const Data = await Persona.findByIdAndUpdate({
+            _id: req.body._id
+        }, {
+            $set: {
+                Nombre: req.body.Nombre,
+                Apellido: req.body.Apellido,
+                Email: req.body.Email,
+                Identificacion: req.body.Identificacion,
+                Usuario: req.body.Usuario,
+                TipoUsuario: req.body.TipoUsuario,
+                Curso: req.body.Curso,
+                Paralelo: req.body.Paralelo,
+            }
+        })
+        res.json({ "titulo": "Excelente", "respuesta": 'Actualizado con exito', "type": "success" })
+    } catch (error) {
+        res.json({ "titulo": "Error", "respuesta": `no se puedo actualizar`, "type": "error" })
+    }
+}
+
+
 export const desabilitarPersonas = async (req: Request, res: Response) => {
     try {
         const Data = await Persona.findByIdAndUpdate({
@@ -218,7 +242,7 @@ export const desabilitarPersonas = async (req: Request, res: Response) => {
             }})
             res.json({ "titulo": "Excelente", "respuesta": 'Actualizado con exito', "type": "success" })
     } catch (error) {
-        res.json("Error de Actualizacion")
+        res.json({ "titulo": "Error", "respuesta": `no se puedo borrar`, "type": "error" })
     }
 }
 export const activarPersonas = async (req: Request, res: Response) => {
@@ -230,7 +254,7 @@ export const activarPersonas = async (req: Request, res: Response) => {
             }})
             res.json({ "titulo": "Excelente", "respuesta": 'Actualizado con exito', "type": "success" })
     } catch (error) {
-        res.json("Error de Actualizacion")
+        res.json({ "titulo": "Error", "respuesta": `no se puedo Activar`, "type": "error" })
     }
 }
 export const test = async (req: Request, res: Response) => {
@@ -250,6 +274,18 @@ export const test = async (req: Request, res: Response) => {
         res.json({ "titulo": "Excelente", "respuesta": 'Actualizado con exito', "type": "success" })
     } else {
         res.json({ "titulo": "Error", "respuesta": `no se puedo borrar`, "type": "error" })
+    }
+
+}
+export const ActualizarContraseña = async (req: Request, res: Response) => {
+
+    const Data = await Persona.findById(req.body._id)
+    if (Data) {
+            Data.Password = req.body.Password,
+        Data.save()
+        res.json({ "titulo": "Excelente", "respuesta": 'Actualizado con exito', "type": "success" })
+    } else {
+        res.json({ "titulo": "Error", "respuesta": `No se pudo Actualizar`, "type": "error" })
     }
 
 }

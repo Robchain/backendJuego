@@ -47,7 +47,7 @@ export const CrearModeloInicialSinJuegos = async (BaseMulti: IMultiJuga) => {
 }
 //aqui guarda en base, la relacion entre juegos y Equipo
 
-export const GuardarRelacionEntreEquipoYJuegos = async (inputObject: IMultiJuga) => {
+export const GuardarRelacionEntreEquipoYJuegos = async (inputObject: IMultiJuga, TipoDeJuego:number) => {
     let IdDeLaAsignacion: string;
     let fecha;
     let Estado: string = "ACTIVO";
@@ -63,7 +63,13 @@ export const GuardarRelacionEntreEquipoYJuegos = async (inputObject: IMultiJuga)
             let idactual = inputObject.NombreDeEquipos[i].value;
             const data = await EquipoBase.find({ _id: idactual }, { "createdAt": 0, "updatedAt": 0 })
             for (let i = 0; i < parseInt(inputObject.NumeroDeIntegrantes.value); i++) {
-                Juegos.push(await Los5Juegos());
+                if(TipoDeJuego === 1){
+                    Juegos.push(await Los5JuegosTIPO1());
+                }else if(TipoDeJuego === 2){
+                    Juegos.push(await Los5JuegosTIPO2());
+                }else if(TipoDeJuego === 3){
+                    Juegos.push(await Los5JuegosTIPO3());
+                }
                 Avances.push(await creacionDeAvance());
             }
             const equipo: IEquipoConJuego = new EquipoConJuegos({
@@ -84,7 +90,7 @@ export const GuardarRelacionEntreEquipoYJuegos = async (inputObject: IMultiJuga)
 }
 
 
-const Los5Juegos = async () => {
+const Los5JuegosTIPO1 = async () => {
     let Juego1 = {}
     let Juego2 = {}
     let Juego3 = {}
@@ -93,8 +99,36 @@ const Los5Juegos = async () => {
     let modeloFinal: IPartidaMulti;
     try {
         Juego1 = await CreaciondePartidasIndividualesVocabulario();
-        Juego2 = await CreaciondePartidasIndividualesVocabulario();
+        Juego2 = await uniendoOracionesPorCategoria();
         Juego3 = await CreaciondePartidasIndividualesVocabulario();
+        Juego4 = await uniendoOracionesPorCategoria();
+        Juego5 = await  CreaciondePartidasIndividualesVocabulario();
+
+        modeloFinal = {
+            Juego1,
+            Juego2,
+            Juego3,
+            Juego4,
+            Juego5,
+        }
+        return modeloFinal;
+
+    } catch (error) {
+
+        return null;
+    }
+}
+const Los5JuegosTIPO2 = async () => {
+    let Juego1 = {}
+    let Juego2 = {}
+    let Juego3 = {}
+    let Juego4 = {}
+    let Juego5 = {}
+    let modeloFinal: IPartidaMulti;
+    try {
+        Juego1 = await  uniendoOracionesPorCategoria()
+        Juego2 = await  uniendoOracionesPorCategoria()
+        Juego3 = await  uniendoOracionesPorCategoria()
         Juego4 = await uniendoOracionesPorCategoria();
         Juego5 = await uniendoOracionesPorCategoria();
 
@@ -112,6 +146,36 @@ const Los5Juegos = async () => {
         return null;
     }
 }
+
+const Los5JuegosTIPO3 = async () => {
+    let Juego1 = {}
+    let Juego2 = {}
+    let Juego3 = {}
+    let Juego4 = {}
+    let Juego5 = {}
+    let modeloFinal: IPartidaMulti;
+    try {
+        Juego1 = await CreaciondePartidasIndividualesVocabulario();
+        Juego2 = await CreaciondePartidasIndividualesVocabulario();
+        Juego3 = await CreaciondePartidasIndividualesVocabulario();
+        Juego4 = await CreaciondePartidasIndividualesVocabulario();
+        Juego5 = await CreaciondePartidasIndividualesVocabulario();
+
+        modeloFinal = {
+            Juego1,
+            Juego2,
+            Juego3,
+            Juego4,
+            Juego5,
+        }
+        return modeloFinal;
+
+    } catch (error) {
+
+        return null;
+    }
+}
+
 
 const creacionDeAvance = async () => {
     try {

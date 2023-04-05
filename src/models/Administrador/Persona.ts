@@ -11,8 +11,8 @@ export interface IPersona extends Document{
     FotoPerfil:string;
     Password:string;
     TipoUsuario:string;
-    Curso:ICurso[];
-    Paralelo:IParalelo[];
+    Curso:string;
+    Paralelo:string;
     Identificacion:string;
     Estado:string;
     compararPassword(password:string): Promise<boolean>;
@@ -57,10 +57,10 @@ const schemaPerson = new Schema({
         trim:true
     },
     Curso:{
-        type:Array,
+        type:String,
         trim:true
     },Paralelo:{
-        type:Array,
+        type:String,
         trim:true
     },Estado:{
         type:String,

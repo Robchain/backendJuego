@@ -85,6 +85,17 @@ export const editarEquipo = async (req:Request, res:Response) => {
         res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
     }
 }
+export const editarEquipoSinImagen = async (req:Request, res:Response) => {
+    try {
+        const data = await Equipo.findByIdAndUpdate({_id:req.body._id},
+        {$set:
+        {   Nombre:req.body.Nombre
+        }})
+            res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+    }
+}
 /*
 export const EditarEquipo =async (req:Request, res:Response) => {
     try {

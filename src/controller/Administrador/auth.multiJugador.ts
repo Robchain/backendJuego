@@ -5,6 +5,7 @@ import { GuardarRelacionEntreEquipoYJuegos, CrearModeloInicialSinJuegos } from '
 
 export const CrearEvento = async (req:Request, res:Response) => {
     try {
+        let TipoDeJuego = req.body.TipoDeJuego;
         const multiJugador:IMultiJuga  = new  MultiJugador({
             NombreDeEquipos:req.body.NombreDeEquipo,
             NumeroDeGrupos:req.body.NumeroDeGrupos,
@@ -16,7 +17,7 @@ export const CrearEvento = async (req:Request, res:Response) => {
         const guardarmulti   =    await   multiJugador.save();
         CrearModeloInicialSinJuegos(guardarmulti); 
         //crear EquipoConJuego y lo guarda
-        GuardarRelacionEntreEquipoYJuegos(guardarmulti);
+        GuardarRelacionEntreEquipoYJuegos(guardarmulti, TipoDeJuego);
               //crear el modelo base y lo guarda
                      
                 res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
