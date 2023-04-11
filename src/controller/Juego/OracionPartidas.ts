@@ -171,7 +171,7 @@ const rompecabezas = async () => {
             },
             Partida:partidaI[0],
             Avance:modeloPartida(partidaI[0].Rompecabeza.Pieza),
-        });
+        }); 
         juegosOracion.save();
 //dos
 const juegosOracion2:IJugadoresConOraciones = new JugadoresConOracion({
