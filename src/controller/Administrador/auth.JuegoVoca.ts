@@ -4,7 +4,7 @@ import EstudianteRompecabeza, {IEstudianteRompecabeza} from "../../models/Admini
 import { Request, Response } from "express";
 import Persona from "../../models/Administrador/Persona";
 import PartidaVocabulario from "../../models/Juego/Vocabulario/PartidaVocabulario";
-import { modeloPartida } from "../auth.TestDeLlamada";
+import { CrearJuegoVocabularioIndividual, modeloPartida } from "../auth.TestDeLlamada";
 import JugadoresConVocabularios, { IJugadoresConVocabulario } from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
 
 export const example = async (req:Request, res:Response) => {
@@ -30,8 +30,9 @@ export const example = async (req:Request, res:Response) => {
 
 
 export const activarJuegoVocabulario = async (req:Request, res:Response)=>{
-try {
+try {   
     const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:req.body.Paralelo,Curso:req.body.Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+  
     const partidaI = await PartidaVocabulario.find().limit(6);
     Estudiantes.forEach(estudiante =>{
         for (let index = 0; index < partidaI.length; index++) {

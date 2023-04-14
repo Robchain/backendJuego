@@ -1,5 +1,4 @@
-import { isObject } from '@typegoose/typegoose/lib/internal/utils';
-import mongoose, {Schema, model,  Document} from 'mongoose';
+import  {Schema, model,  Document} from 'mongoose';
 
 export interface    IRecursosVocabulario extends Document{
     Categoria:string,

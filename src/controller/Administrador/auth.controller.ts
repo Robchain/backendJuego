@@ -30,87 +30,32 @@ export const signup = async (req: Request, res: Response) => {
             Estado: "ACTIVO"
         })
         const personaSave = await persona.save();
+        res.json({ "titulo": "Excelente", "respuesta": 'guardado con exito', "type": "success" });
 
-        /* if (personaSave.TipoUsuario === "ESTUDIANTE") {
-            const habilitadoInical: IActividadesHabilitadas = new ActividadesHablitado({
-                Estudiante: personaSave,
-                Vocabulario: true,
-                Oracion: false,
-                MultiJugador: false,
-                Estado: "ACTIVO",
-            })
-           const habi =  await habilitadoInical.save();
-          UnirUsuarioConOraciones(personaSave);
-            const partidaI = await PartidaVocabulario.find().limit(6);
-            
-            //UNO
-            const juegosVocabulario: IJugadoresConVocabulario = new JugadoresConVocabularios({
-                Estudiante: {
-                    id: personaSave._id,
-                    Nombre: personaSave.Nombre,
-                    Usuario: personaSave.Usuario,
-                },
-                Partida: partidaI[0],
-                Avance: modeloPartida(partidaI[0].Rompecabeza.Pieza),
-            });
-            juegosVocabulario.save();
-            //dos
-            const juegosVocabulario2: IJugadoresConVocabulario = new JugadoresConVocabularios({
-                Estudiante: {
-                    id: personaSave._id,
-                    Nombre: personaSave.Nombre,
-                    Usuario: personaSave.Usuario,
-                },
-                Partida: partidaI[1],
-                Avance: modeloPartida(partidaI[1].Rompecabeza.Pieza),
-            });
-            juegosVocabulario2.save();
-            //tres
-            const juegosVocabulario3: IJugadoresConVocabulario = new JugadoresConVocabularios({
-                Estudiante: {
-                    id: personaSave._id,
-                    Nombre: personaSave.Nombre,
-                    Usuario: personaSave.Usuario,
-                },
-                Partida: partidaI[2],
-                Avance: modeloPartida(partidaI[2].Rompecabeza.Pieza),
-            });
-            juegosVocabulario3.save();
-            //cuatro
-            const juegosVocabulario4: IJugadoresConVocabulario = new JugadoresConVocabularios({
-                Estudiante: {
-                    id: personaSave._id,
-                    Nombre: personaSave.Nombre,
-                    Usuario: personaSave.Usuario,
-                },
-                Partida: partidaI[3],
-                Avance: modeloPartida(partidaI[3].Rompecabeza.Pieza),
-            });
-            juegosVocabulario4.save();
+    } catch (e: any) {
+        res.json({ "titulo": "Error", "respuesta": `el dato: ${Object.keys(e.keyPattern)} ya existe`, "type": "error" })
+        /*res.json(Object.keys(e.keyPattern))  */
+    }
 
-            //cinco
-            const juegosVocabulario5: IJugadoresConVocabulario = new JugadoresConVocabularios({
-                Estudiante: {
-                    id: personaSave._id,
-                    Nombre: personaSave.Nombre,
-                    Usuario: personaSave.Usuario,
-                },
-                Partida: partidaI[4],
-                Avance: modeloPartida(partidaI[4].Rompecabeza.Pieza),
-            });
-            juegosVocabulario5.save();
-            //seis
-            const juegosVocabulario6: IJugadoresConVocabulario = new JugadoresConVocabularios({
-                Estudiante: {
-                    id: personaSave._id,
-                    Nombre: personaSave.Nombre,
-                    Usuario: personaSave.Usuario,
-                },
-                Partida: partidaI[5],
-                Avance: modeloPartida(partidaI[5].Rompecabeza.Pieza),
-            });
-            juegosVocabulario6.save();
-        }*/
+};
+export const signupsinfoto = async (req: Request, res: Response) => {
+
+    try {
+        // guardando un nuevo usuario
+        const persona: IPersona = new Persona({
+            Nombre: req.body.Nombre,
+            Apellido: req.body.Apellido,
+            Email: req.body.Email,
+            Usuario: req.body.Usuario,
+            FotoPerfil: "",
+            Password: req.body.Password,
+            TipoUsuario: req.body.TipoUsuario,
+            Identificacion: req.body.Identificacion,
+            Curso: req.body.Curso,
+            Paralelo: req.body.Paralelo,
+            Estado: "ACTIVO"
+        })
+        const personaSave = await persona.save();
         res.json({ "titulo": "Excelente", "respuesta": 'guardado con exito', "type": "success" });
 
     } catch (e: any) {
@@ -146,7 +91,7 @@ export const BuscarPorCursoYParalelo =async (req:Request, res:Response) => {
                 res.json([{value:"NO HAY ESTUDIANTES",label:"NO HAY ESTUDIANTES"}]);
             }else{
             let respuesta = user.map((item) => ({
-            value: item._id,
+            value: item.Usuario,
             label: `${item.Nombre} ${item.Apellido}`
           }));
             res.json(respuesta);

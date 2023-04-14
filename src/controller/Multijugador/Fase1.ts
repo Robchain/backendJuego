@@ -63,11 +63,11 @@ export const GuardarRelacionEntreEquipoYJuegos = async (inputObject: IMultiJuga,
             let idactual = inputObject.NombreDeEquipos[i].value;
             const data = await EquipoBase.find({ _id: idactual }, { "createdAt": 0, "updatedAt": 0 })
             for (let i = 0; i < parseInt(inputObject.NumeroDeIntegrantes.value); i++) {
-                if(TipoDeJuego === 1){
+                if(TipoDeJuego === 3){
                     Juegos.push(await Los5JuegosTIPO1());
                 }else if(TipoDeJuego === 2){
                     Juegos.push(await Los5JuegosTIPO2());
-                }else if(TipoDeJuego === 3){
+                }else if(TipoDeJuego === 1){
                     Juegos.push(await Los5JuegosTIPO3());
                 }
                 Avances.push(await creacionDeAvance());
@@ -273,10 +273,10 @@ export const UneIntegrantesConJuegos = async (req: Request, res: Response) => {
             'Juegos': input.Juegos,
             'Avance': input.Avance
         })
-        const updetate = await EquipoConJuegos.updateOne({_id:input.id},{'YaAsignado': true})
+        const updetate = await EquipoConJuegos.updateOne({_id:input._id},{'YaAsignado': true})
         res.json(updetate);
     } catch (error) {
-        res.json(error);
+        res.json([]);
     }
 
 }

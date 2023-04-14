@@ -5,7 +5,7 @@ import Categoria from '../models/Administrador/Categoria';
 import Rompecabeza from '../models/Administrador/RecursosRompecabeza';
 import JugadoresConVocabularios, { IJugadoresConVocabulario } from '../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
 
-export const RecibirJson = async (req: Request, res: Response) => {
+export const CrearJuegoVocabularioIndividual = async (req: Request, res: Response) => {
   try {
     let juego1 = {}
     let juego2 = {}
@@ -321,9 +321,9 @@ export const prueba = async (req: Request, res: Response) => {
 // MODELO BASE
 export const modeloPartida = (rompecabeza: number) => {
   let modelo = {
-    PalabraCorrecta: "",
-    PalabraSeleccionada: "",
-    Resultado: "",
+    PalabraCorrecta: "SIN JUGAR",
+    PalabraSeleccionada: "SIN JUGAR",
+    Resultado: "SIN JUAGAR",
     Terminado: false
   };
   let Juego1 = {};

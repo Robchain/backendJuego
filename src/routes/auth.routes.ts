@@ -1,18 +1,19 @@
 import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
-import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUserConArchivo,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros, activarPersonas, desabilitarPersonas, getBase, EditarsinArchivoUsuario, ActualizarContraseña, BuscarPorCursoYParalelo } from "../controller/Administrador/auth.controller";
+import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUserConArchivo,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros, activarPersonas, desabilitarPersonas, getBase, EditarsinArchivoUsuario, ActualizarContraseña, BuscarPorCursoYParalelo, signupsinfoto } from "../controller/Administrador/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza, EditarRompecabezaSinArchivo, DesibilitarRompecabeza, HabilitarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
 import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi, DesibilitarVocabulario, HabilitarVocabulario, editarVocabularioSinArchivos} from '../controller/Administrador/auth.vocabulario';
 import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion, DesibilitarOracion, HabilitarOracion, editarOracionSinArchivo, ActivarJuegoConEstudianteOracion } from '../controller/Administrador/auth.oracion';
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria, DesibilitarCategoriaVocabulario, HabilitarCategoriaVocabulario } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo, DesibilitarEquipo, HabilitarEquipo, editarEquipoSinImagen}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
-import { /*partidaVocabularioInicial,*/ RecibirJson, testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7, UpdateTerminadoVocabularioFinal  } from '../controller/auth.TestDeLlamada';
+import { /*partidaVocabularioInicial,*/testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario, UpdateTerminadoVocabulario1, UpdateTerminadoVocabulario2, UpdateTerminadoVocabulario3, UpdateTerminadoVocabulario4, UpdateTerminadoVocabulario5, UpdateTerminadoVocabulario6, UpdateTerminadoVocabulario7, UpdateTerminadoVocabularioFinal, CrearJuegoVocabularioIndividual  } from '../controller/auth.TestDeLlamada';
 import { CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, UpdateTerminadoOracion1, UpdateTerminadoOracion2, UpdateTerminadoOracion3, UpdateTerminadoOracion4, UpdateTerminadoOracion5, UpdateTerminadoOracion6, UpdateTerminadoOracion7, UpdateTerminadoOracionFinal } from '../controller/Juego/OracionPartidas';
 import { borrarCategoriaOracion, crearCategoriasOraciones, DesibilitarCategoriaOraciones, EditarCategoriaOracion, HabilitarCategoriaOraciones } from '../controller/Administrador/CategoriaOracionesController';
 import { actualizarJuego1, actualizarJuego2, actualizarJuego3, actualizarJuego4, actualizarJuego5, actualizarJuegoTerminado, DevuelveLaPosicionDentroDelArray, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
 import { activarJuegoVocabulario } from '../controller/Administrador/auth.JuegoVoca';
+import { ReporteMultiJugador, ReporteOracion, ReporteVocabulario } from '../controller/Administrador/reportes';
 
 const router : Router = Router();
 router.get("/",getBase)
@@ -20,6 +21,7 @@ router.post('/signup' ,signup);
 router.post('/signin',signin);
 router.get('/profile',profile);
 router.get('/Ver-Registrados-Activos',perfilesActivosEstudiantes)
+router.post('/signupsinfoto',signupsinfoto);
 router.post("/Perfiles/BuscarPorCursoYParalelo", BuscarPorCursoYParalelo)
 router.get('/perfilesNoActivos',perfilesNoActivos)
 router.post("/Perfiles/EditarconImagen",editarUserConArchivo)
@@ -90,6 +92,7 @@ router.get('/MultiJugador/Presentacion', PEvento)
 //armar partidas
 router.get('/partidaVocabularioInicial',testas)
 //Juego Vocabulario
+router.get('/CrearJuegoVocabularioIndividual',CrearJuegoVocabularioIndividual)
 router.post("/llamadaPartidaVocabulario",  llamadaPartidaVocabulario)
 router.post("/UpdateTerminadoVocabulario1", UpdateTerminadoVocabulario1)
 router.post("/UpdateTerminadoVocabulario2", UpdateTerminadoVocabulario2);
@@ -100,7 +103,7 @@ router.post("/UpdateTerminadoVocabulario6", UpdateTerminadoVocabulario6);
 router.post("/UpdateTerminadoVocabulario7", UpdateTerminadoVocabulario7);
 router.post("/UpdateTerminadoVocabularioFinal",UpdateTerminadoVocabularioFinal);
 //Juego Oracion
-router.get("/uniendoPartida",armandoJuegosOracionesPorPiezas);
+router.get("/armandoJuegosOracionesPorPiezas",armandoJuegosOracionesPorPiezas);
 router.post("/llamadaPartidaOracion",llamadaPartidaOracion);
 router.post("/UpdateTerminadoOracion1", UpdateTerminadoOracion1);
 router.post("/UpdateTerminadoOracion2", UpdateTerminadoOracion2);
@@ -114,7 +117,7 @@ router.post("/UpdateTerminadoOracionFinal",UpdateTerminadoOracionFinal);
 router.get('/CallMatch',ArmandoPartida)
 router.get('/testa',testvi)
 router.get('/Listado-Estudiante', SoloEstudiantes)
-router.get('/RecibidoPrueba',RecibirJson)
+
 /*router.get('/partidaEstudiante',partidaEstudiante);*/
 router.get('/prueba',prueba);
 /* Mutlijugador */
@@ -128,6 +131,11 @@ router.post('/actualizarJuegoCuatro',actualizarJuego4)
 router.post('/actualizarJuegoCinco',actualizarJuego5)
 router.post('/actualizarJuegoTerminadoMulti', actualizarJuegoTerminado);
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno
+
+//Reportes
+router.post('/ReporteVocabulario',ReporteVocabulario );
+router.post('/ReporteOracion', ReporteOracion);
+router.post('/ReporteMultiJugador', ReporteMultiJugador);
 
 export default router;
 
