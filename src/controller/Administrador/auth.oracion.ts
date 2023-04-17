@@ -3,7 +3,7 @@ import Oracion,{IRecursosOracion} from  '../../models/Administrador/RecursosOrac
 import { Request, Response} from "express";
 import PartidaOracion from '../../models/Juego/Oracion/PartidaOracion';
 import JugadoresConOraciones, { IJugadoresConOraciones } from '../../models/Jugadores/JugadoresOracion/JugadoresConOraciones';
-import { modeloPartida } from '../auth.TestDeLlamada';
+import { modeloPartida, rompecabezas } from '../auth.TestDeLlamada';
 
 
 export const subirOracion = async (req:Request, res:Response) => {
@@ -124,24 +124,30 @@ export const ActivarJuegoConEstudianteOracion = async (req:Request, res:Response
 
     try {
         const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:req.body.Paralelo,Curso:req.body.Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
-        const partidaI = await PartidaOracion.find().limit(6);
-        Estudiantes.forEach(estudiante =>{
-            for (let index = 0; index < partidaI.length; index++) {
-            const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
-                Estudiante: {
-                    id: estudiante._id,
-                    Nombre: estudiante.Nombre,
-                    Usuario: estudiante.Usuario,
-                },
-                Partida: partidaI[index],
-                Avance: modeloPartida(partidaI[index].Rompecabeza.Pieza),
-            });
-            juegosOracion.save();
+        for (const estudiante of Estudiantes){
+            await crearJuegoOraciones(estudiante)
         }
-        })
         res.json({"titulo":"Excelente","respuesta":'Juego Creado Con exito',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`Hubo un error al crear el juego`, "type":"error"}); 
+    }
+
+}
+
+const crearJuegoOraciones = async (estudiante:any)=>{
+    for (let index = 0; index < 13; index++) {
+        const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
+            Estudiante: {
+                id: estudiante._id,
+                Nombre: estudiante.Nombre,
+                Usuario: estudiante.Usuario,
+                Identificacion:estudiante.Identificacion,
+            },
+            Rompecabeza: await rompecabezas(),
+            Avance: null,
+            Terminado:false
+        });
+        juegosOracion.save();
     }
 
 }

@@ -1,11 +1,13 @@
 import {Schema, Document, model} from "mongoose";
-import { IModeloPartida } from "../../../interface/ModeloPartida";
+import { IModeloPartida, Juego } from "../../../interface/ModeloPartida";
 import { IPersona } from "../../Administrador/Persona";
 import { IPartidaOracion } from "../../Juego/Oracion/PartidaOracion";
+import { IRompecabeza } from "../../Administrador/RecursosRompecabeza";
 export interface IJugadoresConOraciones extends Document{
     Estudiante: IPersona,
-    Partida:IPartidaOracion,
-    Avance:IModeloPartida
+    Rompecabeza:IRompecabeza,
+    Avance:Juego[],
+    Terminado:boolean
 }
 
 const schemaJugadoresConOraciones = new Schema({
@@ -13,13 +15,17 @@ const schemaJugadoresConOraciones = new Schema({
         type:Object,
         require:true,
     },
-    Partida:{
+    Rompecabeza:{
         type:Object,
-        require:true,
+        required:true
     },
     Avance:{
-        type:Object,
+        type:Array,
         require:true,
+    },
+    Terminado:{
+        type:Boolean,
+        require:true
     }
 },{
     timestamps:true,

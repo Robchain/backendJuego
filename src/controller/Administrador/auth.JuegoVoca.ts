@@ -4,7 +4,7 @@ import EstudianteRompecabeza, {IEstudianteRompecabeza} from "../../models/Admini
 import { Request, Response } from "express";
 import Persona from "../../models/Administrador/Persona";
 import PartidaVocabulario from "../../models/Juego/Vocabulario/PartidaVocabulario";
-import { CrearJuegoVocabularioIndividual, modeloPartida } from "../auth.TestDeLlamada";
+import { CrearJuegoVocabularioIndividual, modeloPartida, rompecabezas } from "../auth.TestDeLlamada";
 import JugadoresConVocabularios, { IJugadoresConVocabulario } from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
 
 export const example = async (req:Request, res:Response) => {
@@ -29,27 +29,32 @@ export const example = async (req:Request, res:Response) => {
 //volver a revisar la logica
 
 
-export const activarJuegoVocabulario = async (req:Request, res:Response)=>{
+export const activarJuegoVocabularioPorGrupo = async (req:Request, res:Response)=>{
 try {   
-    const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:req.body.Paralelo,Curso:req.body.Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
-  
-    const partidaI = await PartidaVocabulario.find().limit(6);
-    Estudiantes.forEach(estudiante =>{
-        for (let index = 0; index < partidaI.length; index++) {
-        const juegosVocabulario: IJugadoresConVocabulario = new JugadoresConVocabularios({
-            Estudiante: {
-                id: estudiante._id,
-                Nombre: estudiante.Nombre,
-                Usuario: estudiante.Usuario,
-            },
-            Partida: partidaI[index],
-            Avance: modeloPartida(partidaI[index].Rompecabeza.Pieza),
-        });
-        juegosVocabulario.save();
+    const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:req.body.Paralelo,Curso:req.body.Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 })
+    for( const estudiante of Estudiantes){
+        await   crearJuegoVocabulario(estudiante);
     }
-    })
     res.json({"titulo":"Excelente","respuesta":'Juego Creado Con exito',"type":"success"})
 } catch (error) {
     res.json({"titulo":"Error","respuesta":`Hubo un error al crear el juego`, "type":"error"}); 
 }
 }
+
+const crearJuegoVocabulario = async (estudiante:any) => {
+    for (let index = 0; index < 13; index++) {
+      const juegosVocabulario = new JugadoresConVocabularios({
+        Estudiante: {
+          _id: estudiante._id,
+          Nombre: estudiante.Nombre,
+          Usuario: estudiante.Usuario,
+          Identificacion: estudiante.Identificacion,
+        },
+        Rompecabeza: await rompecabezas(),
+        Avance: null,
+        Terminado: false,
+      });
+      await juegosVocabulario.save();
+    }
+  }
+  

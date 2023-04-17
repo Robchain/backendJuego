@@ -7,50 +7,33 @@ import JugadoresConVocabularios, { IJugadoresConVocabulario } from '../models/Ju
 
 export const CrearJuegoVocabularioIndividual = async (req: Request, res: Response) => {
   try {
-    let juego1 = {}
-    let juego2 = {}
-    let juego3 = {}
-    let juego4 = {}
-    let juego5 = {}
-    let juego6 = {}
-    let juego7 = {}
-    let rompecabeza = await rompecabezas();
-    if (rompecabeza.Pieza === 4) {
-      juego1 = await CreaciondePartidasIndividualesVocabulario();
-      juego2 = await CreaciondePartidasIndividualesVocabulario();
-      juego3 = await CreaciondePartidasIndividualesVocabulario();
-      juego4 = await CreaciondePartidasIndividualesVocabulario();
-      juego5 = await CreaciondePartidasIndividualesVocabulario();
-      const PartidaVocabuarioN: IPartidaVocabulario = new PartidaVocabuario({
-        Rompecabeza: rompecabeza,
-        Juego1: juego1,
-        Juego2: juego2,
-        Juego3: juego3,
-        Juego4: juego4,
-        Juego5: juego5,
-      })
-      PartidaVocabuarioN.save();
-      res.json({ rompecabeza, juego1, juego2, juego3, juego4, juego5 })
-    } else if (rompecabeza.Pieza === 6) {
-      juego1 = await CreaciondePartidasIndividualesVocabulario();
-      juego2 = await CreaciondePartidasIndividualesVocabulario();
-      juego3 = await CreaciondePartidasIndividualesVocabulario();
-      juego4 = await CreaciondePartidasIndividualesVocabulario();
-      juego5 = await CreaciondePartidasIndividualesVocabulario();
-      juego6 = await CreaciondePartidasIndividualesVocabulario();
-      juego7 = await CreaciondePartidasIndividualesVocabulario();
-      const PartidaVocabuarioN: IPartidaVocabulario = new PartidaVocabuario({
-        Rompecabeza: rompecabeza,
-        Juego1: juego1,
-        Juego2: juego2,
-        Juego3: juego3,
-        Juego4: juego4,
-        Juego5: juego5,
-        Juego6: juego6,
-        Juego7: juego7
-      })
-      PartidaVocabuarioN.save();
-      res.json({ rompecabeza, juego1, juego2, juego3, juego4, juego5, juego6, juego7 })
+      let piezas = req.params.id;
+    let Juego1 = {}
+    let Juego2 = {}
+    let Juego3 = {}
+    let Juego4 = {}
+    let Juego5 = {}
+    let Juego6 = {}
+    let Juego7 = {}
+    if(parseInt(piezas) !== 4 && parseInt(piezas) !==6){
+      res.status(500).json("Numero no valido")
+    }
+    if (parseInt(piezas) === 4) {
+      Juego1 = await CreaciondePartidasIndividualesVocabulario();
+      Juego2 = await CreaciondePartidasIndividualesVocabulario();
+      Juego3 = await CreaciondePartidasIndividualesVocabulario();
+      Juego4 = await CreaciondePartidasIndividualesVocabulario();
+      Juego5 = await CreaciondePartidasIndividualesVocabulario();
+      res.json({ Juego1, Juego2, Juego3, Juego4, Juego5 })
+    } else if (parseInt(piezas) === 6) {
+      Juego1 = await CreaciondePartidasIndividualesVocabulario();
+      Juego2 = await CreaciondePartidasIndividualesVocabulario();
+      Juego3 = await CreaciondePartidasIndividualesVocabulario();
+      Juego4 = await CreaciondePartidasIndividualesVocabulario();
+      Juego5 = await CreaciondePartidasIndividualesVocabulario();
+      Juego6 = await CreaciondePartidasIndividualesVocabulario();
+      Juego7 = await CreaciondePartidasIndividualesVocabulario();
+      res.json({ Juego1, Juego2, Juego3, Juego4, Juego5, Juego6, Juego7 })
     }
   } catch (error) {
     res.json(error)
@@ -61,9 +44,13 @@ export const CreaciondePartidasIndividualesVocabulario = async () => {
   let vocabulario: any[] = [];
   let categoria = [];
   let Palabras = [];
-
+  do {
   categoria = await Categoria.aggregate([
-    {
+    {'$match': {
+      'Estado': 'ACTIVO'
+    }
+  }, 
+  {
       '$sample': {
         'size': 1
       }
@@ -105,6 +92,7 @@ export const CreaciondePartidasIndividualesVocabulario = async () => {
       }
     },
   ]);
+} while ( vocabulario.length > 2);
   if (vocabulario[0].correcto[0]) {
     let arrayId = [vocabulario[0].correcto[0]._id.toString(), vocabulario[0].incorrecto[0]._id.toString(), vocabulario[0].incorrecto[1]._id.toString()]
     arrayId.sort();
@@ -123,16 +111,12 @@ export const CreaciondePartidasIndividualesVocabulario = async () => {
 
   let final = {
     categoria: categoria[0],
-    vocabulario: {
-      Palabra1: Palabras[0],
-      Palabra2: Palabras[1],
-      Palabra3: Palabras[2],
-    }
+    Palabras
   }
   return final;
 }
 //--------------------------
-const rompecabezas = async () => {
+export const rompecabezas = async () => {
   let rompecabeza = [];
 
   rompecabeza = await Rompecabeza.aggregate([
@@ -391,14 +375,12 @@ res.status(500).json(null);
 
 // actualizacion
 
-export const UpdateTerminadoVocabulario1 = async (req: Request, res: Response) => {
+export const UpdateTerminadoVocabulario = async (req: Request, res: Response) => {
   try {
-    const dad = await JugadoresConVocabularios.updateOne({ _id: req.body.id }, {
-      'Avance.Juego1.PalabraCorrecta': req.body.PalabraCorrecta,
-      'Avance.Juego1.PalabraSeleccionada': req.body.PalabraSeleccionada,
-      'Avance.Juego1.Resultado': req.body.Resultado,
-      'Avance.Juego1.Terminado': req.body.Terminado
-    });
+    const dad = await JugadoresConVocabularios.findByIdAndUpdate({ _id: req.body.id }, {$set:
+      {   
+          Avance:req.body.Avance,
+      }});
     res.json(dad);
   } catch (error) {
 

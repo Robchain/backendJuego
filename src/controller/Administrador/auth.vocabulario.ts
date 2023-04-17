@@ -113,3 +113,12 @@ export const HabilitarVocabulario =async (req:Request, res:Response) => {
 }
 
 
+
+
+
+export const pruebaparam =(req:Request,res:Response)=>{
+
+ let id =  req.params.id;
+
+  res.json(id);
+}

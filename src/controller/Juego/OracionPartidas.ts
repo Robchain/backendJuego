@@ -8,51 +8,34 @@ import JugadoresConOracion, { IJugadoresConOraciones } from "../../models/Jugado
 import { modeloPartida } from "../auth.TestDeLlamada";
 //une un rompecabeza con un juego
 export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Response) => {
-    try {
-      let juego1 = {}
-      let juego2 = {}
-      let juego3 = {}
-      let juego4 = {}
-      let juego5 = {}
-      let juego6 = {}
-      let juego7 = {}
-      let rompecabeza = await rompecabezas();
-      if (rompecabeza.Pieza === 4) {
-        juego1 = await uniendoOracionesPorCategoria();
-        juego2 = await uniendoOracionesPorCategoria();
-        juego3 = await uniendoOracionesPorCategoria();
-        juego4 = await uniendoOracionesPorCategoria();
-        juego5 = await uniendoOracionesPorCategoria();
-        const PartidaOracionN: IPartidaOracion = new PartidaOracion({
-          Rompecabeza: rompecabeza,
-          Juego1: juego1,
-          Juego2: juego2,
-          Juego3: juego3,
-          Juego4: juego4,
-          Juego5: juego5,
-        })
-        PartidaOracionN.save();
-        res.json({ rompecabeza, juego1, juego2, juego3, juego4, juego5 })
-      } else if (rompecabeza.Pieza === 6) {
-        juego1 = await uniendoOracionesPorCategoria();
-        juego2 = await uniendoOracionesPorCategoria();
-        juego3 = await uniendoOracionesPorCategoria();
-        juego4 = await uniendoOracionesPorCategoria();
-        juego5 = await uniendoOracionesPorCategoria();
-        juego6 = await uniendoOracionesPorCategoria();
-        juego7 = await uniendoOracionesPorCategoria();
-        const PartidaOracionN: IPartidaOracion = new PartidaOracion({
-          Rompecabeza: rompecabeza,
-          Juego1: juego1,
-          Juego2: juego2,
-          Juego3: juego3,
-          Juego4: juego4,
-          Juego5: juego5,
-          Juego6: juego6,
-          Juego7: juego7
-        })
-        PartidaOracionN.save();
-        res.json({ rompecabeza, juego1, juego2, juego3, juego4, juego5, juego6, juego7 })
+    try { 
+      let piezas = req.params.id;
+      let Juego1 = {}
+      let Juego2 = {}
+      let Juego3 = {}
+      let Juego4 = {}
+      let Juego5 = {}
+      let Juego6 = {}
+      let Juego7 = {}
+      if(parseInt(piezas) !== 4 && parseInt(piezas) !==6){
+        res.status(500).json("Numero no valido")
+      }
+      if (parseInt(piezas) === 4) {
+        Juego1 = await uniendoOracionesPorCategoria();
+        Juego2 = await uniendoOracionesPorCategoria();
+        Juego3 = await uniendoOracionesPorCategoria();
+        Juego4 = await uniendoOracionesPorCategoria();
+        Juego5 = await uniendoOracionesPorCategoria();
+        res.json({ Juego1, Juego2, Juego3, Juego4, Juego5 })
+      } else if (parseInt(piezas) === 6) {
+        Juego1 = await uniendoOracionesPorCategoria();
+        Juego2 = await uniendoOracionesPorCategoria();
+        Juego3 = await uniendoOracionesPorCategoria();
+        Juego4 = await uniendoOracionesPorCategoria();
+        Juego5 = await uniendoOracionesPorCategoria();
+        Juego6 = await uniendoOracionesPorCategoria();
+        Juego7 = await uniendoOracionesPorCategoria();
+        res.json({  Juego1, Juego2, Juego3, Juego4, Juego5, Juego6, Juego7 })
       }
     } catch (error) {
       res.json(error)
@@ -63,14 +46,20 @@ export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Respons
 export const uniendoOracionesPorCategoria= async ()=>{
    let categoriaOra = [];
    let oraciones:any[]=[];
-   let Palabras = [];
-   categoriaOra = await CategoriaOraciones.aggregate([{
-    '$sample': {
-      'size': 1
+   let Oraciones = [];
+   do {
+    
+   categoriaOra = await CategoriaOraciones.aggregate([{'$match': {
+      'Estado': 'ACTIVO'
     }
-  }, {
-    '$limit': 1
-  }
+  }, 
+  {
+      '$sample': {
+        'size': 1
+      }
+    }, {
+      '$limit': 1
+    }
 ]);
 oraciones = await RecursosOracion.aggregate([
         {
@@ -107,10 +96,11 @@ oraciones = await RecursosOracion.aggregate([
         },
       ]);
 
+   } while (oraciones.length>2);
       if (oraciones[0].correcto[0]) {
         let arrayId = [oraciones[0].correcto[0]._id.toString(), oraciones[0].incorrecto[0]._id.toString(), oraciones[0].incorrecto[1]._id.toString()]
         arrayId.sort();
-        Palabras = arrayId.map(x => {
+        Oraciones = arrayId.map(x => {
           if (oraciones[0].correcto[0]._id.toString() === x) {
             return oraciones[0].correcto[0];
           }
@@ -127,12 +117,8 @@ oraciones = await RecursosOracion.aggregate([
       
       let final = {
         Categoria: categoriaOra[0],
-        Oraciones: {
-          Oracion1: Palabras[0],
-          Oracion2: Palabras[1],
-          Oracion3: Palabras[2],
-        },
-        TipoPregunta:Seleccion(Palabras[0])
+        Oraciones,
+        TipoPregunta:Seleccion(Oraciones[0])
       }
      return final;
 }
@@ -275,14 +261,12 @@ let opc=0;
     return Math.floor(Math.random() * (b - a + 1) + a);
   }
   
-  export const UpdateTerminadoOracion1 = async (req: Request, res: Response) => {
+  export const UpdateTerminadoOracion = async (req: Request, res: Response) => {
     try {
-const dad = await JugadoresConOracion.updateOne({ _id: req.body.id }, {
-        'Avance.Juego1.PalabraCorrecta': req.body.PalabraCorrecta,
-        'Avance.Juego1.PalabraSeleccionada': req.body.PalabraSeleccionada,
-        'Avance.Juego1.Resultado': req.body.Resultado,
-        'Avance.Juego1.Terminado': req.body.Terminado
-      });
+const dad = await JugadoresConOracion.findByIdAndUpdate({ _id: req.body.id }, {$set:
+  {   
+      Avance:req.body.Avance,
+  }});
       res.json(dad);
     } catch (error) {
   
