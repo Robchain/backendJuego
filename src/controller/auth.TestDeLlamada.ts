@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import Vocabulario from '../models/Administrador/RecursosVocabulario'
-import PartidaVocabuario, { IPartidaVocabulario } from '../models/Juego/Vocabulario/PartidaVocabulario'
+import PartidaVocabuario from '../models/Juego/Vocabulario/PartidaVocabulario'
 import Categoria from '../models/Administrador/Categoria';
 import Rompecabeza from '../models/Administrador/RecursosRompecabeza';
-import JugadoresConVocabularios, { IJugadoresConVocabulario } from '../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
+import JugadoresConVocabularios from '../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
 
 export const CrearJuegoVocabularioIndividual = async (req: Request, res: Response) => {
   try {
@@ -377,115 +377,28 @@ res.status(500).json(null);
 
 export const UpdateTerminadoVocabulario = async (req: Request, res: Response) => {
   try {
+   let input:any[] = req.body.Avance
+let finished:boolean=false
+    if( input.length === 4 && input.filter(obj => obj.Resultado === "CORRECTO").length===4){
+      finished=true;
+    }else if(input.length === 5 && input.filter(obj => obj.Resultado === "CORRECTO").length===4){
+      finished=true;
+    }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length===6){
+      finished=true;
+    }else if(input.length === 7 && input.filter(obj => obj.Resultado === "CORRECTO").length===6){
+      finished=true;
+    }else{
+      finished=false;
+    }
     const dad = await JugadoresConVocabularios.findByIdAndUpdate({ _id: req.body.id }, {$set:
       {   
-          Avance:req.body.Avance,
+          Avance:input,
+          Terminado:finished
       }});
+      
     res.json(dad);
   } catch (error) {
 
   }
 }
 
-//parte dos
-export const UpdateTerminadoVocabulario2 = async (req: Request, res: Response) => {
-  try {
-
-    const dad = await JugadoresConVocabularios.updateOne({ _id: req.body.id }, {
-      'Avance.Juego2.PalabraCorrecta': req.body.PalabraCorrecta,
-      'Avance.Juego2.PalabraSeleccionada': req.body.PalabraSeleccionada,
-      'Avance.Juego2.Resultado': req.body.Resultado,
-      'Avance.Juego2.Terminado': req.body.Terminado
-    });
-    res.json(dad);
-  } catch (error) {
-
-  }
-}
-
-// parte tres
-export const UpdateTerminadoVocabulario3 = async (req: Request, res: Response) => {
-  try {
-    const dad = await JugadoresConVocabularios.updateOne({ _id: req.body.id }, {
-      'Avance.Juego3.PalabraCorrecta': req.body.PalabraCorrecta,
-      'Avance.Juego3.PalabraSeleccionada': req.body.PalabraSeleccionada,
-      'Avance.Juego3.Resultado': req.body.Resultado,
-      'Avance.Juego3.Terminado': req.body.Terminado
-    });
-    res.json(dad);
-  } catch (error) {
-
-  }
-}
-
-// parte cuatro
-export const UpdateTerminadoVocabulario4 = async (req: Request, res: Response) => {
-  try {
-    const dad = await JugadoresConVocabularios.updateOne({ _id: req.body.id }, {
-      'Avance.Juego4.PalabraCorrecta': req.body.PalabraCorrecta,
-      'Avance.Juego4.PalabraSeleccionada': req.body.PalabraSeleccionada,
-      'Avance.Juego4.Resultado': req.body.Resultado,
-      'Avance.Juego4.Terminado': req.body.Terminado
-    });
-    res.json(dad);
-  } catch (error) {
-
-  }
-}
-
-//parte cinco
-export const UpdateTerminadoVocabulario5 = async (req: Request, res: Response) => {
-  try {
-
-
-    const dad = await JugadoresConVocabularios.updateOne({ _id: req.body.id }, {
-      'Avance.Juego5.PalabraCorrecta': req.body.PalabraCorrecta,
-      'Avance.Juego5.PalabraSeleccionada': req.body.PalabraSeleccionada,
-      'Avance.Juego5.Resultado': req.body.Resultado,
-      'Avance.Juego5.Terminado': req.body.Terminado
-    });
-    res.json(dad);
-  } catch (error) {
-
-  }
-}
-
-//parte seis
-export const UpdateTerminadoVocabulario6 = async (req: Request, res: Response) => {
-  try {
-    const dad = await JugadoresConVocabularios.updateOne({ _id: req.body.id }, {
-      'Avance.Juego6.PalabraCorrecta': req.body.PalabraCorrecta,
-      'Avance.Juego6.PalabraSeleccionada': req.body.PalabraSeleccionada,
-      'Avance.Juego6.Resultado': req.body.Resultado,
-      'Avance.Juego6.Terminado': req.body.Terminado
-    });
-    res.json(dad);
-  } catch (error) {
-
-  }
-}
-
-// parte siete
-export const UpdateTerminadoVocabulario7 = async (req: Request, res: Response) => {
-  try {
-    const dad = await JugadoresConVocabularios.updateOne({ _id: req.body.id }, {
-      'Avance.Juego7.PalabraCorrecta': req.body.PalabraCorrecta,
-      'Avance.Juego7.PalabraSeleccionada': req.body.PalabraSeleccionada,
-      'Avance.Juego7.Resultado': req.body.Resultado,
-      'Avance.Juego7.Terminado': req.body.Terminado
-    });
-    res.json(dad);
-  } catch (error) {
-
-  }
-}
-export const UpdateTerminadoVocabularioFinal = async (req: Request, res: Response) => {
-  try {
-    const dad = await JugadoresConVocabularios.updateOne({ _id: req.body.id }, {
-      'Avance.Terminado': req.body.Terminado
-    });
-    res.json(dad);
-  } catch (error) {
-
-  }
-}

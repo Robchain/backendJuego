@@ -11,7 +11,7 @@ export const crearCategoriasOraciones = async (req: Request, res: Response) => {
     }
 }
 // crear el resto del crud
-export const borrarCategoriaOracion    =  async (req:Request, res:Response) => {
+export const borrarCategoriaOracion   =  async (req:Request, res:Response) => {
     try {
         const borrar = await CategoriaOraciones.deleteOne({_id:req.body._id});
         res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
