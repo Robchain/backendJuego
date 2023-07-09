@@ -1,9 +1,8 @@
 import Persona from '../../models/Administrador/Persona';
 import Oracion,{IRecursosOracion} from  '../../models/Administrador/RecursosOracion';
 import { Request, Response} from "express";
-import PartidaOracion from '../../models/Juego/Oracion/PartidaOracion';
 import JugadoresConOraciones, { IJugadoresConOraciones } from '../../models/Jugadores/JugadoresOracion/JugadoresConOraciones';
-import { modeloPartida, rompecabezas } from '../auth.TestDeLlamada';
+import {  rompecabezas } from '../auth.TestDeLlamada';
 
 
 export const subirOracion = async (req:Request, res:Response) => {
@@ -138,10 +137,12 @@ const crearJuegoOraciones = async (estudiante:any)=>{
     for (let index = 0; index < 13; index++) {
         const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
             Estudiante: {
-                id: estudiante._id,
+                _id: estudiante._id,
                 Nombre: estudiante.Nombre,
                 Usuario: estudiante.Usuario,
                 Identificacion:estudiante.Identificacion,
+                Curso:estudiante.Curso,
+                Paralelo:estudiante.Paralelo
             },
             Rompecabeza: await rompecabezas(),
             Avance: null,

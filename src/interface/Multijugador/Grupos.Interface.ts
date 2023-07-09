@@ -27,12 +27,16 @@ export interface IIntegrantes{
     value:string;
 }
 export interface IIntegrantesPorGrupos{
-    equipo0:IEquipoInterno[];
-    equipo1?:IEquipoInterno[];
-    equipo2?:IEquipoInterno[];
-    equipo3?:IEquipoInterno[];
-    equipo4?:IEquipoInterno[];
-    equipo5?:IEquipoInterno[];
+    [key: string]: IEquipoInterno[] | undefined;
+  "Equipo 0"?: IEquipoInterno[];
+  "Equipo 1"?: IEquipoInterno[];
+  "Equipo 2"?: IEquipoInterno[];
+  "Equipo 3"?: IEquipoInterno[];
+  "Equipo 4"?: IEquipoInterno[];
+  "Equipo 5"?: IEquipoInterno[];
+  "Equipo 6"?: IEquipoInterno[];
+  "Equipo 7"?: IEquipoInterno[];
+  "Equipo 8"?: IEquipoInterno[];
 }
 
 export interface IEquipoInterno{

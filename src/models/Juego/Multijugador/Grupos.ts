@@ -1,15 +1,17 @@
 import { Schema, Document, model, Date } from "mongoose";
-import { IAvenceArriba, IEquipoMult, IIntegrantes, IPartidaMulti } from "../../../interface/Multijugador/Grupos.Interface";
+import { IAvenceArriba, IEquipoMult, IIntegrantes } from "../../../interface/Multijugador/Grupos.Interface";
 
 
 export interface IGrupoDeTrabajo extends Document {
-    IdDeLaAsignacion: string,
-    Equipo: IEquipoMult,
-    Integrantes:IIntegrantes[],
-    Juegos: IPartidaMulti[],
-    Avance: IAvenceArriba[],
-    FechaDeInicio: Date,
-    FechaDeFin: Date,
+    IdDeLaAsignacion: string;
+    Equipo: IEquipoMult;
+    Integrantes:IIntegrantes[];
+    Curso:string;
+    Paralelo:string;
+    TipoDeJuego: string;
+    Avance: IAvenceArriba[];
+    FechaDeInicio: Date;
+    FechaDeFin: Date;
     Estado:string
 }
 
@@ -26,11 +28,18 @@ const schemaPartidaGrupoDeTrabjo = new Schema({
         type: Array,
         require: true,
     },
-    Juegos: {
-        type: Object,
+    Curso:{
+        type:String,
+        trim:true
+    },Paralelo:{
+        type:String,
+        trim:true
+    },
+    TipoDeJuego: {
+        type: String,
     },
     Avance: {
-        type: Object,
+        type: Array,
     },
     FechaDeInicio: {
         type: Object,

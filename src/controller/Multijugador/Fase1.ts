@@ -9,34 +9,33 @@ import EquipoBase from '../../models/Administrador/Equipo';
 
 //creacion de partida
 export const CrearModeloInicialSinJuegos = async (BaseMulti: IMultiJuga) => {
-    let IdDeLaAsignacion: string;
-    let Estado: string = "ACTIVO";
     try {
-        IdDeLaAsignacion = BaseMulti.id;
         for (let i = 0; i < parseInt(BaseMulti.NumeroDeGrupos.value); i++) {
             let integrantes = null;
             if (i === 0) {
-                integrantes = BaseMulti.IntegrantesPorGrupos.equipo0
+                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 0']
             } else if (i === 1) {
-                integrantes = BaseMulti.IntegrantesPorGrupos.equipo1;
+                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 1'];
             } else if (i === 2) {
-                integrantes = BaseMulti.IntegrantesPorGrupos.equipo2;
+                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 2'];
             } else if (i === 3) {
-                integrantes = BaseMulti.IntegrantesPorGrupos.equipo3;
+                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 3'];
             } else if (i === 4) {
-                integrantes = BaseMulti.IntegrantesPorGrupos.equipo4;
+                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 4'];
             } else if (i === 5) {
-                integrantes = BaseMulti.IntegrantesPorGrupos.equipo5;
+                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 5'];
             }
             const GrupoInicialsinJuegos: IGrupoDeTrabajo = new Grupos({
-                IdDeLaAsignacion: IdDeLaAsignacion,
+                IdDeLaAsignacion: BaseMulti.id,
                 Equipo: null,
                 Integrantes: integrantes,
-                Juegos: null,
+                Curso:BaseMulti.Curso,
+                Paralelo:BaseMulti.Paralelo,
+                TipoDeJuego: BaseMulti.TipoDeJuego,
                 Avance: null,
                 FechaDeInicio: BaseMulti.Fecha[0],
                 FechaDeFin: BaseMulti.Fecha[1],
-                Estado: Estado
+                Estado: "ACTIVO"
             })
             GrupoInicialsinJuegos.save()
 
@@ -47,39 +46,21 @@ export const CrearModeloInicialSinJuegos = async (BaseMulti: IMultiJuga) => {
 }
 //aqui guarda en base, la relacion entre juegos y Equipo
 
-export const GuardarRelacionEntreEquipoYJuegos = async (inputObject: IMultiJuga, TipoDeJuego:number) => {
-    let IdDeLaAsignacion: string;
-    let fecha;
-    let Estado: string = "ACTIVO";
+export const GuardarRelacionEntreEquipoYJuegos = async (inputObject: IMultiJuga) => {
     try {
-
-        IdDeLaAsignacion = inputObject.id;
-        inputObject
-        fecha = inputObject.Fecha;
-        inputObject.NombreDeEquipos.length;
         for (let i = 0; i < inputObject.NombreDeEquipos.length; i++) {
-            let Juegos = [];
-            let Avances = [];
             let idactual = inputObject.NombreDeEquipos[i].value;
-            const data = await EquipoBase.find({ _id: idactual }, { "createdAt": 0, "updatedAt": 0 })
-            for (let i = 0; i < parseInt(inputObject.NumeroDeIntegrantes.value); i++) {
-                if(TipoDeJuego === 3){
-                    Juegos.push(await Los5JuegosTIPO1());
-                }else if(TipoDeJuego === 2){
-                    Juegos.push(await Los5JuegosTIPO2());
-                }else if(TipoDeJuego === 1){
-                    Juegos.push(await Los5JuegosTIPO3());
-                }
-                Avances.push(await creacionDeAvance());
-            }
+            const data = await EquipoBase.find({ _id: idactual }, { "createdAt": 0, "updatedAt": 0 });
             const equipo: IEquipoConJuego = new EquipoConJuegos({
-                IdDeLaAsignacion: IdDeLaAsignacion,
+                IdDeLaAsignacion: inputObject.id,
                 Equipo: data[0],
-                Juegos: Juegos,
-                Avance: Avances,
+                TipoDeJuego: inputObject.TipoDeJuego,
+                Avance: null,
+                Curso:inputObject.Curso,
+                Paralelo:inputObject.Paralelo,
                 YaAsignado: false,
-                Fecha: fecha,
-                Estado: Estado,
+                Fecha: inputObject.Fecha,
+                Estado: "ACTIVO",
             })
             equipo.save()
         }
@@ -234,7 +215,8 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
     try {
         let value = req.body.value;
         let label = req.body.label;
-        let objetoaBuscar = { label: label, value: value }
+        let situacion:string="";
+        let objetoaBuscar = { value: value, label: label}
         const data = await Grupos.find({
             "Integrantes": {
                 $elemMatch: {
@@ -245,17 +227,47 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
         }, { 'createdAt': 0, 'updatedAt': 0 });
 if(data.length!==0){
     let pos = data[0].Integrantes.findIndex(obj => JSON.stringify(obj) === JSON.stringify(objetoaBuscar));
+    if(data[0].Equipo===null){
+        if(pos === 0){
+            situacion="Eleccion Equipo";
+        }else if(pos>0){
+            situacion="Sala de espera";
+        }
+    }else if(data[0].Equipo!==null){
+        if(data[0].Avance ===null){
+            if(pos === 0){
+                situacion="Jugar";
+            }else if(pos>0){
+                situacion="Sala de espera";
+            }
+        }else if(Array.isArray(data[0].Avance)){
+                if(data[0].Avance.length===(pos*5)){
+                    situacion="Jugar";
+                }else if(data[0].Avance.length!==(pos*5)){
+                    if(data[0].Avance.length===(data[0].Integrantes.length*5)){
+                        situacion="Podio";
+                    }else{
+                        situacion="Sala de espera";
+                    }
+                   
+                }
+        }
+    }
+
     res.json({
         _id: data[0].id,
         IdDeLaAsignacion: data[0].IdDeLaAsignacion,
         Equipo: data[0].Equipo,
         Integrantes: data[0].Integrantes,
-        Juegos: data[0].Juegos,
+        TipoDeJuego: data[0].TipoDeJuego,
         Avance: data[0].Avance,
+        Curso:data[0].Curso,
+        Paralelo:data[0].Paralelo,
         FechaDeInicio: data[0].FechaDeInicio,
         FechaDeFin: data[0].FechaDeFin,
         Estado: data[0].Estado,
-        Posicion: pos
+        Posicion: pos,
+        Situacion:situacion
     });
 }else {
     res.json(null);
@@ -270,7 +282,7 @@ export const UneIntegrantesConJuegos = async (req: Request, res: Response) => {
         let input = req.body.BaseUno as IEquipoConJuego;
         const data = await Grupos.updateOne({ _id: req.body.idDeBase }, {
             'Equipo': input.Equipo,
-            'Juegos': input.Juegos,
+            'Juegos': input.TipoDeJuego,
             'Avance': input.Avance
         })
         const updetate = await EquipoConJuegos.updateOne({_id:input._id},{'YaAsignado': true})
@@ -280,101 +292,32 @@ export const UneIntegrantesConJuegos = async (req: Request, res: Response) => {
     }
 
 }
-export const actualizarJuego1 = async (req: Request, res: Response) => {
 
-    try {
-        let indice = req.body.indice as number;
 
-        const data = await Grupos.updateOne({ _id: req.body.idOutput }, {
-            $set: {
-                [`Avance.${indice}.Juego1.PalabraCorrecta`]: req.body.PalabraCorrecta,
-                [`Avance.${indice}.Juego1.PalabraSeleccionada`]: req.body.PalabraSeleccionada,
-                [`Avance.${indice}.Juego1.Resultado`]: req.body.Resultado,
-                [`Avance.${indice}.Juego1.Terminado`]: req.body.Terminado
-            }
-        })
-        res.json(data)
-    } catch (error) {
-        res.json(error)
-    }
-}
-export const actualizarJuego2 = async (req: Request, res: Response) => {
-
-    try {
-        let indice = req.body.indice as Number;
-        const data = await Grupos.updateOne({ _id: req.body.idOutput }, {
-            $set: {
-                [`Avance.${indice}.Juego2.PalabraCorrecta`]: req.body.PalabraCorrecta,
-                [`Avance.${indice}.Juego2.PalabraSeleccionada`]: req.body.PalabraSeleccionada,
-                [`Avance.${indice}.Juego2.Resultado`]: req.body.Resultado,
-                [`Avance.${indice}.Juego2.Terminado`]: req.body.Terminado
-            }
-        })
-        res.json(data)
-    } catch (error) {
-        res.json(error)
-    }
-}
-export const actualizarJuego3 = async (req: Request, res: Response) => {
-
-    try {
-        let indice = req.body.indice as Number;
-        const data = await Grupos.updateOne({ _id: req.body.idOutput }, {
-            $set: {
-                [`Avance.${indice}.Juego3.PalabraCorrecta`]: req.body.PalabraCorrecta,
-                [`Avance.${indice}.Juego3.PalabraSeleccionada`]: req.body.PalabraSeleccionada,
-                [`Avance.${indice}.Juego3.Resultado`]: req.body.Resultado,
-                [`Avance.${indice}.Juego3.Terminado`]: req.body.Terminado
-            }
-        })
-        res.json(data)
-    } catch (error) {
-        res.json(error)
-    }
-}
-export const actualizarJuego4 = async (req: Request, res: Response) => {
-
-    try {
-        let indice = req.body.indice as Number;
-        const data = await Grupos.updateOne({ _id: req.body.idOutput }, {
-            $set: {
-                [`Avance.${indice}.Juego4.PalabraCorrecta`]: req.body.PalabraCorrecta,
-                [`Avance.${indice}.Juego4.PalabraSeleccionada`]: req.body.PalabraSeleccionada,
-                [`Avance.${indice}.Juego4.Resultado`]: req.body.Resultado,
-                [`Avance.${indice}.Juego4.Terminado`]: req.body.Terminado
-            }
-        })
-        res.json(data)
-    } catch (error) {
-        res.json(error)
-    }
-}
-export const actualizarJuego5 = async (req: Request, res: Response) => {
-
-    try {
-        let indice = req.body.indice as Number;
-        const data = await Grupos.updateOne({ _id: req.body.idOutput }, {
-            $set: {
-                [`Avance.${indice}.Juego5.PalabraCorrecta`]: req.body.PalabraCorrecta,
-                [`Avance.${indice}.Juego5.PalabraSeleccionada`]: req.body.PalabraSeleccionada,
-                [`Avance.${indice}.Juego5.Resultado`]: req.body.Resultado,
-                [`Avance.${indice}.Juego5.Terminado`]: req.body.Terminado
-            }
-        })
-        res.json(data)
-    } catch (error) {
-        res.json(error)
-    }
-}
 export const actualizarJuegoTerminado = async (req: Request, res: Response) => {
     try {
-        let indice = req.body.indice as Number;
-        const data = await Grupos.updateOne({ _id: req.body.idOutput }, {
-            $set: {
-                [`Avance.${indice}.Terminado`]: req.body.Terminado,
+        //busca, encuentra, verifica si hay una antes, si no, lo guarda directemente, si si hay, captura la que estaba, anexa la nueva al final y guarda todo
+    let id =   req.body.idOutput;
+    let input = req.body.Avance;
+        const data = await Grupos.findOne({ _id:id});
+        if (data !== null) {
+            if(data.Avance !== null){
+              let aux =  data.Avance;
+
+              let nuevo=aux.concat(input);
+
+              data.Avance=nuevo;
+              await data.save();
+              res.json()
+            }else if(data.Avance===null){
+                data.Avance = input;
+                await data.save()
+                res.json()
             }
-        })
-        res.json(data)
+        }else{
+            //no hay data
+            res.json()
+        }
     } catch (error) {
         res.json(error)
     }

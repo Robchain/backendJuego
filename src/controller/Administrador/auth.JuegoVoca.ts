@@ -1,11 +1,8 @@
-import Rompecabeza,{IRompecabeza} from "../../models/Administrador/RecursosRompecabeza";
-import Vocabulario,{IRecursosVocabulario} from "../../models/Administrador/RecursosVocabulario";
-import EstudianteRompecabeza, {IEstudianteRompecabeza} from "../../models/Administrador/EstudianteRompecabeza";
+import Rompecabeza from "../../models/Administrador/RecursosRompecabeza";
 import { Request, Response } from "express";
 import Persona from "../../models/Administrador/Persona";
-import PartidaVocabulario from "../../models/Juego/Vocabulario/PartidaVocabulario";
-import { CrearJuegoVocabularioIndividual, modeloPartida, rompecabezas } from "../auth.TestDeLlamada";
-import JugadoresConVocabularios, { IJugadoresConVocabulario } from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
+import { rompecabezas } from "../auth.TestDeLlamada";
+import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
 
 export const example = async (req:Request, res:Response) => {
     try {
@@ -49,6 +46,8 @@ const crearJuegoVocabulario = async (estudiante:any) => {
           Nombre: estudiante.Nombre,
           Usuario: estudiante.Usuario,
           Identificacion: estudiante.Identificacion,
+          Curso:estudiante.Curso,
+          Paralelo:estudiante.Paralelo
         },
         Rompecabeza: await rompecabezas(),
         Avance: null,

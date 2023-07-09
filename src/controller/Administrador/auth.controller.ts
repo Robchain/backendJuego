@@ -91,7 +91,7 @@ export const BuscarPorCursoYParalelo =async (req:Request, res:Response) => {
                 res.json([{value:"NO HAY ESTUDIANTES",label:"NO HAY ESTUDIANTES"}]);
             }else{
             let respuesta = user.map((item) => ({
-            value: item.Usuario,
+            value: item.Identificacion,
             label: `${item.Nombre} ${item.Apellido}`
           }));
             res.json(respuesta);
