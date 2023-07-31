@@ -2,6 +2,7 @@ export interface ISentence {
     Categoria:string,
     Oracion:string,
     Verbo:string,
+    Sujeto:string,
     FileSujetoImagen:string,
     FileAdjetivoImagen:string,
     FileVideoPreguntaQue:string,

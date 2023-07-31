@@ -12,6 +12,7 @@ export const subirOracion = async (req:Request, res:Response) => {
             Oracion:req.body.Oracion,
             Verbo:req.body.Verbo,
             Adverbio:req.body.Adverbio,
+            Sujeto:req.body.Sujeto,
             FileSujetoImagen:req.body.FileSujetoImagen,
             FileAdjetivoImagen:req.body.FileAdjetivoImagen,
             FileVideoPreguntaQue:req.body.FileVideoPreguntaQue,

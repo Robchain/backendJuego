@@ -6,6 +6,7 @@ export interface IRecursosOracion extends Document{
     Oracion:string,
     Verbo:string,
     Adverbio:string
+    Sujeto:string,
     FileSujetoImagen:string,
     FileAdjetivoImagen:string,
     FileVideoPreguntaQue:string,
@@ -32,6 +33,10 @@ const schemaRecursosOracion = new Schema({
         trim:true
     },Adverbio:{
         type:String,
+        trim:true
+    },Sujeto:{
+        type:String,
+        require:true,
         trim:true
     },
     FileSujetoImagen:{
