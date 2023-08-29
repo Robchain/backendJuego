@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import MultiJugador, {IMultiJuga} from '../../models/Administrador/MultiJugador';
 import { GuardarRelacionEntreEquipoYJuegos, CrearModeloInicialSinJuegos } from '../Multijugador/Fase1';
-import Grupos from "../../models/Juego/Multijugador/Grupos"
+import Grupos, { IGrupoDeTrabajo } from "../../models/Juego/Multijugador/Grupos"
 import Persona from '../../models/Administrador/Persona';
 import { uniendoOracionesPorCategoria } from '../Juego/OracionPartidas';
 import { CreaciondePartidasIndividualesVocabulario } from '../auth.TestDeLlamada';
@@ -30,7 +30,7 @@ export const CrearEvento = async (req:Request, res:Response) => {
         GuardarRelacionEntreEquipoYJuegos(guardarmulti);
               //crear el modelo base y lo guarda
                      
-                res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
+                res.json({"titulo":"Excelente","respuesta":'Multi-jugador Creada con exito',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
     }
@@ -39,7 +39,7 @@ export const CrearEvento = async (req:Request, res:Response) => {
 
 export const BuscarPorCursoYParaleloMultijugador =async (req:Request, res:Response) => {
     try {
-            const grupo = await Grupos.find({Curso:req.body.Curso, Paralelo:req.body.Paralelo}, {password:0});
+            const grupo:IGrupoDeTrabajo[] = await Grupos.find({Curso:req.body.Curso, Paralelo:req.body.Paralelo});
             if(grupo.length === 0){
                 const user = await Persona.find({Curso:req.body.Curso, Paralelo:req.body.Paralelo}, {password:0});
                 if(user.length === 0){
@@ -53,6 +53,7 @@ export const BuscarPorCursoYParaleloMultijugador =async (req:Request, res:Respon
             }    
             // aqui se manda el listado de estudiante en base al curso y paralelo
             }else{
+              //if(grupo[0].FechaDeFin === grupo[0].FechaDeInicio )return 
 //aqui se manda todo los grupo mostrando que hay una actividad en progreso
             res.status(200).json(grupo);
         }

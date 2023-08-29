@@ -111,7 +111,7 @@ export const perfilesActivosEstudiantes = async (req: Request, res: Response) =>
 }
 export const perfilesActivosMaestros = async (req: Request, res: Response) => {
     try {
-        const users = await Persona.find({ TipoUsuario: "MAESTRO"}, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+        const users = await Persona.find({ TipoUsuario: "DOCENTE"}, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
         res.json(users);
     } catch (error) {
         res.json(error);

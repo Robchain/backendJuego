@@ -12,7 +12,7 @@ export const crearCategorias =async (req:Request,res:Response) => {
                 Estado:"ACTIVO"
             })
             categoria.save();
-        }else if(Juego.value==="Oracion"){
+        }else if(Juego.value==="Oración"){
             const categoria: ICategoriaOraciones = new CategoriaOraciones({
                 NombreCategoria: req.body.NombreCategoria,
                 Estado:"ACTIVO"

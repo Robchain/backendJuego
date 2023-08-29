@@ -14,7 +14,7 @@ export const subirVocabulario =async (req:Request, res:Response) => {
     })
 
    const vocabularioGuardar = await vocabulario.save();
-   res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
+   res.json({"titulo":"Excelente","respuesta":'Vocabulario creado con exito',"type":"success"})
    } catch (error:any) {
     res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})
    }
@@ -24,9 +24,9 @@ export const subirVocabulario =async (req:Request, res:Response) => {
 export const borrarVocabulario  = async (req:Request,res:Response) => {
   try {
     const Data  = await Vocabulario.deleteMany({Palabra:req.body.Palabra});
-    res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+    res.json({"titulo":"Excelente","respuesta":'Item borrado',"type":"success"})
   } catch (error) {
-    res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+    res.json({"titulo":"Error","respuesta":`No se puedo borrar`, "type":"error"});
   }
 }
 //mostrar toddos en la data

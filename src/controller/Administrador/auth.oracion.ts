@@ -21,7 +21,7 @@ export const subirOracion = async (req:Request, res:Response) => {
             Estado:"ACTIVO"
         })
         const guardarOracion   =    await   oracion.save();
-        res.json({"titulo":"Excelente","respuesta":'Rompecabeza Creada con exito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Oracion Creada con exito',"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})
     }
