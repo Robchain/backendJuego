@@ -52,10 +52,29 @@ export const BuscarPorCursoYParaleloMultijugador =async (req:Request, res:Respon
                 res.status(200).json(respuesta);
             }    
             // aqui se manda el listado de estudiante en base al curso y paralelo
-            }else{
-              //if(grupo[0].FechaDeFin === grupo[0].FechaDeInicio )return 
-//aqui se manda todo los grupo mostrando que hay una actividad en progreso
-            res.status(200).json(grupo);
+            }else{  
+              const fechaActual = new Date();
+              const FechaDeFin = new Date(grupo[0].FechaDeFin.toString());
+              const FechaDeInicio = new Date(grupo[0].FechaDeInicio.toString());
+// Compara las fechas
+if(fechaActual >= FechaDeInicio || fechaActual < FechaDeInicio){
+if (fechaActual.getTime() > FechaDeFin.getTime()) {
+  const user = await Persona.find({Curso:req.body.Curso, Paralelo:req.body.Paralelo}, {password:0});
+  if(user.length === 0){
+      res.status(200).json([{value:"NO HAY ESTUDIANTES",label:"NO HAY ESTUDIANTES"}]);
+  }else{
+  let respuesta = user.map((item) => ({
+  value: item.Identificacion,
+  label: `${item.Nombre} ${item.Apellido}`
+}));
+  res.status(200).json(respuesta);
+} 
+} else if (fechaActual.getTime() < FechaDeFin.getTime()) {
+  res.status(200).json(grupo);    
+}
+//aqui se manda todo los grupo mostrando que hay una actividad en progreso    
+}
+
         }
     } catch (error) {
     res.status(500).json([{value:"NO HAY INFORMACION",label:"NO HAY INFORMACION"}]);
@@ -65,7 +84,7 @@ export const BuscarPorCursoYParaleloMultijugador =async (req:Request, res:Respon
 export const PEvento = async (req:Request, res:Response) => {
     try {
         const data = await MultiJugador.find({},{"createdAt":0,"updatedAt":0})
-        res.json(data)
+        res.status(200).json(data)
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`No se pudo encontrar`, "type":"error"});
     }

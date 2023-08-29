@@ -10,8 +10,8 @@ export interface IGrupoDeTrabajo extends Document {
     Paralelo:string;
     TipoDeJuego: string;
     Avance: IAvenceArriba[];
-    FechaDeInicio: Date;
-    FechaDeFin: Date;
+    FechaDeInicio: String;
+    FechaDeFin: String;
     Estado:string
 }
 
@@ -42,11 +42,11 @@ const schemaPartidaGrupoDeTrabjo = new Schema({
         type: Array,
     },
     FechaDeInicio: {
-        type: Object,
+        type: String,
         require: true,
     },
     FechaDeFin: {
-        type: Object,
+        type: String,
         require: true,
     },
     Estado:{
