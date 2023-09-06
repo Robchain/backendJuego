@@ -32,7 +32,7 @@ try {
     for( const estudiante of Estudiantes){
         await   crearJuegoVocabulario(estudiante);
     }
-    res.json({"titulo":"Excelente","respuesta":'Juego Creado Con exito',"type":"success"})
+    res.json({"titulo":"Excelente","respuesta":'Juego Creado Con éxito',"type":"success"})
 } catch (error) {
     res.json({"titulo":"Error","respuesta":`Hubo un error al crear el juego`, "type":"error"}); 
 }

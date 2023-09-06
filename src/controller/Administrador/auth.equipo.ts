@@ -10,7 +10,7 @@ export const CrearEquipo = async (req:Request, res:Response) => {
             Estado:"ACTIVO",
         })
         const data = equipo.save();
-        res.json({"titulo":"Excelente","respuesta":'Equipo creada con exito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Equipo creado con éxito',"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})  
     }
@@ -28,7 +28,7 @@ export const MostrarEquipo =async (req:Request, res:Response) => {
 export const EliminarEquipo =async (req:Request, res:Response) => {
     try {
         const data = await Equipo.deleteOne({_id:req.body._id})
-        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem Borrado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -39,7 +39,7 @@ export const DesibilitarEquipo =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem borrado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -50,7 +50,7 @@ export const HabilitarEquipo =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Item Restaurado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -80,7 +80,7 @@ export const editarEquipo = async (req:Request, res:Response) => {
         {   Nombre:req.body.Nombre,
             Imagen:req.body.Imagen,
         }})
-            res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
+            res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
     }
@@ -91,7 +91,7 @@ export const editarEquipoSinImagen = async (req:Request, res:Response) => {
         {$set:
         {   Nombre:req.body.Nombre
         }})
-            res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
+            res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
     }

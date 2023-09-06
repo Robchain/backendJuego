@@ -1,4 +1,5 @@
 import {Schema, model, Document} from 'mongoose'
+import { IObjectoOracion } from '../../interface/Oracion.Interface'
 
 export interface IRecursosOracion extends Document{
     //Categoria:mongoose.Types.ObjectId,
@@ -6,7 +7,8 @@ export interface IRecursosOracion extends Document{
     Oracion:string,
     Verbo:string,
     Adverbio:string
-    Sujeto:string,
+    Sujeto:IObjectoOracion,
+    Que:IObjectoOracion,
     FileSujetoImagen:string,
     FileAdjetivoImagen:string,
     FileVideoPreguntaQue:string,
@@ -35,7 +37,12 @@ const schemaRecursosOracion = new Schema({
         type:String,
         trim:true
     },Sujeto:{
-        type:String,
+        type:Object,
+        require:true,
+        trim:true
+    },
+    Que:{
+        type:Object,
         require:true,
         trim:true
     },

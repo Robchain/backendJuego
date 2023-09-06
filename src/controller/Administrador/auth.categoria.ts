@@ -19,7 +19,7 @@ export const crearCategorias =async (req:Request,res:Response) => {
             })
             categoria.save();
         }
-        res.json({"titulo":"Excelente","respuesta":'Categoria creada con exito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Categoria creada con éxito',"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})
     }
@@ -28,7 +28,7 @@ export const crearCategorias =async (req:Request,res:Response) => {
 export const borrarCategoria    =  async (req:Request, res:Response) => {
     try {
         const borrar = await Categoria.deleteOne({_id:req.body._id});
-        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem borrado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -39,7 +39,7 @@ export const DesibilitarCategoriaVocabulario =async (req:Request, res:Response) 
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem borrado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -50,7 +50,7 @@ export const HabilitarCategoriaVocabulario =async (req:Request, res:Response) =>
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Item Restaurado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -84,7 +84,7 @@ export const EditarCategoria = async (req:Request, res:Response) => {
                 NombreCategoria:req.body.NombreCategoria,
             }
         })
-        res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Editado con éxito',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
     }

@@ -14,7 +14,7 @@ export const subirVocabulario =async (req:Request, res:Response) => {
     })
 
    const vocabularioGuardar = await vocabulario.save();
-   res.json({"titulo":"Excelente","respuesta":'Vocabulario creado con exito',"type":"success"})
+   res.status(200).json({"titulo":"Excelente","respuesta":'Vocabulario creado con éxito',"type":"success"})
    } catch (error:any) {
     res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})
    }
@@ -24,7 +24,7 @@ export const subirVocabulario =async (req:Request, res:Response) => {
 export const borrarVocabulario  = async (req:Request,res:Response) => {
   try {
     const Data  = await Vocabulario.deleteMany({Palabra:req.body.Palabra});
-    res.json({"titulo":"Excelente","respuesta":'Item borrado',"type":"success"})
+    res.status(200).json({"titulo":"Excelente","respuesta":'Item borrado',"type":"success"})
   } catch (error) {
     res.json({"titulo":"Error","respuesta":`No se puedo borrar`, "type":"error"});
   }
@@ -59,9 +59,9 @@ export const editarVocabulario =async (req:Request, res:Response) => {
         FileImagen:req.body.FileImagen,
       }
     })
-    res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
+    res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
   } catch (error) {
-    res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+    res.json({"titulo":"Error","respuesta":`No se pudo editar el ítem`, "type":"error"});
   }
 }
 export const editarVocabularioSinArchivos =async (req:Request, res:Response) => {
@@ -73,19 +73,10 @@ export const editarVocabularioSinArchivos =async (req:Request, res:Response) => 
         Silaba:req.body.Silaba,
       }
     })
-    res.json({"titulo":"Excelente","respuesta":'Editado con exito',"type":"success"})
+    res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
   } catch (error) {
-    res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+    res.json({"titulo":"Error","respuesta":`No se pudo editar el ítem`, "type":"error"});
   }
-}
-// test
-export const testvi =async (req:Request, res:Response) => {
-    try {
-      const Data = await Vocabulario.findOne({Palabra:'PAN'})
-      res.json(Data)
-    } catch (error) {
-      res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
-    }
 }
 
 
@@ -95,9 +86,9 @@ export const DesibilitarVocabulario =async (req:Request, res:Response) => {
           {$set:
           {  Estado:"INACTIVO"  
           }})
-      res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+      res.json({"titulo":"Excelente","respuesta":'Ítem borrado',"type":"success"})
   } catch (error) {
-      res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+      res.json({"titulo":"Error","respuesta":`no se puedo borrar el ítem`, "type":"error"});
   }
 }
 export const HabilitarVocabulario =async (req:Request, res:Response) => {
@@ -106,19 +97,8 @@ export const HabilitarVocabulario =async (req:Request, res:Response) => {
           {$set:
           {  Estado:"ACTIVO"  
           }})
-      res.json({"titulo":"Excelente","respuesta":'Item Restaurado',"type":"success"})
+      res.json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
   } catch (error) {
-      res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+      res.json({"titulo":"Error","respuesta":`no se puedo borrar el ítem`, "type":"error"});
   }
-}
-
-
-
-
-
-export const pruebaparam =(req:Request,res:Response)=>{
-
- let id =  req.params.id;
-
-  res.json(id);
 }

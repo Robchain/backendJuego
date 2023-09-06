@@ -2,8 +2,8 @@ import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
 import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUserConArchivo,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros, activarPersonas, desabilitarPersonas, getBase, EditarsinArchivoUsuario, ActualizarContraseña, BuscarPorCursoYParalelo, signupsinfoto } from "../controller/Administrador/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza, EditarRompecabezaSinArchivo, DesibilitarRompecabeza, HabilitarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
-import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, testvi, DesibilitarVocabulario, HabilitarVocabulario, editarVocabularioSinArchivos, pruebaparam} from '../controller/Administrador/auth.vocabulario';
-import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion, DesibilitarOracion, HabilitarOracion, editarOracionSinArchivo, ActivarJuegoConEstudianteOracion } from '../controller/Administrador/auth.oracion';
+import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, DesibilitarVocabulario, HabilitarVocabulario, editarVocabularioSinArchivos} from '../controller/Administrador/auth.vocabulario';
+import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion, DesibilitarOracion, HabilitarOracion, editarOracionSinArchivo, ActivarJuegoConEstudianteOracion, ImagenQuienCrear, ImagenQuienMostrar, ImagenQuienEliminar, ImagenQuienDesibilitar, ImagenQuienHabilitar } from '../controller/Administrador/auth.oracion';
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria, DesibilitarCategoriaVocabulario, HabilitarCategoriaVocabulario } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo, DesibilitarEquipo, HabilitarEquipo, editarEquipoSinImagen}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
@@ -63,6 +63,11 @@ router.post('/OracionAdmi/Editar',editarOracion);
 router.post('/OracionAdmi/Desabilitar',DesibilitarOracion);
 router.post('/OracionAdmi/Habilitar',HabilitarOracion)
 router.post("/OracionAdmi/EditarSinImagenes",editarOracionSinArchivo)
+router.post("/OracionAdmi/ImagenQuienCrear",ImagenQuienCrear)
+router.get("/OracionAdmi/ImagenQuienMostrar",ImagenQuienMostrar)
+router.post("/OracionAdmi/ImagenQuienEliminar",ImagenQuienEliminar)
+router.post("/OracionAdmi/ImagenQuienDesibilitar",ImagenQuienDesibilitar)
+router.post("/OracionAdmi/ImagenQuienHabilitar",ImagenQuienHabilitar)
 //categoria
 router.post('/Categoria',crearCategorias);
 router.post('/Categoria/borrar',borrarCategoria);
@@ -103,9 +108,7 @@ router.post("/UpdateTerminadoOracion", UpdateTerminadoOracion);//guardado final
 
 //test de llamadas
 router.get('/CallMatch',ArmandoPartida)
-router.get('/testa',testvi)
 router.get('/Listado-Estudiante', SoloEstudiantes)
-router.get('/pruebacondata/:id', pruebaparam);
 /*router.get('/partidaEstudiante',partidaEstudiante);*/
 router.get('/prueba',prueba);
 /* Mutlijugador */

@@ -30,7 +30,7 @@ export const CrearEvento = async (req:Request, res:Response) => {
         GuardarRelacionEntreEquipoYJuegos(guardarmulti);
               //crear el modelo base y lo guarda
                      
-                res.json({"titulo":"Excelente","respuesta":'Multi-jugador Creada con exito',"type":"success"})
+                res.json({"titulo":"Excelente","respuesta":'Multi-jugador Creada con éxito',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
     }

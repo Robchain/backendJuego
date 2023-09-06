@@ -124,23 +124,49 @@ oraciones = await RecursosOracion.aggregate([
 }
 //busca un rompecabeza al azar
 const rompecabezas = async () => {
-    let rompecabeza = [];
-  
-    rompecabeza = await Rompecabeza.aggregate([
-      {
-        '$match': {
-          "Estado": true
-        }
+  let categoriaOra = [];
+  let oraciones:any[]=[];
+  let Oraciones = [];
+   
+  categoriaOra = await CategoriaOraciones.aggregate([{'$match': {
+     'Estado': 'ACTIVO'
+   }
+ }, 
+ {
+     '$sample': {
+       'size': 1
+     }
+   }, {
+     '$limit': 1
+   }
+]);
+oraciones = await RecursosOracion.aggregate([
+  {
+    '$match': {
+      'Categoria': categoriaOra[0].NombreCategoria
+    }
+  },
+  {
+    '$sample': {
+      'size': 3
+    }
+  },
+  {
+    '$group': {
+      '_id': '$Sujeto.label',
+      'docs': {
+        '$push': '$$ROOT'
       }
-      , {
-        '$sample': {
-          'size': 1
-        }
+    }
+  },
+  {
+    '$replaceRoot': {
+      'newRoot': {
+        '$arrayElemAt': ['$docs', 0]
       }
-    ]);
-  
-    let final = rompecabeza[0];
-    return final;
+    }
+  }
+]);
   
   };
 
