@@ -11,8 +11,14 @@ export interface IModeloPartida {
 }
 
 export interface Juego {
-    PalabraCorrecta:     string;
-    PalabraSeleccionada: string;
+    PalabraAEvaluar:     string;
+    PalabraASeleccionada: string;
     Resultado:           string;
     Terminado:           boolean;
+}
+
+
+export interface JuegoSimple {
+    PalabraAEvaluar:     string;
+    PalabraASeleccionada: string;
 }

@@ -1,160 +1,391 @@
 import { Request, Response } from "express";
 import Grupos from "../../models/Juego/Multijugador/Grupos";
-import JugadoresConOraciones from "../../models/Jugadores/JugadoresOracion/JugadoresConOraciones";
-import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
+import JugadoresConOraciones, { IJugadoresConOraciones } from "../../models/Jugadores/JugadoresOracion/JugadoresConOraciones";
+import JugadoresConVocabularios, { IJugadoresConVocabulario } from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
 import { IAvenceArriba } from "../../interface/Multijugador/Grupos.Interface";
+import { IReporteInterfaceEstudiante, IReporteInterfaceCursoParalelo, IReporteInterfaceJuego } from "../../interface/Reportes.inteface";
+import { JuegoSimple } from "../../interface/ModeloPartida";
 
 
 
-function seleccionarObjetosPorIntervalo(array:IAvenceArriba[], inicio:number, fin:number) {
-  return array.slice(inicio, fin );
+
+function seleccionarObjetosPorIntervalo(array: IAvenceArriba[], inicio: number, fin: number) {
+  return array.slice(inicio, fin);
 }
 
 
-  export const reporteGeneralPorEstudiante =async (req:Request,res:Response) => {
-    try {
-      let Pregunta=req.body.Pregunta
-      let id = req.body.valorId
-      let objetosConAvance:any[] = [] 
-      let objetosConAvancedos:any[] = [] 
-      let objetosConAvancetres:any[] = [] 
-      switch (Pregunta) {
-        case 'vocabulario':
-          objetosConAvance   = await JugadoresConVocabularios.find({ "Estudiante.Identificacion":id},{ Rompecabeza: 0 }).exec()
-          if(objetosConAvance.length>0){
-            res.status(200).json(objetosConAvance);
-          }else if(objetosConAvance.length===0){
-            res.status(200).json([])
-          }
-          break;
-          case 'oracion':
-            objetosConAvance   = await JugadoresConOraciones.find({ "Estudiante.Identificacion": id},{ Rompecabeza: 0 }).exec()
-            if(objetosConAvance.length>0){
-              res.status(200).json(objetosConAvance);
-            }else if(objetosConAvance.length===0){
-              res.status(200).json([])
-            }
-          break;
-          case 'Multi-Jugador':
-            objetosConAvance   = await Grupos.find({
-              "Integrantes": {
-                  $elemMatch: {
-                      value: id
-                  }
-              }
-          });
-
-          if(objetosConAvance.length>0){
-             let pos=-1
-            const nuevoarray = objetosConAvance.map(obj=>{
-           const {Integrantes,Avance, createdAt,updatedAt} = obj;
-           if(Avance !== null){
-            for (let i = 0; i < Integrantes.length; i++) {
-              if (Integrantes[i].value === id) {
-                pos = i;
-break;
-              }
-            }
-              let inicio = ((pos+1)*5)-5;
-            let  nuevoAn = seleccionarObjetosPorIntervalo(Avance, inicio, (pos+1)*5);
-            if(nuevoAn.length>0){
-              return{
-                Avance:nuevoAn,
-                createdAt,
-                updatedAt
-              }
-            }else if(nuevoAn.length===0){
-              return{
-                Avance:[{PalabraAEvaluar:'No a jugado',PalabraASeleccionada:'No a jugado',Resultado:'No a jugado'}],
-                createdAt,
-                updatedAt
-              }
-            }
-         
-           }else if(Avance ===null){
-           return{
-            Avance:[{PalabraAEvaluar:'No a jugado',PalabraASeleccionada:'No a jugado',Resultado:'No a jugado'}],
-            createdAt,
-            updatedAt
-          }}
-          })
-          res.status(200).json(nuevoarray);
-          }else if(objetosConAvance.length===0){
-            res.status(200).json([{ Avance:[{PalabraAEvaluar:'No existe juego',PalabraASeleccionada:'No existe juego',Resultado:'No existe juego'}]}])
-          }
-          break;
-          case 'Todos':
-            objetosConAvance   = await JugadoresConVocabularios.find({ "Estudiante.Identificacion":id},{ Rompecabeza: 0 }).exec()
-            objetosConAvancedos   = await JugadoresConOraciones.find({ "Estudiante.Identificacion": id},{ Rompecabeza: 0 }).exec()
-            objetosConAvancetres = await Grupos.find({
-              "Integrantes": {
-                  $elemMatch: {
-                      value: id
-                  }
-              }
-          });
-
-          if(objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length  > 0){
-            res.status(200).json(objetosConAvance.concat(objetosConAvancedos,multijugadorinter(objetosConAvancetres,id)));
-          }else if(objetosConAvance.length===0 && objetosConAvancedos.length === 0){
-            res.status(200).json([])
-          }
-          break;
-        default:
-          res.status(200).json([])
-          break;
-      }
-    } catch (error) {
-      res.status(500).json([]);
-    }
-  }
-
-// por curso
-export const reporteGeneralPorCurso =async (req:Request,res:Response) => {
+export const reporteGeneralPorEstudiante = async (req: Request, res: Response) => {
   try {
-    let Pregunta=req.body.Pregunta
-    let Curso=req.body.Curso
-    let Paralelo= req.body.Paralelo;
-    let objetosConAvance:any[] = [] 
-    let objetosConAvancedos:any[] = [] 
-    let objetosConAvancetres:any[] = [] 
+    const { Fecha, Pregunta, valorId } = req.body as IReporteInterfaceEstudiante;
+    let fechaInicio = undefined;
+    let fechaFin = undefined;
+    let objetosConAvance: any[] = []
+    let objectosalida: any[] = []
+    let objectosalida2: any[] = []
+    let objetosConAvancedos: any[] = []
+    let objetosConAvancetres: any[] = []
+    if (Array.isArray(Fecha) && Fecha.length > 0) {
+      fechaInicio = new Date(Fecha[0]);
+      fechaFin = new Date(Fecha[1]);
+    } else if (Array.isArray(Fecha) && Fecha.length === 0) {
+      fechaInicio = undefined;
+    } else if (typeof Fecha === 'string') {
+      fechaInicio = new Date(Fecha!);
+    } else {
+      fechaInicio = undefined;
+    }
     switch (Pregunta) {
       case 'vocabulario':
-        objetosConAvance   = await JugadoresConVocabularios.find({ "Estudiante.Curso": Curso,"Estudiante.Paralelo": Paralelo },{ Rompecabeza: 0 })
-        if(objetosConAvance.length>0){
-          res.status(200).json(objetosConAvance);
-        }else if(objetosConAvance.length===0){
-          res.status(203).json([])
+        if (fechaInicio && fechaFin) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "Estudiante.Identificacion": valorId, "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          }, { Rompecabeza: 0 }).exec()
+
+        } else if (fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find({ "Estudiante.Identificacion": valorId }, { Rompecabeza: 0 }).exec()
+        } else if (!fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find({ "Estudiante.Identificacion": valorId }, { Rompecabeza: 0 }).exec()
+        }
+        if (objetosConAvance.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+            objectosalida.push(modeladosalidaGeneralIndividual(objetosConAvance[i]))
+          }
+          res.status(200).json(objectosalida);
+        } else if (objetosConAvance.length === 0) {
+          res.status(200).json([])
         }
         break;
-        case 'oracion':
-          objetosConAvance   = await JugadoresConOraciones.find({ "Estudiante.Curso": Curso,"Estudiante.Paralelo": Paralelo },{ Rompecabeza: 0 })
-          if(objetosConAvance.length>0){
-            res.status(200).json(objetosConAvance);
-          }else if(objetosConAvance.length===0){
-            res.status(203).json([])
+      case 'oracion':
+        if (fechaInicio && fechaFin) {
+          objetosConAvance = await JugadoresConOraciones.find({
+            "Estudiante.Identificacion": valorId, "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          }, { Rompecabeza: 0 }).exec()
+
+        } else if (fechaInicio) {
+          objetosConAvance = await JugadoresConOraciones.find({ "Estudiante.Identificacion": valorId }, { Rompecabeza: 0 }).exec()
+        } else if (!fechaInicio) {
+          objetosConAvance = await JugadoresConOraciones.find({ "Estudiante.Identificacion": valorId }, { Rompecabeza: 0 }).exec()
+        }
+        if (objetosConAvance.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+            objectosalida.push(modeladosalidaGeneralIndividualOracion(objetosConAvance[i]))
           }
+          res.status(200).json(objectosalida);
+        } else if (objetosConAvance.length === 0) {
+          res.status(200).json([])
+        }
         break;
-        case 'Multi-Jugador':
-          objetosConAvance   = await Grupos.find({ "Curso": Curso,"Paralelo": Paralelo },{ updatedAt: 0 });
-          if(objetosConAvance.length>0){
-            res.status(200).json(objetosConAvance);
-          }else if(objetosConAvance.length===0){
-            res.status(203).json([])
-          }
+      case 'Colaborativo':
+        if (fechaInicio && fechaFin) {
+          objetosConAvance = await Grupos.find({
+            "Integrantes": {
+              $elemMatch: {
+                value: valorId
+              }
+            },
+            "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          });
+        } else if (fechaInicio) {
+          objetosConAvance = await Grupos.find({
+            "Integrantes": {
+              $elemMatch: {
+                value: valorId
+              }
+            }
+          });
+        } else if (!fechaInicio) {
+          objetosConAvance = await Grupos.find({
+            "Integrantes": {
+              $elemMatch: {
+                value: valorId
+              }
+            }
+          });
+        }
+        if (objetosConAvance.length > 0) {
+          let pos = -1
+          const nuevoarray = objetosConAvance.map(obj => {
+            const { Integrantes, Avance, createdAt, updatedAt } = obj;
+            if (Avance !== null) {
+              for (let i = 0; i < Integrantes.length; i++) {
+                if (Integrantes[i].value === valorId) {
+                  pos = i;
+                  break;
+                }
+              }
+              let inicio = ((pos + 1) * 5) - 5;
+              let nuevoAn = seleccionarObjetosPorIntervalo(Avance, inicio, (pos + 1) * 5);
+              if (nuevoAn.length > 0) {
+                for (let i = 0; nuevoAn.length > i; i++) {
+                  objectosalida.push(modeladosalidaGeneralIndividualMultiIndiual(nuevoAn[i]))
+                }
+                return {
+                  Avance: objectosalida,
+                  createdAt,
+                  updatedAt
+                }
+              } else if (nuevoAn.length === 0) {
+                return {
+                  Avance: [{ PalabraAEvaluar: 'No a jugado', PalabraASeleccionada: 'No a jugado', Resultado: 'No a jugado' }],
+                  createdAt,
+                  updatedAt
+                }
+              }
+
+            } else if (Avance === null) {
+              return {
+                Avance: [{ PalabraAEvaluar: 'No a jugado', PalabraASeleccionada: 'No a jugado', Resultado: 'No a jugado' }],
+                createdAt,
+                updatedAt
+              }
+            }
+          })
+          res.status(200).json(nuevoarray);
+        } else if (objetosConAvance.length === 0) {
+          res.status(200).json([{ Avance: [{ PalabraAEvaluar: 'No existe juego', PalabraASeleccionada: 'No existe juego', Resultado: 'No existe juego' }] }])
+        }
         break;
-        case 'Todos':
-          objetosConAvance   = await JugadoresConVocabularios.find({ "Estudiante.Curso": Curso,"Estudiante.Paralelo": Paralelo },{ Rompecabeza: 0 })
-          objetosConAvancedos   = await JugadoresConOraciones.find({ "Estudiante.Curso": Curso,"Estudiante.Paralelo": Paralelo },{ Rompecabeza: 0 })
-          objetosConAvancetres = await Grupos.find({ "Curso": Curso,"Paralelo": Paralelo },{ updatedAt: 0 });
-          if(objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length>0 ){
-            res.status(200).json(objetosConAvance.concat(objetosConAvancedos,objetosConAvancetres));
-          }else if(objetosConAvance.length===0 && objetosConAvancedos.length === 0 && objetosConAvancetres.length===0){
-            res.status(203).json([])
+      case 'Todos':
+        if (fechaInicio && fechaFin) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "Estudiante.Identificacion": valorId, "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          }, { Rompecabeza: 0 }).exec()
+          objetosConAvancedos = await JugadoresConOraciones.find({
+            "Estudiante.Identificacion": valorId, "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          }, { Rompecabeza: 0 }).exec()
+          objetosConAvancetres = await Grupos.find({
+            "Integrantes": {
+              $elemMatch: {
+                value: valorId
+              }
+            },
+            "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          });
+        } else if (fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "Estudiante.Identificacion": valorId
+          }, { Rompecabeza: 0 }).exec()
+          objetosConAvancedos = await JugadoresConOraciones.find({
+            "Estudiante.Identificacion": valorId
+          }, { Rompecabeza: 0 }).exec()
+          objetosConAvancetres = await Grupos.find({
+            "Integrantes": {
+              $elemMatch: {
+                value: valorId
+              }
+            }
+          });
+        } else if (!fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "Estudiante.Identificacion": valorId
+          }, { Rompecabeza: 0 }).exec()
+          objetosConAvancedos = await JugadoresConOraciones.find({
+            "Estudiante.Identificacion": valorId
+          }, { Rompecabeza: 0 }).exec()
+          objetosConAvancetres = await Grupos.find({
+            "Integrantes": {
+              $elemMatch: {
+                value: valorId
+              }
+            }
+          });
+        }
+        if (objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+            objectosalida.push(modeladosalidaGeneralIndividual(objetosConAvance[i]))
           }
+          for (let i = 0; objetosConAvancedos.length > i; i++) {
+            objectosalida2.push(modeladosalidaGeneralIndividualOracion(objetosConAvance[i]))
+          }
+          res.status(200).json(objectosalida.concat(objectosalida2, multijugadorinter(objetosConAvancetres, valorId)));
+        } else if (objetosConAvance.length === 0 && objetosConAvancedos.length === 0) {
+          res.status(200).json([])
+        }
         break;
       default:
-        res.status(203).json([])
+        res.status(200).json([])
+        break;
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json([]);
+  }
+}
+
+// por curso
+export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
+  try {
+    const { Fecha, Pregunta, Curso, Paralelo } = req.body as IReporteInterfaceCursoParalelo;
+    let fechaInicio = undefined;
+    let fechaFin = undefined;
+    let objetosConAvance: any[] = []
+    let objectosalida: any[] = [];
+    let objectosalida2: any[] = [];
+    let objectosalida3: any[] = [];
+    let objetosConAvancedos: any[] = []
+    let objetosConAvancetres: any[] = []
+    if (Array.isArray(Fecha) && Fecha.length > 0) {
+      fechaInicio = new Date(Fecha[0]);
+      fechaFin = new Date(Fecha[1]);
+    } else if (Array.isArray(Fecha) && Fecha.length === 0) {
+      fechaInicio = undefined;
+    } else if (typeof Fecha === 'string') {
+      fechaInicio = new Date(Fecha!);
+    } else {
+      fechaInicio = undefined;
+    }
+    switch (Pregunta) {
+      case 'vocabulario':
+        if (fechaInicio && fechaFin) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo, "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          }, { Rompecabeza: 0 })
+        } else if (fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
+          }, { Rompecabeza: 0 })
+        } else if (!fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
+          }, { Rompecabeza: 0 })
+        }
+        if (objetosConAvance.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+            objectosalida.push(modeladosalidaGeneralIndividual(objetosConAvance[i]))
+          }
+          res.status(200).json(objectosalida);
+        } else if (objetosConAvance.length === 0) {
+          res.status(200).json([])
+        }
+        break;
+      case 'oracion':
+
+        if (fechaInicio && fechaFin) {
+          objetosConAvance = await JugadoresConOraciones.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo, "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          }, { Rompecabeza: 0 })
+        } else if (fechaInicio) {
+          objetosConAvance = await JugadoresConOraciones.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
+          }, { Rompecabeza: 0 })
+        } else if (!fechaInicio) {
+          objetosConAvance = await JugadoresConOraciones.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
+          }, { Rompecabeza: 0 })
+        }
+        if (objetosConAvance.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+            objectosalida.push(modeladosalidaGeneralIndividualOracion(objetosConAvance[i]))
+          }
+          res.status(200).json(objectosalida);
+        } else if (objetosConAvance.length === 0) {
+          res.status(200).json([])
+        }
+        break;
+      case 'Colaborativo':
+        if (fechaInicio && fechaFin) {
+        objetosConAvance = await Grupos.find({
+          "Curso": Curso, "Paralelo": Paralelo,
+          "createdAt": {
+            $gte: fechaInicio,
+            $lte: fechaFin
+          }
+        }, { updatedAt: 0 });
+      }else if(fechaInicio){
+        objetosConAvance = await Grupos.find({
+          "Curso": Curso, "Paralelo": Paralelo
+        }, { updatedAt: 0 });
+      }else if(!fechaInicio){
+        objetosConAvance = await Grupos.find({
+          "Curso": Curso, "Paralelo": Paralelo
+        }, { updatedAt: 0 });
+      }
+        if (objetosConAvance.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+            objectosalida.push(modeladosalidaGeneralIndividualMulti(objetosConAvance[i]))
+          }
+          res.status(200).json(objectosalida);
+        } else if (objetosConAvance.length === 0) {
+          res.status(200).json([])
+        }
+        break;
+      case 'Todos':
+        if (fechaInicio && fechaFin) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo, "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          }, { Rompecabeza: 0 })
+          objetosConAvancedos = await JugadoresConOraciones.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo, "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          }, { Rompecabeza: 0 })
+          objetosConAvancetres = await Grupos.find({ "Curso": Curso, "Paralelo": Paralelo,
+          "createdAt": {
+            $gte: fechaInicio,
+            $lte: fechaFin
+          } }, { updatedAt: 0 });
+        } else if (fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
+          }, { Rompecabeza: 0 })
+          objetosConAvancedos = await JugadoresConOraciones.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
+          }, { Rompecabeza: 0 })
+          objetosConAvancetres = await Grupos.find({ "Curso": Curso, "Paralelo": Paralelo }, { updatedAt: 0 });
+        } else if (!fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
+          }, { Rompecabeza: 0 })
+          objetosConAvancedos = await JugadoresConOraciones.find({
+            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
+          }, { Rompecabeza: 0 })
+          objetosConAvancetres = await Grupos.find({ "Curso": Curso, "Paralelo": Paralelo }, { updatedAt: 0 });
+        }
+        if (objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+            objectosalida.push(modeladosalidaGeneralIndividual(objetosConAvance[i]))
+          }
+          for (let i = 0; objetosConAvancedos.length > i; i++) {
+            objectosalida2.push(modeladosalidaGeneralIndividualOracion(objetosConAvancedos[i]))
+          }
+          for (let i = 0; objetosConAvancetres.length > i; i++) {
+            objectosalida3.push(modeladosalidaGeneralIndividualMulti(objetosConAvancetres[i]))
+          }
+          res.status(200).json(objectosalida.concat(objectosalida2, objectosalida3));
+        } else if (objetosConAvance.length === 0 && objetosConAvancedos.length === 0 && objetosConAvancetres.length === 0) {
+          res.status(200).json([])
+        }
+        break;
+      default:
+        res.status(200).json([])
         break;
     }
   } catch (error) {
@@ -162,101 +393,309 @@ export const reporteGeneralPorCurso =async (req:Request,res:Response) => {
   }
 }
 
-  //por juego
-  export const reporteGeneralPorJuego =async (req:Request,res:Response) => {
-    try {
-      let Pregunta=req.body.Pregunta
-      let objetosConAvance:any = [] 
-      let objetosConAvancedos:any[] = [] 
-      let objetosConAvancetres:any[] = [] 
-      switch (Pregunta) {
-        case 'vocabulario':
-          objetosConAvance   = await JugadoresConVocabularios.find()
-          if(objetosConAvance.length>0){
-            res.status(200).json(objetosConAvance);
-          }else if(objetosConAvance.length===0){
-            res.status(203).json([])
+//por juego
+export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
+  try {
+    const { Fecha, Pregunta } = req.body as IReporteInterfaceJuego;
+    let fechaInicio = undefined;
+    let fechaFin = undefined;
+    let objectosalida: any[] = [];
+    let objectosalida2: any[] = [];
+    let objectosalida3: any[] = [];
+    let objetosConAvance: any = []
+    let objetosConAvancedos: any[] = []
+    let objetosConAvancetres: any[] = []
+    if (Array.isArray(Fecha) && Fecha.length > 0) {
+      fechaInicio = new Date(Fecha[0]);
+      fechaFin = new Date(Fecha[1]);
+    } else if (Array.isArray(Fecha) && Fecha.length === 0) {
+      fechaInicio = undefined;
+    } else if (typeof Fecha === 'string') {
+      fechaInicio = new Date(Fecha!);
+    } else {
+      fechaInicio = undefined;
+    }
+    switch (Pregunta) {
+      case 'vocabulario':
+        if (fechaInicio && fechaFin) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          })
+        } else if (fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find();
+        } else if (!fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find();
+        }
+        if (objetosConAvance.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+            objectosalida.push(modeladosalidaGeneralIndividual(objetosConAvance[i]))
           }
-          break;
-          case 'oracion':
-            objetosConAvance   = await JugadoresConOraciones.find()
-            if(objetosConAvance.length>0){
-              res.status(200).json(objetosConAvance);
-            }else if(objetosConAvance.length===0){
-              res.status(203).json([])
+          res.status(200).json(objectosalida);
+        } else if (objetosConAvance.length === 0) {
+          res.status(200).json([])
+        }
+        break;
+      case 'oracion':
+        if (fechaInicio && fechaFin) {
+          objetosConAvance = await JugadoresConOraciones.find({
+            "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
             }
-          break;
-          case 'Multi-Jugador':
-            objetosConAvance   = await Grupos.find({},{ updatedAt: 0 })
-            res.status(200).json(objetosConAvance);
-          break;
-          case 'Todos':
-            objetosConAvance   = await JugadoresConVocabularios.find()
-            objetosConAvancedos = await JugadoresConOraciones.find()
-            objetosConAvancetres=await Grupos.find({},{ updatedAt: 0 })
-            if(objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length>0){
-              res.status(200).json(objetosConAvance.concat(objetosConAvancedos,objetosConAvancetres));
-            }else if(objetosConAvance.length===0 && objetosConAvancedos.length === 0&& objetosConAvancetres.length===0){
-              res.status(203).json([])
+          })
+        } else if (fechaInicio) {
+          objetosConAvance = await JugadoresConOraciones.find();
+        } else if (!fechaInicio) {
+          objetosConAvance = await JugadoresConOraciones.find();
+        }
+        if (objetosConAvance.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+            objectosalida.push(modeladosalidaGeneralIndividualOracion(objetosConAvance[i]))
+          }
+          res.status(200).json(objectosalida);
+        } else if (objetosConAvance.length === 0) {
+          res.status(200).json([])
+        }
+        break;
+      case 'Colaborativo':
+        if(fechaInicio && fechaFin){
+          objetosConAvance = await Grupos.find({
+            "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }}, { updatedAt: 0 })
+        }else if (fechaInicio) {
+          objetosConAvance = await Grupos.find({}, { updatedAt: 0 })
+        } else if (!fechaInicio) {
+          objetosConAvance = await Grupos.find({}, { updatedAt: 0 })
+        }
+        if (objetosConAvance.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+           objectosalida.push(modeladosalidaGeneralIndividualMulti(objetosConAvance[i]))
+          }
+        res.status(200).json(objectosalida); 
+        } else if (objetosConAvance.length === 0) {
+          res.status(200).json([])
+        }
+        break;
+      case 'Todos':
+        if (fechaInicio && fechaFin) {
+          objetosConAvance = await JugadoresConVocabularios.find({
+            "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
             }
-          break;
-        default:
-          res.status(203).json([])
-          break;
+          })
+          objetosConAvancedos = await JugadoresConOraciones.find({
+            "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }
+          })
+          objetosConAvancetres = await Grupos.find({
+            "createdAt": {
+              $gte: fechaInicio,
+              $lte: fechaFin
+            }});
+        } else if (fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find();
+          objetosConAvancedos = await JugadoresConOraciones.find();
+          objetosConAvancetres = await Grupos.find();
+        } else if (!fechaInicio) {
+          objetosConAvance = await JugadoresConVocabularios.find();
+          objetosConAvancedos = await JugadoresConOraciones.find();
+          objetosConAvancetres = await Grupos.find();
+        }
+        if (objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length > 0) {
+          for (let i = 0; objetosConAvance.length > i; i++) {
+            objectosalida.push(modeladosalidaGeneralIndividual(objetosConAvance[i]))
+          }
+          for (let i = 0; objetosConAvancedos.length > i; i++) {
+            objectosalida2.push(modeladosalidaGeneralIndividualOracion(objetosConAvancedos[i]))
+          }
+          for (let i = 0; objetosConAvancetres.length > i; i++) {
+            objectosalida3.push(modeladosalidaGeneralIndividualMulti(objetosConAvancetres[i]))
+          }
+          res.status(200).json(objectosalida.concat(objectosalida2, objectosalida3));
+        } else if (objetosConAvance.length === 0 && objetosConAvancedos.length === 0 && objetosConAvancetres.length === 0) {
+          res.status(200).json([])
+        }
+        break;
+      default:
+        res.status(200).json([])
+        break;
+    }
+  } catch (error) {
+    res.status(500).json([]);
+  }
+}
+
+
+
+const multijugadorinter = (objetosConAvance: any[], id: String) => {
+  let pos = -1
+  let objectosalida: any[] = []
+  try {
+    if (objetosConAvance.length === 0) {
+      return [{ Avance: [{ PalabraAEvaluar: 'No existe juego', PalabraASeleccionada: 'No existe juego', Resultado: 'No existe juego' }] }]
+    } else if (objetosConAvance.length > 0) {
+      const nuevoarray = objetosConAvance.map(obj => {
+        const { Integrantes, Avance, createdAt, updatedAt } = obj;
+        if (Avance !== null) {
+          for (let i = 0; i < Integrantes.length; i++) {
+            if (Integrantes[i].value === id) {
+              pos = i;
+              break;
+            }
+          }
+          let inicio = ((pos + 1) * 5) - 5;
+          let nuevoAn = seleccionarObjetosPorIntervalo(Avance, inicio, (pos + 1) * 5);
+          if (nuevoAn.length > 0) {
+            for (let i = 0; nuevoAn.length > i; i++) {
+              objectosalida.push(modeladosalidaGeneralIndividualMultiIndiual(nuevoAn[i]))
+            }
+            return {
+              Avance: objectosalida,
+              createdAt,
+              updatedAt
+            }
+          } else if (nuevoAn.length === 0) {
+            return {
+              Avance: [{ PalabraAEvaluar: 'No a jugado', PalabraASeleccionada: 'No a jugado', Resultado: 'No a jugado' }],
+              createdAt,
+              updatedAt
+            }
+          }
+
+        } else if (Avance === null) {
+          return {
+            Avance: [{ PalabraAEvaluar: 'No a jugado', PalabraASeleccionada: 'No a jugado', Resultado: 'No a jugado' }],
+            createdAt,
+            updatedAt
+          }
+        }
+      })
+      return nuevoarray;
+    }
+  } catch (error) {
+    return [{ Avance: [{ PalabraAEvaluar: 'No existe juego', PalabraASeleccionada: 'No existe juego', Resultado: 'No existe juego' }] }]
+  }
+
+}
+
+
+
+const modeladosalidaGeneralIndividual = (input: any) => {
+  let correcto: string[] = [];
+  let Incorrecto: JuegoSimple[] = [];
+  let avance = null
+  if (input.Avance !== null) {
+    if (input.Avance.length >= 0) {
+      for (let i = 0; input.Avance.length > i; i++) {
+        if (input.Avance[i].Resultado === "CORRECTO") {
+          correcto.push(input.Avance[i].PalabraASeleccionada);
+        } else if (input.Avance[i].Resultado === "INCORRECTO") {
+          Incorrecto.push({ PalabraAEvaluar: input.Avance[i].PalabraAEvaluar, PalabraASeleccionada: input.Avance[i].PalabraASeleccionada })
+        }
       }
-    } catch (error) {
-      res.status(500).json([]);
+      avance = { Correcto: correcto, Incorrecto: Incorrecto }
     }
+  } else {
+    avance = null;
   }
- 
-  //por todos los juegos
-
-
-
-
-
-  const multijugadorinter = (objetosConAvance:any[],id:string)=>{
-    let pos=-1
-    try {
-      if(objetosConAvance.length ===0){
-        return [{ Avance:[{PalabraAEvaluar:'No existe juego',PalabraASeleccionada:'No existe juego',Resultado:'No existe juego'}]}]
-      }else if(objetosConAvance.length >0){
-        const nuevoarray = objetosConAvance.map(obj=>{
-          const {Integrantes,Avance, createdAt,updatedAt} = obj;
-          if(Avance !== null){
-           for (let i = 0; i < Integrantes.length; i++) {
-             if (Integrantes[i].value === id) {
-               pos = i;
-    break;
-             }
-           }
-             let inicio = ((pos+1)*5)-5;
-           let  nuevoAn = seleccionarObjetosPorIntervalo(Avance, inicio, (pos+1)*5);
-           if(nuevoAn.length>0){
-             return{
-               Avance:nuevoAn,
-               createdAt,
-               updatedAt
-             }
-           }else if(nuevoAn.length===0){
-             return{
-               Avance:[{PalabraAEvaluar:'No a jugado',PalabraASeleccionada:'No a jugado',Resultado:'No a jugado'}],
-               createdAt,
-               updatedAt
-             }
-           }
-        
-          }else if(Avance ===null){
-          return{
-           Avance:[{PalabraAEvaluar:'No a jugado',PalabraASeleccionada:'No a jugado',Resultado:'No a jugado'}],
-           createdAt,
-           updatedAt
-         }}
-         })
-         return nuevoarray;
-      } 
-    } catch (error) {
-      return [{ Avance:[{PalabraAEvaluar:'No existe juego',PalabraASeleccionada:'No existe juego',Resultado:'No existe juego'}]}]
+  return {
+    Estudiante: input.Estudiante,
+    Rompecabeza: input.Rompecabeza,
+    Avance: avance,
+    Terminado: input.Terminado,
+    createdAt: input.createdAt,
+    updatedAt: input.updatedAt
+  }
+}
+const modeladosalidaGeneralIndividualOracion = (input: any) => {
+  let correcto: string[] = [];
+  let Incorrecto: JuegoSimple[] = [];
+  let avance = null
+  if (input.Avance !== null) {
+    if (input.Avance.length >= 0) {
+      for (let i = 0; input.Avance.length > i; i++) {
+        if (input.Avance[i].Resultado === "CORRECTO") {
+          correcto.push(input.Avance[i].OracionCorrecta);
+        } else if (input.Avance[i].Resultado === "INCORRECTO") {
+          Incorrecto.push({ PalabraAEvaluar: input.Avance[i].PalabraAEvaluar, PalabraASeleccionada: input.Avance[i].PalabraASeleccionada })
+        }
+      }
+      avance = { Correcto: correcto, Incorrecto: Incorrecto }
     }
-    
+  } else {
+    avance = null;
   }
+  return {
+    Estudiante: input.Estudiante,
+    Rompecabeza: input.Rompecabeza,
+    Avance: avance,
+    Terminado: input.Terminado,
+    createdAt: input.createdAt,
+    updatedAt: input.updatedAt
+  }
+}
+
+const modeladosalidaGeneralIndividualMultiIndiual = (input: any) => {
+  let correcto: string[] = [];
+  let Incorrecto: JuegoSimple[] = [];
+  let Avance = null
+  if (input.Avance !== null) {
+    if (input.Avance.length >= 0) {
+      for (let i = 0; input.Avance.length > i; i++) {
+        if (input.Avance[i].Resultado === "CORRECTO") {
+          if (!input.Avance[i].OracionCorrecta) {
+            correcto.push(input.Avance[i].PalabraASeleccionada);
+          } else {
+            correcto.push(input.Avance[i].OracionCorrecta);
+          }
+        } else if (input.Avance[i].Resultado === "INCORRECTO") {
+          Incorrecto.push({ PalabraAEvaluar: input.Avance[i].PalabraAEvaluar, PalabraASeleccionada: input.Avance[i].PalabraASeleccionada })
+        }
+      }
+      Avance = { Correcto: correcto, Incorrecto: Incorrecto }
+    }
+  } else {
+    Avance = null;
+  }
+  return Avance
+}
+
+const modeladosalidaGeneralIndividualMulti = (input: any) => {
+  let correcto: string[] = [];
+  let Incorrecto: JuegoSimple[] = [];
+  let Avance = null
+  if (input.Avance !== null) {
+    if (input.Avance.length >= 0) {
+      for (let i = 0; input.Avance.length > i; i++) {
+        if (input.Avance[i].Resultado === "CORRECTO") {
+          if (!input.Avance[i].OracionCorrecta) {
+            correcto.push(input.Avance[i].PalabraASeleccionada);
+          } else {
+            correcto.push(input.Avance[i].OracionCorrecta);
+          }
+        } else if (input.Avance[i].Resultado === "INCORRECTO") {
+          Incorrecto.push({ PalabraAEvaluar: input.Avance[i].PalabraAEvaluar, PalabraASeleccionada: input.Avance[i].PalabraASeleccionada })
+        }
+      }
+      Avance = { Correcto: correcto, Incorrecto: Incorrecto }
+    }
+  } else {
+    Avance = null;
+  }
+  return {
+    Equipo: input.Equipo,
+    Integrantes: input.Integrantes,
+    Avance: Avance,
+    Terminado: input.Terminado,
+    createdAt: input.createdAt,
+    updatedAt: input.updatedAt
+  }
+}
