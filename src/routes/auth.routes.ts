@@ -2,8 +2,8 @@ import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
 import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUserConArchivo,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros, activarPersonas, desabilitarPersonas, getBase, EditarsinArchivoUsuario, ActualizarContraseña, BuscarPorCursoYParalelo, signupsinfoto } from "../controller/Administrador/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza, EditarRompecabezaSinArchivo, DesibilitarRompecabeza, HabilitarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
-import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, DesibilitarVocabulario, HabilitarVocabulario, editarVocabularioSinArchivos} from '../controller/Administrador/auth.vocabulario';
-import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion, DesibilitarOracion, HabilitarOracion, editarOracionSinArchivo, ActivarJuegoConEstudianteOracion, ImagenQuienCrear, ImagenQuienMostrar, ImagenQuienEliminar, ImagenQuienDesibilitar, ImagenQuienHabilitar } from '../controller/Administrador/auth.oracion';
+import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, DesibilitarVocabulario, HabilitarVocabulario, editarVocabularioSinArchivos, JuegosActivos} from '../controller/Administrador/auth.vocabulario';
+import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOracion, DesibilitarOracion, HabilitarOracion, editarOracionSinArchivo, ActivarJuegoConEstudianteOracion, ImagenQuienCrear, ImagenQuienMostrar, ImagenQuienEliminar, ImagenQuienDesibilitar, ImagenQuienHabilitar, JuegosActivosOracion } from '../controller/Administrador/auth.oracion';
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria, DesibilitarCategoriaVocabulario, HabilitarCategoriaVocabulario } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo, DesibilitarEquipo, HabilitarEquipo, editarEquipoSinImagen}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
@@ -52,7 +52,8 @@ router.post('/vocabulario/Editar',editarVocabulario)
 router.post('/vacabulario/EditarSinArchivo', editarVocabularioSinArchivos);
 router.post("/vocabulario/Desabilitar",DesibilitarVocabulario);
 router.post("/vocabulario/Habilitar",HabilitarVocabulario);
-router.post("/vocabulario/activarJuegoPorCursoParalelo",activarJuegoVocabularioPorGrupo) //listo ya esta actualizado
+router.post("/vocabulario/activarJuegoPorCursoParalelo",activarJuegoVocabularioPorGrupo)//listo ya esta actualizado
+router.get("/vocabulario/JuegosActivos",JuegosActivos) 
 //Oracion
 router.post('/OracionAdmi',subirOracion);
 router.post('/OracionAdmi/borrar',borrarOracion);
@@ -68,6 +69,7 @@ router.get("/OracionAdmi/ImagenQuienMostrar",ImagenQuienMostrar)
 router.post("/OracionAdmi/ImagenQuienEliminar",ImagenQuienEliminar)
 router.post("/OracionAdmi/ImagenQuienDesibilitar",ImagenQuienDesibilitar)
 router.post("/OracionAdmi/ImagenQuienHabilitar",ImagenQuienHabilitar)
+router.get("/OracionAdmi/JuegosActivosOracion",JuegosActivosOracion); 
 //categoria
 router.post('/Categoria',crearCategorias);
 router.post('/Categoria/borrar',borrarCategoria);

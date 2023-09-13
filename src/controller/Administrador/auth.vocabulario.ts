@@ -1,5 +1,7 @@
 import Vocabulario,{IRecursosVocabulario} from "../../models/Administrador/RecursosVocabulario";
 import { Request, Response } from "express";
+import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
+import { ActivoJuego } from "../../interface/JuegoVoca.Interface";
 
 export const subirVocabulario =async (req:Request, res:Response) => {    
    try {
@@ -100,5 +102,35 @@ export const HabilitarVocabulario =async (req:Request, res:Response) => {
       res.json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
   } catch (error) {
       res.json({"titulo":"Error","respuesta":`no se puedo borrar el ítem`, "type":"error"});
+  }
+}
+
+
+
+export const JuegosActivos =async (req:Request, res:Response) => {
+  try {
+    let output:ActivoJuego[]=[];
+      const data = await JugadoresConVocabularios.aggregate([
+        {
+          '$group': {
+            '_id': {
+              'Curso': '$Estudiante.Curso', 
+              'Paralelo': '$Estudiante.Paralelo'
+            }, 
+            'Estudiante': {
+              '$push': '$Estudiante'
+            }
+          }
+        }
+      ])
+        for(let i=0; data.length>i;i++){
+          if(data[i].Estudiante[0].Curso ||data[i].Estudiante[0].Paralelo){
+            output.push({Curso:data[i].Estudiante[0].Curso, Paralelo:data[i].Estudiante[0].Paralelo,Activo:'Si' });
+          }
+        }
+
+      res.status(200).json(output)
+  } catch (error) {
+      res.status(500).json({"titulo":"Error","respuesta":`no se puedo borrar el ítem`, "type":"error"});
   }
 }

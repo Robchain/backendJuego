@@ -50,8 +50,8 @@ export interface Palabra1Class {
 
 
 
-
-
-
-
-
+export interface ActivoJuego{
+    Curso:string;
+     Paralelo:string;
+    Activo:string;
+}

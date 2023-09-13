@@ -4,6 +4,7 @@ import { Request, Response} from "express";
 import JugadoresConOraciones, { IJugadoresConOraciones } from '../../models/Jugadores/JugadoresOracion/JugadoresConOraciones';
 import {  rompecabezas } from '../auth.TestDeLlamada';
 import QuienImagen from '../../models/Administrador/QuienImagen';
+import { ActivoJuego } from '../../interface/JuegoVoca.Interface';
 
 
 export const subirOracion = async (req:Request, res:Response) => {
@@ -216,3 +217,32 @@ export const ImagenQuienHabilitar =async (req:Request, res:Response) => {
         res.status(500).json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
 }
+
+
+export const JuegosActivosOracion =async (req:Request, res:Response) => {
+    try {
+      let output:ActivoJuego[]=[];
+        const data = await JugadoresConOraciones.aggregate([
+          {
+            '$group': {
+              '_id': {
+                'Curso': '$Estudiante.Curso', 
+                'Paralelo': '$Estudiante.Paralelo'
+              }, 
+              'Estudiante': {
+                '$push': '$Estudiante'
+              }
+            }
+          }
+        ])
+          for(let i=0; data.length>i;i++){
+            if(data[i].Estudiante[0].Curso ||data[i].Estudiante[0].Paralelo){
+              output.push({Curso:data[i].Estudiante[0].Curso, Paralelo:data[i].Estudiante[0].Paralelo,Activo:'Si' });
+            }
+          }
+  
+        res.status(200).json(output)
+    } catch (error) {
+        res.status(500).json({"titulo":"Error","respuesta":`no se puedo borrar el ítem`, "type":"error"});
+    }
+  }
