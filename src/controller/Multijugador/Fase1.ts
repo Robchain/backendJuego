@@ -29,8 +29,8 @@ export const CrearModeloInicialSinJuegos = async (BaseMulti: IMultiJuga) => {
                 IdDeLaAsignacion: BaseMulti.id,
                 Equipo: null,
                 Integrantes: integrantes,
-                Curso:BaseMulti.Curso,
-                Paralelo:BaseMulti.Paralelo,
+                Curso: BaseMulti.Curso,
+                Paralelo: BaseMulti.Paralelo,
                 TipoDeJuego: BaseMulti.TipoDeJuego,
                 Avance: null,
                 FechaDeInicio: BaseMulti.Fecha[0],
@@ -56,8 +56,8 @@ export const GuardarRelacionEntreEquipoYJuegos = async (inputObject: IMultiJuga)
                 Equipo: data[0],
                 TipoDeJuego: inputObject.TipoDeJuego,
                 Avance: null,
-                Curso:inputObject.Curso,
-                Paralelo:inputObject.Paralelo,
+                Curso: inputObject.Curso,
+                Paralelo: inputObject.Paralelo,
                 YaAsignado: false,
                 Fecha: inputObject.Fecha,
                 Estado: "ACTIVO",
@@ -83,7 +83,7 @@ const Los5JuegosTIPO1 = async () => {
         Juego2 = await uniendoOracionesPorCategoria();
         Juego3 = await CreaciondePartidasIndividualesVocabulario();
         Juego4 = await uniendoOracionesPorCategoria();
-        Juego5 = await  CreaciondePartidasIndividualesVocabulario();
+        Juego5 = await CreaciondePartidasIndividualesVocabulario();
 
         modeloFinal = {
             Juego1,
@@ -107,9 +107,9 @@ const Los5JuegosTIPO2 = async () => {
     let Juego5 = {}
     let modeloFinal: IPartidaMulti;
     try {
-        Juego1 = await  uniendoOracionesPorCategoria()
-        Juego2 = await  uniendoOracionesPorCategoria()
-        Juego3 = await  uniendoOracionesPorCategoria()
+        Juego1 = await uniendoOracionesPorCategoria()
+        Juego2 = await uniendoOracionesPorCategoria()
+        Juego3 = await uniendoOracionesPorCategoria()
         Juego4 = await uniendoOracionesPorCategoria();
         Juego5 = await uniendoOracionesPorCategoria();
 
@@ -215,8 +215,8 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
     try {
         let value = req.body.value;
         let label = req.body.label;
-        let situacion:string="";
-        let objetoaBuscar = { value: value, label: label}
+        let situacion: string = "";
+        let objetoaBuscar = { value: value, label: label }
         const data = await Grupos.find({
             "Integrantes": {
                 $elemMatch: {
@@ -225,53 +225,53 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
                 }
             }
         }, { 'createdAt': 0, 'updatedAt': 0 });
-if(data.length!==0){
-    let pos = data[0].Integrantes.findIndex(obj => JSON.stringify(obj) === JSON.stringify(objetoaBuscar));
-    if(data[0].Equipo===null){
-        if(pos === 0){
-            situacion="Eleccion Equipo";
-        }else if(pos>0){
-            situacion="Sala de espera";
-        }
-    }else if(data[0].Equipo!==null){
-        if(data[0].Avance ===null){
-            if(pos === 0){
-                situacion="Jugar";
-            }else if(pos>0){
-                situacion="Sala de espera";
-            }
-        }else if(Array.isArray(data[0].Avance)){
-                if(data[0].Avance.length===(pos*5)){
-                    situacion="Jugar";
-                }else if(data[0].Avance.length!==(pos*5)){
-                    if(data[0].Avance.length===(data[0].Integrantes.length*5)){
-                        situacion="Podio";
-                    }else{
-                        situacion="Sala de espera";
-                    }
-                   
+        if (data.length !== 0) {
+            let pos = data[0].Integrantes.findIndex(obj => JSON.stringify(obj) === JSON.stringify(objetoaBuscar));
+            if (data[0].Equipo === null) {
+                if (pos === 0) {
+                    situacion = "Eleccion Equipo";
+                } else if (pos > 0) {
+                    situacion = "Sala de espera";
                 }
-        }
-    }
+            } else if (data[0].Equipo !== null) {
+                if (data[0].Avance === null) {
+                    if (pos === 0) {
+                        situacion = "Jugar";
+                    } else if (pos > 0) {
+                        situacion = "Sala de espera";
+                    }
+                } else if (Array.isArray(data[0].Avance)) {
+                    if (data[0].Avance.length === (pos * 5)) {
+                        situacion = "Jugar";
+                    } else if (data[0].Avance.length !== (pos * 5)) {
+                        if (data[0].Avance.length === (data[0].Integrantes.length * 5)) {
+                            situacion = "Podio";
+                        } else {
+                            situacion = "Sala de espera";
+                        }
 
-    res.json({
-        _id: data[0].id,
-        IdDeLaAsignacion: data[0].IdDeLaAsignacion,
-        Equipo: data[0].Equipo,
-        Integrantes: data[0].Integrantes,
-        TipoDeJuego: data[0].TipoDeJuego,
-        Avance: data[0].Avance,
-        Curso:data[0].Curso,
-        Paralelo:data[0].Paralelo,
-        FechaDeInicio: data[0].FechaDeInicio,
-        FechaDeFin: data[0].FechaDeFin,
-        Estado: data[0].Estado,
-        Posicion: pos,
-        Situacion:situacion
-    });
-}else {
-    res.json(null);
-} 
+                    }
+                }
+            }
+
+            res.json({
+                _id: data[0].id,
+                IdDeLaAsignacion: data[0].IdDeLaAsignacion,
+                Equipo: data[0].Equipo,
+                Integrantes: data[0].Integrantes,
+                TipoDeJuego: data[0].TipoDeJuego,
+                Avance: data[0].Avance,
+                Curso: data[0].Curso,
+                Paralelo: data[0].Paralelo,
+                FechaDeInicio: data[0].FechaDeInicio,
+                FechaDeFin: data[0].FechaDeFin,
+                Estado: data[0].Estado,
+                Posicion: pos,
+                Situacion: situacion
+            });
+        } else {
+            res.json(null);
+        }
     } catch (error) {
         res.json(null);
     }
@@ -285,7 +285,7 @@ export const UneIntegrantesConJuegos = async (req: Request, res: Response) => {
             'Juegos': input.TipoDeJuego,
             'Avance': input.Avance
         })
-        const updetate = await EquipoConJuegos.updateOne({_id:input._id},{'YaAsignado': true})
+        const updetate = await EquipoConJuegos.updateOne({ _id: input._id }, { 'YaAsignado': true })
         res.json(updetate);
     } catch (error) {
         res.json([]);
@@ -297,28 +297,61 @@ export const UneIntegrantesConJuegos = async (req: Request, res: Response) => {
 export const actualizarJuegoTerminado = async (req: Request, res: Response) => {
     try {
         //busca, encuentra, verifica si hay una antes, si no, lo guarda directemente, si si hay, captura la que estaba, anexa la nueva al final y guarda todo
-    let id =   req.body.idOutput;
-    let input = req.body.Avance;
-        const data = await Grupos.findOne({ _id:id});
+        let id = req.body.idOutput;
+        let input = req.body.Avance;
+        const data = await Grupos.findOne({ _id: id });
         if (data !== null) {
-            if(data.Avance !== null){
-              let aux =  data.Avance;
+            if (data.Avance !== null) {
+                let aux = data.Avance;
 
-              let nuevo=aux.concat(input);
+                let nuevo = aux.concat(input);
 
-              data.Avance=nuevo;
-              await data.save();
-              res.json()
-            }else if(data.Avance===null){
+                data.Avance = nuevo;
+                await data.save();
+                res.json()
+            } else if (data.Avance === null) {
                 data.Avance = input;
                 await data.save()
                 res.json()
             }
-        }else{
+        } else {
             //no hay data
             res.json()
         }
     } catch (error) {
         res.json(error)
+    }
+}
+
+
+export const historialJuego = async (req: Request, res: Response) => {
+    try {
+        let { Curso, Paralelo } = req.body
+
+        const data = await Grupos.aggregate([
+            {
+                '$match': {
+                    'Curso': Curso,
+                    'Paralelo': Paralelo
+                }
+            }, {
+                '$group': {
+                    '_id': {
+                        'FechaDeInicio': '$FechaDeInicio',
+                        'FechaDeFin': '$FechaDeFin'
+                    },
+                    'documentos': {
+                        '$push': '$$ROOT'
+                    }
+                }
+            }
+        ]);
+        if (data.length !== 0) {
+            res.json(data)
+        } else if (data.length === 0) {
+            res.json([]);
+        }
+    } catch (error) {
+        res.status(500).json(error);
     }
 }

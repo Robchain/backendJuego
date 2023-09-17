@@ -10,8 +10,8 @@ export interface IGrupoDeTrabajo extends Document {
     Paralelo:string;
     TipoDeJuego: string;
     Avance: IAvenceArriba[];
-    FechaDeInicio: String;
-    FechaDeFin: String;
+    FechaDeInicio: string;
+    FechaDeFin: string;
     Estado:string
 }
 
