@@ -186,7 +186,29 @@ export const ImagenQuienMostrar =async (req:Request, res:Response) => {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
 }
-
+export const editarQuien = async (req:Request, res:Response) => {
+    try {
+        const data = await QuienImagen.findByIdAndUpdate({_id:req.body._id},
+        {$set:
+        {   Nombre:req.body.Nombre,
+            Imagen:req.body.Imagen,
+        }})
+            res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+    }
+}
+export const editarQuienSinImagen = async (req:Request, res:Response) => {
+    try {
+        const data = await QuienImagen.findByIdAndUpdate({_id:req.body._id},
+        {$set:
+        {   Nombre:req.body.Nombre
+        }})
+            res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+    }
+}
 export const ImagenQuienEliminar =async (req:Request, res:Response) => {
     try {
         const data = await QuienImagen.deleteOne({_id:req.body._id})
@@ -217,6 +239,7 @@ export const ImagenQuienHabilitar =async (req:Request, res:Response) => {
         res.status(500).json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
 }
+
 
 
 export const JuegosActivosOracion =async (req:Request, res:Response) => {

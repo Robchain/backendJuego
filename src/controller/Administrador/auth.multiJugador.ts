@@ -21,7 +21,7 @@ export const CrearEvento = async (req: Request, res: Response) => {
 
       const grupo: IGrupoDeTrabajo[] = await Grupos.find({ Curso: Curso, Paralelo: Paralelo });
       if (grupo.length !== 0) {
-        for (let i = 0; grupo.length > 0; i++) {
+        for (let i = 0; grupo.length > i; i++) {
           let fechafinjuegos = new Date(grupo[i].FechaDeFin);
           if (fechaInicio <= fechafinjuegos) {
             res.status(500).json({ "titulo": "Error", "respuesta": `La fecha inicial del juego está dentro del rango de otra actividad`, "type": "error" });

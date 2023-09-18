@@ -10,7 +10,8 @@ import EquipoBase from '../../models/Administrador/Equipo';
 //creacion de partida
 export const CrearModeloInicialSinJuegos = async (BaseMulti: IMultiJuga) => {
     try {
-        for (let i = 0; i <= parseInt(BaseMulti.NumeroDeGrupos.value); i++) {
+        let cantidad = Object.keys(BaseMulti.IntegrantesPorGrupos).length;
+        for (let i = 0; i < cantidad; i++) {
             let integrantes = null;
             if (i === 0) {
                 integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 1'];
@@ -24,6 +25,10 @@ export const CrearModeloInicialSinJuegos = async (BaseMulti: IMultiJuga) => {
                 integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 5'];
             } else if (i === 5) {
                 integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 6'];
+            }else if (i === 6) {
+                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 7'];
+            }else if (i === 7) {
+                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 8'];
             }
             const GrupoInicialsinJuegos: IGrupoDeTrabajo = new Grupos({
                 IdDeLaAsignacion: BaseMulti.id,

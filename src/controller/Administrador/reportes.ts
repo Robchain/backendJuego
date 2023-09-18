@@ -265,78 +265,157 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
         break;
       case 'Colaborativo':
         if (fechaInicio && fechaFin) {
-          objetosConAvance = await Grupos.find({
-            "Integrantes": {
-              $elemMatch: {
-                value: valorId
+          objetosConAvance = await Grupos.aggregate([
+            {
+              //agregar el filtro de null
+              '$match': {
+                'Integrantes': {
+                  '$elemMatch': {
+                    'value': valorId
+                  }
+                },
+                "createdAt": {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
               }
-            },
-            "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          });
+          ])
         } else if (fechaInicio) {
-          objetosConAvance = await Grupos.find({
-            "Integrantes": {
-              $elemMatch: {
-                value: valorId
+          objetosConAvance = await Grupos.aggregate([
+            {
+              '$match': {
+                'Integrantes': {
+                  '$elemMatch': {
+                    'value': valorId
+                  }
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
               }
             }
-          });
+          ])
         } else if (!fechaInicio) {
-          objetosConAvance = await Grupos.find({
-            "Integrantes": {
-              $elemMatch: {
-                value: valorId
+          //agregar el filtro de null
+          objetosConAvance = await Grupos.aggregate([
+            {
+              '$match': {
+                'Integrantes': {
+                  '$elemMatch': {
+                    'value': valorId
+                  }
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
               }
             }
-          });
+          ])
         }
         if (objetosConAvance.length > 0) {
           let pos = -1
+          let integrante = {};
           const nuevoarray = objetosConAvance.map(obj => {
-            for(let i =0;obj.documentos.length>0; i++ ){
+            for (let i = 0; obj.documentos.length > 0; i++) {
               const { Integrantes, Avance, createdAt, updatedAt } = obj.documentos[i];
               if (Avance !== null) {
-                for (let i = 0; i < Integrantes.length; i++) {
-                  if (Integrantes[i].value === valorId) {
-                    pos = i;
+                for (let j = 0; j < Integrantes.length; j++) {
+                  if (Integrantes[j].value === valorId) {
+                    integrante = { value: Integrantes[j].value, label: Integrantes[j].label }
+                    pos = j; // pasa saber la posicion del jugador dentro del equipo
                     break;
                   }
                 }
-                let inicio = ((pos + 1) * 5) - 5;
-                let nuevoAn = seleccionarObjetosPorIntervalo(Avance, inicio, (pos + 1) * 5);
+                let inicio = ((pos + 1) * 5) - 5; //donde inicia, la busqueda del array de avance
+                let nuevoAn = seleccionarObjetosPorIntervalo(Avance, inicio, (pos + 1) * 5 /*donde termina el array*/);
                 if (nuevoAn.length > 0) {
-                  for (let i = 0; nuevoAn.length > i; i++) {//////aqui me quede revisar bien, si es necesario volverlo hacer 
-                    objectosalida.push(modeladosalidaGeneralIndividualMultiIndiual(nuevoAn[i]))
+                  for (let i = 0; nuevoAn.length > i; i++) {
+                    objectosalida.push(modeladosalidaGeneralIndividualMultiIndiual(nuevoAn))
                   }
                   return {
-                    Avance: objectosalida,
-                    createdAt,
-                    updatedAt
+                    documentos: {
+
+                      Integrante: integrante,
+                      Avance: objectosalida,
+                      createdAt,
+                      updatedAt
+                    }
                   }
                 } else if (nuevoAn.length === 0) {
                   return {
-                    Avance: [{ PalabraAEvaluar: 'No a jugado', PalabraASeleccionada: 'No a jugado'}],
+                    documentos: {
+                      Integrante: integrante,
+                      Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }],
+                      createdAt,
+                      updatedAt
+                    }
+                  }
+                }
+
+              } else if (Avance === null) {
+                return {
+                  documentos: {
+                    Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }],
                     createdAt,
                     updatedAt
                   }
                 }
-  
-              } else if (Avance === null) {
-                return {
-                  Avance: [{ PalabraAEvaluar: 'No a jugado', PalabraASeleccionada: 'No a jugado'}],
-                  createdAt,
-                  updatedAt
-                }
               }
             }
-            
+
           })
           res.status(200).json(nuevoarray);
         } else if (objetosConAvance.length === 0) {
-          res.status(200).json([{ Avance: [{ PalabraAEvaluar: 'No existe Juego', PalabraASeleccionada: 'No existe juego'}] }])
+          res.status(200).json([{ Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }], }])
         }
         break;
       case 'Todos':
@@ -409,17 +488,40 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
               }
             }
           ]);
-          objetosConAvancetres = await Grupos.find({
-            "Integrantes": {
-              $elemMatch: {
-                value: valorId
+          objetosConAvancetres = await Grupos.aggregate([
+            {
+              //agregar el filtro de null
+              '$match': {
+                'Integrantes': {
+                  '$elemMatch': {
+                    'value': valorId
+                  }
+                },
+                "createdAt": {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
               }
-            },
-            "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          });
+          ])
         } else if (fechaInicio) {
           objetosConAvance = await JugadoresConVocabularios.aggregate([
             {
@@ -483,13 +585,35 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
               }
             }
           ]);
-          objetosConAvancetres = await Grupos.find({
-            "Integrantes": {
-              $elemMatch: {
-                value: valorId
+          objetosConAvancetres = await Grupos.aggregate([
+            {
+              '$match': {
+                'Integrantes': {
+                  '$elemMatch': {
+                    'value': valorId
+                  }
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
               }
             }
-          });
+          ])
         } else if (!fechaInicio) {
           objetosConAvance = await JugadoresConVocabularios.aggregate([
             {
@@ -553,13 +677,35 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
               }
             }
           ]);
-          objetosConAvancetres = await Grupos.find({
-            "Integrantes": {
-              $elemMatch: {
-                value: valorId
+          objetosConAvancetres = await Grupos.aggregate([
+            {
+              '$match': {
+                'Integrantes': {
+                  '$elemMatch': {
+                    'value': valorId
+                  }
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
               }
             }
-          });
+          ])
         }
         if (objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length > 0) {
           for (let i = 0; objetosConAvance.length > i; i++) {
@@ -735,25 +881,120 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
       case 'oracion':
 
         if (fechaInicio && fechaFin) {
-          objetosConAvance = await JugadoresConOraciones.find({
-            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo, "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+          objetosConAvance = await JugadoresConOraciones.aggregate([
+            {
+              '$match': {
+                "Estudiante.Curso": Curso,
+                "Estudiante.Paralelo": Paralelo,
+                "createdAt": {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
+              }
+            }, {
+              '$match': {
+                'Avance': {
+                  '$ne': null
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                  'Identificacion': '$Estudiante.Identificacion'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          }, { Rompecabeza: 0 })
+          ]);
         } else if (fechaInicio) {
-          objetosConAvance = await JugadoresConOraciones.find({
-            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
-          }, { Rompecabeza: 0 })
+          objetosConAvance = await JugadoresConOraciones.aggregate([
+            {
+              '$match': {
+                "Estudiante.Curso": Curso,
+                "Estudiante.Paralelo": Paralelo,
+              }
+            }, {
+              '$match': {
+                'Avance': {
+                  '$ne': null
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                  'Identificacion': '$Estudiante.Identificacion'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+          ]);
         } else if (!fechaInicio) {
-          objetosConAvance = await JugadoresConOraciones.find({
-            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
-          }, { Rompecabeza: 0 })
+          objetosConAvance = await JugadoresConOraciones.aggregate([
+            {
+              '$match': {
+                "Estudiante.Curso": Curso,
+                "Estudiante.Paralelo": Paralelo,
+              }
+            }, {
+              '$match': {
+                'Avance': {
+                  '$ne': null
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                  'Identificacion': '$Estudiante.Identificacion'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+          ]);
         }
         if (objetosConAvance.length > 0) {
           for (let i = 0; objetosConAvance.length > i; i++) {
-            objectosalida.push(modeladosalidaGeneralIndividualOracion(objetosConAvance[i]))
+            objectosalida.push({
+              _id: objetosConAvance[i]._id,
+              documentos: modeladosalidaGeneralIndividualOracion(objetosConAvance[i].documentos)
+            });
           }
+
           res.status(200).json(objectosalida);
         } else if (objetosConAvance.length === 0) {
           res.status(200).json([])
@@ -761,25 +1002,98 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
         break;
       case 'Colaborativo':
         if (fechaInicio && fechaFin) {
-          objetosConAvance = await Grupos.find({
-            "Curso": Curso, "Paralelo": Paralelo,
-            "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+          objetosConAvance = await Grupos.aggregate([
+            {
+              '$match': {
+                "Estudiante.Curso": Curso,
+                "Estudiante.Paralelo": Paralelo,
+                "createdAt": {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
+              }
+            },{
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          }, { updatedAt: 0 });
+          ]);
         } else if (fechaInicio) {
-          objetosConAvance = await Grupos.find({
-            "Curso": Curso, "Paralelo": Paralelo
-          }, { updatedAt: 0 });
+          objetosConAvance = await Grupos.aggregate([
+            {
+              '$match': {
+                "Curso": Curso,
+                "Paralelo": Paralelo,
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+
+          ]);
         } else if (!fechaInicio) {
-          objetosConAvance = await Grupos.find({
-            "Curso": Curso, "Paralelo": Paralelo
-          }, { updatedAt: 0 });
+          objetosConAvance = await Grupos.aggregate([
+            {
+              '$match': {
+                "Curso": Curso,
+                "Paralelo": Paralelo,
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+
+          ]);
         }
         if (objetosConAvance.length > 0) {
           for (let i = 0; objetosConAvance.length > i; i++) {
-            objectosalida.push(modeladosalidaGeneralIndividualMulti(objetosConAvance[i]))
+            for (let j = 0; objetosConAvance[i].documentos.length > j; j++) {
+              objectosalida.push({ documentos: modeladosalidaGeneralIndividualMulti(objetosConAvance[i].documentos[j]) })
+            }
           }
           res.status(200).json(objectosalida);
         } else if (objetosConAvance.length === 0) {
@@ -825,19 +1139,75 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
               }
             }
           ]);
-          objetosConAvancedos = await JugadoresConOraciones.find({
-            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo, "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+          objetosConAvancedos = await JugadoresConOraciones.aggregate([
+            {
+              '$match': {
+                "Estudiante.Curso": Curso,
+                "Estudiante.Paralelo": Paralelo,
+                "createdAt": {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
+              }
+            }, {
+              '$match': {
+                'Avance': {
+                  '$ne': null
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                  'Identificacion': '$Estudiante.Identificacion'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          }, { Rompecabeza: 0 })
-          objetosConAvancetres = await Grupos.find({
-            "Curso": Curso, "Paralelo": Paralelo,
-            "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+          ]);
+          objetosConAvancetres = await Grupos.aggregate([
+            {
+              '$match': {
+                "Curso": Curso,
+                "Paralelo": Paralelo,
+                "createdAt": {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          }, { updatedAt: 0 });
+
+          ]);
+
         } else if (fechaInicio) {
           objetosConAvance = await JugadoresConVocabularios.aggregate([
             {
@@ -872,10 +1242,66 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
               }
             }
           ]);
-          objetosConAvancedos = await JugadoresConOraciones.find({
-            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
-          }, { Rompecabeza: 0 })
-          objetosConAvancetres = await Grupos.find({ "Curso": Curso, "Paralelo": Paralelo }, { updatedAt: 0 });
+          objetosConAvancedos = await JugadoresConOraciones.aggregate([
+            {
+              '$match': {
+                "Estudiante.Curso": Curso,
+                "Estudiante.Paralelo": Paralelo,
+              }
+            }, {
+              '$match': {
+                'Avance': {
+                  '$ne': null
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                  'Identificacion': '$Estudiante.Identificacion'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+          ]);
+          objetosConAvancetres = await Grupos.aggregate([
+            {
+              '$match': {
+                "Curso": Curso,
+                "Paralelo": Paralelo,
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+
+          ]);
         } else if (!fechaInicio) {
           objetosConAvance = await JugadoresConVocabularios.aggregate([
             {
@@ -910,10 +1336,66 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
               }
             }
           ]);
-          objetosConAvancedos = await JugadoresConOraciones.find({
-            "Estudiante.Curso": Curso, "Estudiante.Paralelo": Paralelo
-          }, { Rompecabeza: 0 })
-          objetosConAvancetres = await Grupos.find({ "Curso": Curso, "Paralelo": Paralelo }, { updatedAt: 0 });
+          objetosConAvancedos = await JugadoresConOraciones.aggregate([
+            {
+              '$match': {
+                "Estudiante.Curso": Curso,
+                "Estudiante.Paralelo": Paralelo,
+              }
+            }, {
+              '$match': {
+                'Avance': {
+                  '$ne': null
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                  'Identificacion': '$Estudiante.Identificacion'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+          ]);
+          objetosConAvancetres = await Grupos.aggregate([
+            {
+              '$match': {
+                "Curso": Curso,
+                "Paralelo": Paralelo,
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+
+          ]);
         }
         if (objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length > 0) {
           for (let i = 0; objetosConAvance.length > i; i++) {
@@ -923,11 +1405,15 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
             });
           }
           for (let i = 0; objetosConAvancedos.length > i; i++) {
-            objectosalida2.push(modeladosalidaGeneralIndividualOracion(objetosConAvancedos[i]))
+            objectosalida2.push({
+              _id: objetosConAvance[i]._id,
+              documentos: modeladosalidaGeneralIndividualOracion(objetosConAvance[i].documentos)
+            });
           }
           for (let i = 0; objetosConAvancetres.length > i; i++) {
-            objectosalida3.push(modeladosalidaGeneralIndividualMulti(objetosConAvancetres[i]))
-          }
+            for (let j = 0; objetosConAvancetres[i].documentos.length > j; j++) { 
+             objectosalida3.push({documentos:modeladosalidaGeneralIndividualMulti(objetosConAvancetres[i].documentos[j])})
+          }}
           res.status(200).json(objectosalida.concat(objectosalida2, objectosalida3));
         } else if (objetosConAvance.length === 0 && objetosConAvancedos.length === 0 && objetosConAvancetres.length === 0) {
           res.status(200).json([])
@@ -1075,20 +1561,106 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
         break;
       case 'oracion':
         if (fechaInicio && fechaFin) {
-          objetosConAvance = await JugadoresConOraciones.find({
-            "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+          objetosConAvance = await JugadoresConOraciones.aggregate([
+            {
+              '$match': {
+                'createdAt': {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
+              }
+            }, {
+              '$match': {
+                'Avance': {
+                  '$ne': null
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                  'Identificacion': '$Estudiante.Identificacion'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          })
+          ]);
         } else if (fechaInicio) {
-          objetosConAvance = await JugadoresConOraciones.find();
+          objetosConAvance = await JugadoresConOraciones.aggregate([{
+            '$match': {
+              'Avance': {
+                '$ne': null
+              }
+            }
+          },
+          {
+            '$addFields': {
+              'createdAtDay': {
+                '$dateToString': {
+                  'format': '%Y-%m-%d',
+                  'date': '$createdAt'
+                }
+              }
+            }
+          }, {
+            '$group': {
+              '_id': {
+                'createdAtDay': '$createdAtDay',
+                'Identificacion': '$Estudiante.Identificacion'
+              },
+              'documentos': {
+                '$push': '$$ROOT'
+              }
+            }
+          }
+          ]);
         } else if (!fechaInicio) {
-          objetosConAvance = await JugadoresConOraciones.find();
+          objetosConAvance = await JugadoresConOraciones.aggregate([{
+            '$match': {
+              'Avance': {
+                '$ne': null
+              }
+            }
+          },
+          {
+            '$addFields': {
+              'createdAtDay': {
+                '$dateToString': {
+                  'format': '%Y-%m-%d',
+                  'date': '$createdAt'
+                }
+              }
+            }
+          }, {
+            '$group': {
+              '_id': {
+                'createdAtDay': '$createdAtDay',
+                'Identificacion': '$Estudiante.Identificacion'
+              },
+              'documentos': {
+                '$push': '$$ROOT'
+              }
+            }
+          }
+          ]);
         }
         if (objetosConAvance.length > 0) {
           for (let i = 0; objetosConAvance.length > i; i++) {
-            objectosalida.push(modeladosalidaGeneralIndividualOracion(objetosConAvance[i]))
+            objectosalida.push({
+              _id: objetosConAvance[i]._id,
+              documentos: modeladosalidaGeneralIndividualOracion(objetosConAvance[i].documentos)
+            });
           }
           res.status(200).json(objectosalida);
         } else if (objetosConAvance.length === 0) {
@@ -1097,21 +1669,85 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
         break;
       case 'Colaborativo':
         if (fechaInicio && fechaFin) {
-          objetosConAvance = await Grupos.find({
-            "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+          objetosConAvance = await Grupos.aggregate([
+            {
+              '$match': {
+                "createdAt": {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
+              }
+            },
+            {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          }, { updatedAt: 0 })
+          ])
         } else if (fechaInicio) {
-          objetosConAvance = await Grupos.find({}, { updatedAt: 0 })
+          objetosConAvance = await Grupos.aggregate([
+            {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+          ])
         } else if (!fechaInicio) {
-          objetosConAvance = await Grupos.find({}, { updatedAt: 0 })
+          objetosConAvance = await Grupos.aggregate([
+            {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+          ])
         }
         if (objetosConAvance.length > 0) {
           for (let i = 0; objetosConAvance.length > i; i++) {
-            objectosalida.push(modeladosalidaGeneralIndividualMulti(objetosConAvance[i]))
-          }
+            for (let j = 0; objetosConAvance[i].documentos.length > j; j++) {
+            objectosalida.push({documentos:modeladosalidaGeneralIndividualMulti(objetosConAvance[i].documentos[j])})
+          }}
           res.status(200).json(objectosalida);
         } else if (objetosConAvance.length === 0) {
           res.status(200).json([])
@@ -1119,24 +1755,105 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
         break;
       case 'Todos':
         if (fechaInicio && fechaFin) {
-          objetosConAvance = await JugadoresConVocabularios.find({
-            "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+          objetosConAvance = await JugadoresConVocabularios.aggregate([
+            {
+              '$match': {
+                'createdAt': {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
+              }
+            }, {
+              '$match': {
+                'Avance': {
+                  '$ne': null
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                  'Identificacion': '$Estudiante.Identificacion'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          })
-          objetosConAvancedos = await JugadoresConOraciones.find({
-            "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+          ]);
+          objetosConAvancedos = await JugadoresConOraciones.aggregate([
+            {
+              '$match': {
+                'createdAt': {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
+              }
+            }, {
+              '$match': {
+                'Avance': {
+                  '$ne': null
+                }
+              }
+            }, {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                  'Identificacion': '$Estudiante.Identificacion'
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          })
-          objetosConAvancetres = await Grupos.find({
-            "createdAt": {
-              $gte: fechaInicio,
-              $lte: fechaFin
+          ]);
+          objetosConAvancetres = await Grupos.aggregate([
+            {
+              '$match': {
+                "createdAt": {
+                  $gte: fechaInicio,
+                  $lte: fechaFin
+                }
+              }
+            },
+            {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
             }
-          });
+          ])
         } else if (fechaInicio) {
           objetosConAvance = await JugadoresConVocabularios.aggregate([{
             '$match': {
@@ -1166,8 +1883,55 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
             }
           }
           ]);
-          objetosConAvancedos = await JugadoresConOraciones.find();
-          objetosConAvancetres = await Grupos.find();
+          objetosConAvancedos = await JugadoresConOraciones.aggregate([{
+            '$match': {
+              'Avance': {
+                '$ne': null
+              }
+            }
+          },
+          {
+            '$addFields': {
+              'createdAtDay': {
+                '$dateToString': {
+                  'format': '%Y-%m-%d',
+                  'date': '$createdAt'
+                }
+              }
+            }
+          }, {
+            '$group': {
+              '_id': {
+                'createdAtDay': '$createdAtDay',
+                'Identificacion': '$Estudiante.Identificacion'
+              },
+              'documentos': {
+                '$push': '$$ROOT'
+              }
+            }
+          }
+          ]);
+          objetosConAvancetres = await Grupos.aggregate([
+            {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+          ]);
         } else if (!fechaInicio) {
           objetosConAvance = await JugadoresConVocabularios.aggregate([{
             '$match': {
@@ -1197,8 +1961,55 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
             }
           }
           ]);
-          objetosConAvancedos = await JugadoresConOraciones.find();
-          objetosConAvancetres = await Grupos.find();
+          objetosConAvancedos = await JugadoresConOraciones.aggregate([{
+            '$match': {
+              'Avance': {
+                '$ne': null
+              }
+            }
+          },
+          {
+            '$addFields': {
+              'createdAtDay': {
+                '$dateToString': {
+                  'format': '%Y-%m-%d',
+                  'date': '$createdAt'
+                }
+              }
+            }
+          }, {
+            '$group': {
+              '_id': {
+                'createdAtDay': '$createdAtDay',
+                'Identificacion': '$Estudiante.Identificacion'
+              },
+              'documentos': {
+                '$push': '$$ROOT'
+              }
+            }
+          }
+          ]);
+          objetosConAvancetres = await Grupos.aggregate([
+            {
+              '$addFields': {
+                'createdAtDay': {
+                  '$dateToString': {
+                    'format': '%Y-%m-%d',
+                    'date': '$createdAt'
+                  }
+                }
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  'createdAtDay': '$createdAtDay',
+                },
+                'documentos': {
+                  '$push': '$$ROOT'
+                }
+              }
+            }
+          ]);
         }
         if (objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length > 0) {
           for (let i = 0; objetosConAvance.length > i; i++) {
@@ -1208,11 +2019,15 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
             });
           }
           for (let i = 0; objetosConAvancedos.length > i; i++) {
-            //     objectosalida2.push(modeladosalidaGeneralIndividualOracion(objetosConAvancedos[i]))
+            objectosalida2.push({
+              _id: objetosConAvancedos[i]._id,
+              documentos: modeladosalidaGeneralIndividualOracion(objetosConAvancedos[i].documentos)
+            });
           }
           for (let i = 0; objetosConAvancetres.length > i; i++) {
-            //  objectosalida3.push(modeladosalidaGeneralIndividualMulti(objetosConAvancetres[i]))
-          }
+            for (let j = 0; objetosConAvancetres[i].documentos.length > j; j++) {
+             objectosalida3.push({documentos:modeladosalidaGeneralIndividualMulti(objetosConAvancetres[i].documentos[j])})
+              }  }
           res.status(200).json(objectosalida.concat(objectosalida2, objectosalida3));
         } else if (objetosConAvance.length === 0 && objetosConAvancedos.length === 0 && objetosConAvancetres.length === 0) {
           res.status(200).json([])
@@ -1231,51 +2046,65 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
 
 const multijugadorinter = (objetosConAvance: any[], id: String) => {
   let pos = -1
+  let integrante = {};
   let objectosalida: any[] = []
   try {
     if (objetosConAvance.length === 0) {
       return [{ Avance: [{ PalabraAEvaluar: 'No existe juego', PalabraASeleccionada: 'No existe juego', Resultado: 'No existe juego' }] }]
     } else if (objetosConAvance.length > 0) {
       const nuevoarray = objetosConAvance.map(obj => {
-        const { Integrantes, Avance, createdAt, updatedAt } = obj;
-        if (Avance !== null) {
-          for (let i = 0; i < Integrantes.length; i++) {
-            if (Integrantes[i].value === id) {
-              pos = i;
-              break;
+        for (let i = 0; obj.documentos.length > 0; i++) {
+          const { Integrantes, Avance, createdAt, updatedAt } = obj.documentos[i];
+          if (Avance !== null) {
+            for (let j = 0; j < Integrantes.length; j++) {
+              if (Integrantes[j].value === id) {
+                integrante = { value: Integrantes[j].value, label: Integrantes[j].label };
+                pos = j;
+                break;
+              }
             }
-          }
-          let inicio = ((pos + 1) * 5) - 5;
-          let nuevoAn = seleccionarObjetosPorIntervalo(Avance, inicio, (pos + 1) * 5);
-          if (nuevoAn.length > 0) {
-            for (let i = 0; nuevoAn.length > i; i++) {
-              objectosalida.push(modeladosalidaGeneralIndividualMultiIndiual(nuevoAn[i]))
+            let inicio = ((pos + 1) * 5) - 5;
+            let nuevoAn = seleccionarObjetosPorIntervalo(Avance, inicio, (pos + 1) * 5);
+            if (nuevoAn.length > 0) {
+              for (let i = 0; nuevoAn.length > i; i++) {
+                objectosalida.push(modeladosalidaGeneralIndividualMultiIndiual(nuevoAn))
+              }
+              return {
+                documentos: {
+                  Integrante: integrante,
+                  Avance: objectosalida,
+                  createdAt,
+                  updatedAt
+                }
+              }
+            } else if (nuevoAn.length === 0) {
+              return {
+                documentos: {
+                  Integrante: integrante,
+                  Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }],
+                  createdAt,
+                  updatedAt
+                }
+              }
             }
-            return {
-              Avance: objectosalida,
-              createdAt,
-              updatedAt
-            }
-          } else if (nuevoAn.length === 0) {
-            return {
-              Avance: [{ PalabraAEvaluar: 'No a jugado', PalabraASeleccionada: 'No a jugado', Resultado: 'No a jugado' }],
-              createdAt,
-              updatedAt
-            }
-          }
 
-        } else if (Avance === null) {
-          return {
-            Avance: [{ PalabraAEvaluar: 'No a jugado', PalabraASeleccionada: 'No a jugado', Resultado: 'No a jugado' }],
-            createdAt,
-            updatedAt
+          } else if (Avance === null) {
+            return {
+              documentos: {
+
+                Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }],
+                createdAt,
+                updatedAt
+              }
+            }
           }
         }
       })
       return nuevoarray;
     }
+
   } catch (error) {
-    return [{ Avance: [{ PalabraAEvaluar: 'No existe juego', PalabraASeleccionada: 'No existe juego', Resultado: 'No existe juego' }] }]
+    return [{ Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }], }]
   }
 
 }
@@ -1351,18 +2180,18 @@ const modeladosalidaGeneralIndividualOracion = (input: any[]) => {
 const modeladosalidaGeneralIndividualMultiIndiual = (input: any) => {
   let correcto: string[] = [];
   let Incorrecto: JuegoSimple[] = [];
-  let Avance:any[] =[]
-  if (input.Avance !== null) {
-    if (input.Avance.length >= 0) {
-      for (let i = 0; input.Avance.length > i; i++) {
-        if (input.Avance[i].Resultado === "CORRECTO") {
-          if (!input.Avance[i].OracionCorrecta) {
-            correcto.push(input.Avance[i].PalabraASeleccionada);
+  let Avance: any[] = []
+  if (input !== null) {
+    if (input.length >= 0) {
+      for (let i = 0; input.length > i; i++) {
+        if (input[i].Resultado === "CORRECTO") {
+          if (!input[i].OracionCorrecta) {
+            correcto.push(input[i].PalabraASeleccionada);
           } else {
-            correcto.push(input.Avance[i].OracionCorrecta);
+            correcto.push(input[i].OracionCorrecta);
           }
-        } else if (input.Avance[i].Resultado === "INCORRECTO") {
-          Incorrecto.push({ PalabraAEvaluar: input.Avance[i].PalabraAEvaluar, PalabraASeleccionada: input.Avance[i].PalabraASeleccionada })
+        } else if (input.Resultado === "INCORRECTO") {
+          Incorrecto.push({ PalabraAEvaluar: input[i].PalabraAEvaluar, PalabraASeleccionada: input[i].PalabraASeleccionada })
         }
       }
       Avance.push({ Correcto: correcto, Incorrecto: Incorrecto });
@@ -1393,7 +2222,7 @@ const modeladosalidaGeneralIndividualMulti = (input: any) => {
       Avance = { Correcto: correcto, Incorrecto: Incorrecto }
     }
   } else {
-    Avance = null;
+    Avance=[{Incorrecto:[{ PalabraAEvaluar: 'No han jugado colaborativo', PalabraASeleccionada: 'No han jugado colaborativo' }]}] ;
   }
   return {
     Equipo: input.Equipo,
