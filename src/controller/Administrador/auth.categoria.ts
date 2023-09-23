@@ -28,7 +28,7 @@ export const crearCategorias =async (req:Request,res:Response) => {
 export const borrarCategoria    =  async (req:Request, res:Response) => {
     try {
         const borrar = await Categoria.deleteOne({_id:req.body._id});
-        res.json({"titulo":"Excelente","respuesta":'Ítem borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -39,7 +39,7 @@ export const DesibilitarCategoriaVocabulario =async (req:Request, res:Response) 
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }

@@ -14,7 +14,7 @@ export const crearCategoriasOraciones = async (req: Request, res: Response) => {
 export const borrarCategoriaOracion   =  async (req:Request, res:Response) => {
     try {
         const borrar = await CategoriaOraciones.deleteOne({_id:req.body._id});
-        res.json({"titulo":"Excelente","respuesta":'Ítem borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -41,7 +41,7 @@ export const DesibilitarCategoriaOraciones =async (req:Request, res:Response) =>
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -52,7 +52,7 @@ export const HabilitarCategoriaOraciones =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Item restaurado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }

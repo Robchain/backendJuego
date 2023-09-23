@@ -14,6 +14,7 @@ import { borrarCategoriaOracion, crearCategoriasOraciones, DesibilitarCategoriaO
 import { actualizarJuegoTerminado, DevuelveLaPosicionDentroDelArray, historialJuego, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
 import {  activarJuegoVocabularioPorGrupo } from '../controller/Administrador/auth.JuegoVoca';
 import { reporteGeneralPorCurso, reporteGeneralPorEstudiante, reporteGeneralPorJuego } from '../controller/Administrador/reportes';
+import { CrearCurso, DesibilitarCurso, HabilitarCurso, MostrarCurso, EditarCurso, CrearParalelo, MostrarParalelo, DesibilitarParalelo, HabilitarParalelo, EditarParalelo } from '../controller/Administrador/auth.CursoParalelo';
 
 const router : Router = Router();
 router.get("/",getBase)
@@ -34,6 +35,18 @@ router.delete('/BorrarUsario', borrarPerfiles)
 router.post('/EditarUsuario',test)
 router.get("/perfilesActivosMaestros",perfilesActivosMaestros)
 router.post('/MostrarEstudianteConSusEstudiantes', MostrarMaestrosConSusEstudiantesPorCursos),
+//Curso
+router.post('/CrearCurso', CrearCurso);
+router.get('/MostrarCurso', MostrarCurso);
+router.post('/DesibilitarCurso', DesibilitarCurso);
+router.post('/HabilitarCurso', HabilitarCurso);
+router.post('/EditarCurso', EditarCurso);
+//Paralelo
+router.post('/CrearParalelo', CrearParalelo);
+router.get('/MostrarParalelo', MostrarParalelo);
+router.post('/DesibilitarParalelo', DesibilitarParalelo);
+router.post('/HabilitarParalelo', HabilitarParalelo);
+router.post('/EditarParalelo', EditarParalelo);
 //rompecabeza
 router.post('/rompecabezaAdmi',subirRom);
 router.get('/rompecabezaAdmi/buscarU',mostrarRom);

@@ -196,7 +196,7 @@ export const desabilitarPersonas = async (req: Request, res: Response) => {
         }, {$set: {
                 Estado:"INACTIVO"
             }})
-            res.json({ "titulo": "Excelente", "respuesta": 'Usuario desactivado con éxito', "type": "success" })
+            res.json({ "titulo": "Excelente", "respuesta": 'Ítem desactivado', "type": "success" })
     } catch (error) {
         res.json({ "titulo": "Error", "respuesta": `no se puedo borrar`, "type": "error" })
     }
@@ -208,7 +208,7 @@ export const activarPersonas = async (req: Request, res: Response) => {
         }, {$set: {
                 Estado:"ACTIVO"
             }})
-            res.json({ "titulo": "Excelente", "respuesta": 'Usuario restaurado con éxito', "type": "success" })
+            res.json({ "titulo": "Excelente", "respuesta": 'Ítem restaurado', "type": "success" })
     } catch (error) {
         res.json({ "titulo": "Error", "respuesta": `no se puedo Activar`, "type": "error" })
     }

@@ -13,23 +13,24 @@ export const CrearModeloInicialSinJuegos = async (BaseMulti: IMultiJuga) => {
         let cantidad = Object.keys(BaseMulti.IntegrantesPorGrupos).length;
         for (let i = 0; i < cantidad; i++) {
             let integrantes = null;
-            if (i === 0) {
-                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 1'];
-            } else if (i === 1) {
-                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 2'];
-            } else if (i === 2) {
-                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 3'];
-            } else if (i === 3) {
-                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 4'];
-            } else if (i === 4) {
-                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 5'];
-            } else if (i === 5) {
-                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 6'];
-            }else if (i === 6) {
-                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 7'];
-            }else if (i === 7) {
-                integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 8'];
-            }
+            integrantes = BaseMulti.IntegrantesPorGrupos[`Equipo ${cantidad-i}`];
+            // if (i === 0) {
+                
+            // } else if (i === 1) {
+            //     integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 2'];
+            // } else if (i === 2) {
+            //     integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 3'];
+            // } else if (i === 3) {
+            //     integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 4'];
+            // } else if (i === 4) {
+            //     integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 5'];
+            // } else if (i === 5) {
+            //     integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 6'];
+            // }else if (i === 6) {
+            //     integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 7'];
+            // }else if (i === 7) {
+            //     integrantes = BaseMulti.IntegrantesPorGrupos['Equipo 8'];
+            // }
             const GrupoInicialsinJuegos: IGrupoDeTrabajo = new Grupos({
                 IdDeLaAsignacion: BaseMulti.id,
                 Equipo: null,

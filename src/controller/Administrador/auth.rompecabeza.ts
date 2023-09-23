@@ -19,7 +19,7 @@ export const subirRom= async (req:Request, res:Response) =>{
 export const borrarRom =async (req:Request,res:Response)=>{
     try {
         const data = await Rompecabeza.deleteOne({_id:req.body._id});
-        res.json({"titulo":"Excelente","respuesta":'Ítem Borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar el ítem`, "type":"error"});
     }
@@ -48,7 +48,7 @@ export const DesibilitarRompecabeza =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`no se puedo borrar el ítem`, "type":"error"});
     }

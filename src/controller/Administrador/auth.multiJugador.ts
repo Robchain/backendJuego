@@ -175,3 +175,5 @@ export const CrearJuegoVocabularioIndividual = async (req: Request, res: Respons
     res.json(error)
   }
 }
+
+
