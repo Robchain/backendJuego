@@ -129,10 +129,14 @@ export const ActivarJuegoConEstudianteOracion = async (req:Request, res:Response
 
     try {
         const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:req.body.Paralelo,Curso:req.body.Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+       if(Estudiantes.length> 0){
         for (const estudiante of Estudiantes){
             await crearJuegoOraciones(estudiante)
         }
         res.json({"titulo":"Excelente","respuesta":'Juego Creado Con éxito',"type":"success"})
+    }else{
+        res.json({"titulo":"Error","respuesta":'No hay estudiantes asignados',"type":"error"})
+    }
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`Hubo un error al crear el juego`, "type":"error"}); 
     }
@@ -152,7 +156,8 @@ const crearJuegoOraciones = async (estudiante:any)=>{
             },
             Rompecabeza: await rompecabezas(),
             Avance: null,
-            Terminado:false
+            Terminado:false,
+            Estado:true
         });
         juegosOracion.save();
     }
@@ -223,7 +228,7 @@ export const ImagenQuienDesibilitar =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.status(200).json({"titulo":"Excelente","respuesta":'Item borrado',"type":"success"})
+        res.status(200).json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
     } catch (error) {
         res.status(500).json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -234,7 +239,7 @@ export const ImagenQuienHabilitar =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.status(200).json({"titulo":"Excelente","respuesta":'Item restaurado',"type":"success"})
+        res.status(200).json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
     } catch (error) {
         res.status(500).json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
     }
@@ -260,7 +265,7 @@ export const JuegosActivosOracion =async (req:Request, res:Response) => {
         ])
           for(let i=0; data.length>i;i++){
             if(data[i].Estudiante[0].Curso ||data[i].Estudiante[0].Paralelo){
-              output.push({Curso:data[i].Estudiante[0].Curso, Paralelo:data[i].Estudiante[0].Paralelo,Activo:'Si' });
+              output.push({Curso:data[i].Estudiante[0].Curso, Paralelo:data[i].Estudiante[0].Paralelo,Activo:'ACTIVO' });
             }
           }
   

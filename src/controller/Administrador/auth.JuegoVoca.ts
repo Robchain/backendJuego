@@ -23,16 +23,22 @@ export const example = async (req:Request, res:Response) => {
     }
 }
 
-//volver a revisar la logica
+//volver a revisar la logica - aqui me quede
 
 
 export const activarJuegoVocabularioPorGrupo = async (req:Request, res:Response)=>{
 try {   
     const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:req.body.Paralelo,Curso:req.body.Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 })
-    for( const estudiante of Estudiantes){
-        await   crearJuegoVocabulario(estudiante);
+    if(Estudiantes.length > 0 ){
+        for( const estudiante of Estudiantes){
+            await   crearJuegoVocabulario(estudiante);
+        }
+        //si hay estudiante, mandar un mensjae de que no se puede porq hay no hay estudiantes
+        res.json({"titulo":"Excelente","respuesta":'Juego creado Con éxito',"type":"success"})
+    }else {
+        res.json({"titulo":"Error","respuesta":'No hay estudiantes asignados',"type":"error"})
     }
-    res.json({"titulo":"Excelente","respuesta":'Juego Creado Con éxito',"type":"success"})
+    
 } catch (error) {
     res.json({"titulo":"Error","respuesta":`Hubo un error al crear el juego`, "type":"error"}); 
 }
@@ -52,6 +58,7 @@ const crearJuegoVocabulario = async (estudiante:any) => {
         Rompecabeza: await rompecabezas(),
         Avance: null,
         Terminado: false,
+        Activo:true,
       });
       await juegosVocabulario.save();
     }

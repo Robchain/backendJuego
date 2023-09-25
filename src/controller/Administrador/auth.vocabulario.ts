@@ -125,7 +125,7 @@ export const JuegosActivos =async (req:Request, res:Response) => {
       ])
         for(let i=0; data.length>i;i++){
           if(data[i].Estudiante[0].Curso ||data[i].Estudiante[0].Paralelo){
-            output.push({Curso:data[i].Estudiante[0].Curso, Paralelo:data[i].Estudiante[0].Paralelo,Activo:'Si' });
+            output.push({Curso:data[i].Estudiante[0].Curso, Paralelo:data[i].Estudiante[0].Paralelo,Activo:'ACTIVO' });
           }
         }
 

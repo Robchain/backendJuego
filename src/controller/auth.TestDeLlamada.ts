@@ -134,7 +134,6 @@ export const rompecabezas = async () => {
 
   let final = rompecabeza[0];
   return final;
-
 };
 export const testas = async (req: Request, res: Response) => {
   let vocabulario = [];
