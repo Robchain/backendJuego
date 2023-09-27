@@ -5,6 +5,7 @@ import JugadoresConOraciones, { IJugadoresConOraciones } from '../../models/Juga
 import {  rompecabezas } from '../auth.TestDeLlamada';
 import QuienImagen from '../../models/Administrador/QuienImagen';
 import { ActivoJuego } from '../../interface/JuegoVoca.Interface';
+import { responseformualrio } from '../../lib';
 
 
 export const subirOracion = async (req:Request, res:Response) => {
@@ -24,7 +25,7 @@ export const subirOracion = async (req:Request, res:Response) => {
             Estado:"ACTIVO"
         })
         const guardarOracion   =    await   oracion.save();
-        res.json({"titulo":"Excelente","respuesta":'Oración creada con éxito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Creado.Creado,"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})
     }
@@ -32,9 +33,9 @@ export const subirOracion = async (req:Request, res:Response) => {
 export const borrarOracion  =   async (req:Request,res:Response) => {
     try {
         const data = await Oracion.deleteMany({Oracion:req.body.Oracion})
-        res.json({"titulo":"Excelente","respuesta":'Item Borrado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Borrar.BorrarItem,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Borrar.NoBorrarItem, "type":"error"});
     }
 } 
 //muestra Oracion Todas
@@ -43,7 +44,7 @@ export const mostrarOracTodos = async (req:Request, res:Response) => {
         const Data= await   Oracion.find({},{"createdAt":0,"updatedAt":0});
         res.json(Data);
     } catch (error) {   
-        res.json({"titulo":"Error","respuesta":`Algo salio mal`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Mostrar.NoMostrar, "type":"error"});
     }    
 }
 //muestra Oracion por coincidencia
@@ -77,9 +78,9 @@ export const editarOracion =async (req:Request, res:Response) => {
             FileVideoMuestra:req.body.FileVideoMuestra,
         }
     })
-    res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
+    res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
     }
 }
 
@@ -96,9 +97,9 @@ export const editarOracionSinArchivo =async (req:Request, res:Response) => {
             Adverbio:req.body.Adverbio,
         }
     })
-    res.json({"titulo":"Excelente","respuesta":' Ítem editado con éxito',"type":"success"})
+    res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
     }
 }
 
@@ -108,9 +109,9 @@ export const DesibilitarOracion =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Desactivar.Desactivar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar el ítem`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Desactivar.NoDesactivar, "type":"error"});
     }
 }
 export const HabilitarOracion =async (req:Request, res:Response) => {
@@ -119,9 +120,9 @@ export const HabilitarOracion =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Item restaurado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar ítem`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Activar.NoActivar, "type":"error"});
     }
 }
 
@@ -175,7 +176,7 @@ export const ImagenQuienCrear = (req:Request, res:Response)=>{
             Estado:"ACTIVO",
         })
         const data = quienImagen.save();
-        res.status(200).json({"titulo":"Excelente","respuesta":'Opcion creada con éxito',"type":"success"})
+        res.status(200).json({"titulo":"Excelente","respuesta":responseformualrio.Creado.Creado,"type":"success"})
     } catch (error:any) {
         res.status(500).json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})  
     }
@@ -188,7 +189,7 @@ export const ImagenQuienMostrar =async (req:Request, res:Response) => {
         const data = await QuienImagen.find({},{"createdAt":0,"updatedAt":0})
         res.status(200).json(data)
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Mostrar.NoMostrar, "type":"error"});
     }
 }
 export const editarQuien = async (req:Request, res:Response) => {
@@ -198,9 +199,9 @@ export const editarQuien = async (req:Request, res:Response) => {
         {   Nombre:req.body.Nombre,
             Imagen:req.body.Imagen,
         }})
-            res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
+            res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
     }
 }
 export const editarQuienSinImagen = async (req:Request, res:Response) => {
@@ -209,17 +210,17 @@ export const editarQuienSinImagen = async (req:Request, res:Response) => {
         {$set:
         {   Nombre:req.body.Nombre
         }})
-            res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
+            res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
     }
 }
 export const ImagenQuienEliminar =async (req:Request, res:Response) => {
     try {
         const data = await QuienImagen.deleteOne({_id:req.body._id})
-        res.status(200).json({"titulo":"Excelente","respuesta":'Item borrado',"type":"success"})
+        res.status(200).json({"titulo":"Excelente","respuesta":responseformualrio.Borrar.BorrarItem,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Borrar.NoBorrarItem, "type":"error"});
     }
 }
 export const ImagenQuienDesibilitar =async (req:Request, res:Response) => {
@@ -228,9 +229,9 @@ export const ImagenQuienDesibilitar =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.status(200).json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
+        res.status(200).json({"titulo":"Excelente","respuesta":responseformualrio.Desactivar.Desactivar,"type":"success"})
     } catch (error) {
-        res.status(500).json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.status(500).json({"titulo":"Error","respuesta":responseformualrio.Desactivar.NoDesactivar, "type":"error"});
     }
 }
 export const ImagenQuienHabilitar =async (req:Request, res:Response) => {
@@ -239,9 +240,9 @@ export const ImagenQuienHabilitar =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.status(200).json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
+        res.status(200).json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     } catch (error) {
-        res.status(500).json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.status(500).json({"titulo":"Error","respuesta":responseformualrio.Activar.NoActivar, "type":"error"});
     }
 }
 

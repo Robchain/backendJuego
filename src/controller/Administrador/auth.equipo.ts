@@ -1,6 +1,7 @@
 import Equipo, {IEquipo} from '../../models/Administrador/Equipo'
 import { Request, Response } from 'express'
 import Persona from '../../models/Administrador/Persona'
+import { responseformualrio } from '../../lib'
 
 export const CrearEquipo = async (req:Request, res:Response) => {
     try {
@@ -10,7 +11,7 @@ export const CrearEquipo = async (req:Request, res:Response) => {
             Estado:"ACTIVO",
         })
         const data = equipo.save();
-        res.json({"titulo":"Excelente","respuesta":'Equipo creado con éxito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Creado.Creado,"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})  
     }
@@ -21,16 +22,16 @@ export const MostrarEquipo =async (req:Request, res:Response) => {
         const data = await Equipo.find({},{"createdAt":0,"updatedAt":0})
         res.json(data)
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Mostrar.NoMostrar, "type":"error"});
     }
 }
 
 export const EliminarEquipo =async (req:Request, res:Response) => {
     try {
         const data = await Equipo.deleteOne({_id:req.body._id})
-        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Borrar.BorrarItem,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Borrar.NoBorrarItem, "type":"error"});
     }
 }
 export const DesibilitarEquipo =async (req:Request, res:Response) => {
@@ -39,9 +40,9 @@ export const DesibilitarEquipo =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Desactivar.Desactivar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Desactivar.NoDesactivar, "type":"error"});
     }
 }
 export const HabilitarEquipo =async (req:Request, res:Response) => {
@@ -50,9 +51,9 @@ export const HabilitarEquipo =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Activar.NoActivar, "type":"error"});
     }
 }
 export const CrearEquipoAuto    =   async (req:Request,res:Response)=>{
@@ -80,9 +81,9 @@ export const editarEquipo = async (req:Request, res:Response) => {
         {   Nombre:req.body.Nombre,
             Imagen:req.body.Imagen,
         }})
-            res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
+            res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
     }
 }
 export const editarEquipoSinImagen = async (req:Request, res:Response) => {
@@ -91,9 +92,9 @@ export const editarEquipoSinImagen = async (req:Request, res:Response) => {
         {$set:
         {   Nombre:req.body.Nombre
         }})
-            res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
+            res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
     }
 }
 /*

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import Persona, { IPersona } from '../../models/Administrador/Persona';
 import jwt from 'jsonwebtoken';
+import { responseformualrio } from '../../lib';
 
 //funcion del token 
 function createToken(persona: IPersona) {
@@ -30,7 +31,7 @@ export const signup = async (req: Request, res: Response) => {
             Estado: "ACTIVO"
         })
         const personaSave = await persona.save();
-        res.json({ "titulo": "Excelente", "respuesta": 'guardado con éxito', "type": "success" });
+        res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Creado.Creado, "type": "success" });
 
     } catch (e: any) {
         res.json({ "titulo": "Error", "respuesta": `el dato: ${Object.keys(e.keyPattern)} ya existe`, "type": "error" })
@@ -56,7 +57,7 @@ export const signupsinfoto = async (req: Request, res: Response) => {
             Estado: "ACTIVO"
         })
         const personaSave = await persona.save();
-        res.json({ "titulo": "Excelente", "respuesta": 'guardado con éxito', "type": "success" });
+        res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Creado.Creado, "type": "success" });
 
     } catch (e: any) {
         res.json({ "titulo": "Error", "respuesta": `el dato: ${Object.keys(e.keyPattern)} ya existe`, "type": "error" })
@@ -138,9 +139,9 @@ export const perfilesTotales = async (req: Request, res: Response) => {
 export const borrarPerfiles = async (req: Request, res: Response) => {
     try {
         const usersd = await Persona.deleteMany({ Identificacion: req.body.Identificacion })
-        res.json({ "titulo": "Excelente", "respuesta": 'Usuario borrado con éxito', "type": "success" })
+        res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Borrar.BorrarItem, "type": "success" })
     } catch (error) {
-        res.json({ "titulo": "Error", "respuesta": `no se puedo borrar`, "type": "error" });
+        res.json({ "titulo": "Error", "respuesta": responseformualrio.Borrar.NoBorrarItem, "type": "error" });
     }
 }
 export const editarUserConArchivo = async (req: Request, res: Response) => {
@@ -160,9 +161,9 @@ export const editarUserConArchivo = async (req: Request, res: Response) => {
                 Paralelo: req.body.Paralelo,
             }
         })
-        res.json({ "titulo": "Excelente", "respuesta": 'Usuario editado con éxito', "type": "success" })
+        res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Editadar.editadoExito, "type": "success" })
     } catch (error) {
-        res.json({ "titulo": "Error", "respuesta": `no se puedo actualizar`, "type": "error" })
+        res.json({ "titulo": "Error", "respuesta": responseformualrio.Editadar.editadoFracaso, "type": "error" })
     }
 }
 
@@ -182,9 +183,9 @@ export const EditarsinArchivoUsuario = async (req: Request, res: Response) => {
                 Paralelo: req.body.Paralelo,
             }
         })
-        res.json({ "titulo": "Excelente", "respuesta": 'Usuario editado con éxito', "type": "success" })
+        res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Editadar.editadoExito, "type": "success" })
     } catch (error) {
-        res.json({ "titulo": "Error", "respuesta": `no se puedo actualizar`, "type": "error" })
+        res.json({ "titulo": "Error", "respuesta": responseformualrio.Editadar.editadoFracaso, "type": "error" })
     }
 }
 
@@ -196,9 +197,9 @@ export const desabilitarPersonas = async (req: Request, res: Response) => {
         }, {$set: {
                 Estado:"INACTIVO"
             }})
-            res.json({ "titulo": "Excelente", "respuesta": 'Ítem desactivado', "type": "success" })
+            res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Desactivar.Desactivar, "type": "success" })
     } catch (error) {
-        res.json({ "titulo": "Error", "respuesta": `no se puedo borrar`, "type": "error" })
+        res.json({ "titulo": "Error", "respuesta": responseformualrio.Desactivar.NoDesactivar, "type": "error" })
     }
 }
 export const activarPersonas = async (req: Request, res: Response) => {
@@ -208,9 +209,9 @@ export const activarPersonas = async (req: Request, res: Response) => {
         }, {$set: {
                 Estado:"ACTIVO"
             }})
-            res.json({ "titulo": "Excelente", "respuesta": 'Ítem restaurado', "type": "success" })
+            res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Activar.Activar, "type": "success" })
     } catch (error) {
-        res.json({ "titulo": "Error", "respuesta": `no se puedo Activar`, "type": "error" })
+        res.json({ "titulo": "Error", "respuesta": responseformualrio.Activar.NoActivar, "type": "error" })
     }
 }
 export const test = async (req: Request, res: Response) => {
@@ -227,9 +228,9 @@ export const test = async (req: Request, res: Response) => {
             Data.Identificacion = req.body.Identificacion,
             Data.Estado = req.body.Estado
         Data.save()
-        res.json({ "titulo": "Excelente", "respuesta": 'Usaurio editado con éxito', "type": "success" })
+        res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Editadar.editadoExito, "type": "success" })
     } else {
-        res.json({ "titulo": "Error", "respuesta": `no se puedo borrar`, "type": "error" })
+        res.json({ "titulo": "Error", "respuesta": responseformualrio.Editadar.editadoFracaso, "type": "error" })
     }
 
 }

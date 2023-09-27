@@ -1,0 +1,1 @@
+export {responseformualrio} from './responseoption';

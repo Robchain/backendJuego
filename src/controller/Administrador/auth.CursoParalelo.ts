@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import Curso from '../../models/Administrador/Curso';
 import Paralelo from '../../models/Administrador/Paralelo';
+import { responseformualrio } from '../../lib';
 
 ///Curso
 export const CrearCurso = async (req:Request, res:Response) => {
@@ -10,7 +11,7 @@ export const CrearCurso = async (req:Request, res:Response) => {
             Estado:"ACTIVO",
         })
         const data = equipo.save();
-        res.json({"titulo":"Excelente","respuesta":'Curso creado con éxito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Creado.Creado,"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})  
     }
@@ -21,7 +22,7 @@ export const MostrarCurso =async (req:Request, res:Response) => {
         const data = await Curso.find({},{"createdAt":0,"updatedAt":0})
         res.json(data)
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Mostrar.NoMostrar, "type":"error"});
     }
 }
 
@@ -31,9 +32,9 @@ export const DesibilitarCurso =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Desactivar.Desactivar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Desactivar.NoDesactivar, "type":"error"});
     }
 }
 export const HabilitarCurso =async (req:Request, res:Response) => {
@@ -42,9 +43,9 @@ export const HabilitarCurso =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Activar.NoActivar, "type":"error"});
     }
 }
 export const EditarCurso = async (req:Request, res:Response) => {
@@ -53,9 +54,9 @@ export const EditarCurso = async (req:Request, res:Response) => {
         {$set:
         {   Nombre:req.body.Nombre,
         }})
-            res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
+            res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
     }
 }
 
@@ -67,7 +68,7 @@ export const CrearParalelo = async (req:Request, res:Response) => {
             Estado:"ACTIVO",
         })
         const data = equipo.save();
-        res.json({"titulo":"Excelente","respuesta":'Paralelo creado con éxito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Creado.Creado,"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})  
     }
@@ -79,7 +80,7 @@ export const MostrarParalelo =async (req:Request, res:Response) => {
         const data = await Paralelo.find({},{"createdAt":0,"updatedAt":0})
         res.json(data)
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Mostrar.NoMostrar, "type":"error"});
     }
 }
 
@@ -89,9 +90,9 @@ export const DesibilitarParalelo =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Desactivar.Desactivar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Desactivar.NoDesactivar, "type":"error"});
     }
 }
 export const HabilitarParalelo =async (req:Request, res:Response) => {
@@ -100,9 +101,9 @@ export const HabilitarParalelo =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Activar.NoActivar, "type":"error"});
     }
 }
 export const EditarParalelo = async (req:Request, res:Response) => {
@@ -111,8 +112,8 @@ export const EditarParalelo = async (req:Request, res:Response) => {
         {$set:
         {   Nombre:req.body.Nombre,
         }})
-            res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
+            res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
     }
 }

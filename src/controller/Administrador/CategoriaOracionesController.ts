@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import CategoriaOraciones, { ICategoriaOraciones } from "../../models/Administrador/CategoriaOraciones";
+import { responseformualrio } from "../../lib";
 
 
 export const crearCategoriasOraciones = async (req: Request, res: Response) => {
@@ -7,16 +8,16 @@ export const crearCategoriasOraciones = async (req: Request, res: Response) => {
         const categoria  = await  CategoriaOraciones.find({},{"createdAt":0,"updatedAt":0});
         res.json(categoria);
     } catch (error: any) {
-        res.json([]);
+        res.json({"titulo":"Error","respuesta":responseformualrio.Mostrar.NoMostrar, "type":"error"});
     }
 }
 // crear el resto del crud
 export const borrarCategoriaOracion   =  async (req:Request, res:Response) => {
     try {
         const borrar = await CategoriaOraciones.deleteOne({_id:req.body._id});
-        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Borrar.BorrarItem,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Borrar.NoBorrarItem, "type":"error"});
     }
 }
 
@@ -29,9 +30,9 @@ export const EditarCategoriaOracion = async (req:Request, res:Response) => {
                 NombreCategoria:req.body.NombreCategoria,
             }
         })
-        res.json({"titulo":"Excelente","respuesta":'Ítem editado con éxito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
     }
 }
 
@@ -41,9 +42,9 @@ export const DesibilitarCategoriaOraciones =async (req:Request, res:Response) =>
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Desactivar.Desactivar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Desactivar.NoDesactivar, "type":"error"});
     }
 }
 export const HabilitarCategoriaOraciones =async (req:Request, res:Response) => {
@@ -52,9 +53,9 @@ export const HabilitarCategoriaOraciones =async (req:Request, res:Response) => {
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Activar.NoActivar, "type":"error"});
     }
 }
 

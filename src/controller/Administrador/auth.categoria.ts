@@ -1,6 +1,7 @@
 import Categoria,{ICategoria} from "../../models/Administrador/Categoria";
 import {Request,Response} from 'express';
 import CategoriaOraciones, { ICategoriaOraciones } from "../../models/Administrador/CategoriaOraciones";
+import { responseformualrio } from "../../lib";
 
 
 export const crearCategorias =async (req:Request,res:Response) => {
@@ -19,7 +20,7 @@ export const crearCategorias =async (req:Request,res:Response) => {
             })
             categoria.save();
         }
-        res.json({"titulo":"Excelente","respuesta":'Categoria creada con éxito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Creado.Creado,"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})
     }
@@ -28,9 +29,9 @@ export const crearCategorias =async (req:Request,res:Response) => {
 export const borrarCategoria    =  async (req:Request, res:Response) => {
     try {
         const borrar = await Categoria.deleteOne({_id:req.body._id});
-        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Borrar.BorrarItem,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Borrar.NoBorrarItem, "type":"error"});
     }
 }
 export const DesibilitarCategoriaVocabulario =async (req:Request, res:Response) => {
@@ -39,9 +40,9 @@ export const DesibilitarCategoriaVocabulario =async (req:Request, res:Response) 
             {$set:
             {  Estado:"INACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem desactivado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Desactivar.Desactivar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Desactivar.NoDesactivar, "type":"error"});
     }
 }
 export const HabilitarCategoriaVocabulario =async (req:Request, res:Response) => {
@@ -50,9 +51,9 @@ export const HabilitarCategoriaVocabulario =async (req:Request, res:Response) =>
             {$set:
             {  Estado:"ACTIVO"  
             }})
-        res.json({"titulo":"Excelente","respuesta":'Ítem restaurado',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`no se puedo borrar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Activar.NoActivar, "type":"error"});
     }
 }
 //mostrar todos
@@ -84,9 +85,9 @@ export const EditarCategoria = async (req:Request, res:Response) => {
                 NombreCategoria:req.body.NombreCategoria,
             }
         })
-        res.json({"titulo":"Excelente","respuesta":'Editado con éxito',"type":"success"})
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.  Editadar.editadoExito,"type":"success"})
     } catch (error) {
-        res.json({"titulo":"Error","respuesta":`No se pudo editar`, "type":"error"});
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
     }
 }
 
