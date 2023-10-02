@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import Persona from "../../models/Administrador/Persona";
 import { rompecabezas } from "../auth.TestDeLlamada";
 import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
+import { CrearHabilitarJuego } from "./auth.HabilitarJuego";
+import { responseformualrio } from "../../lib";
 
 export const example = async (req:Request, res:Response) => {
     try {
@@ -27,16 +29,17 @@ export const example = async (req:Request, res:Response) => {
 
 
 export const activarJuegoVocabularioPorGrupo = async (req:Request, res:Response)=>{
-try {   
-    const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:req.body.Paralelo,Curso:req.body.Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 })
-    if(Estudiantes.length > 0 ){
+try {    
+    const {Paralelo, Curso} = req.body;
+    const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:Paralelo,Curso:Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 })
+    if(Estudiantes.length > 0 ){ 
         for( const estudiante of Estudiantes){
             await   crearJuegoVocabulario(estudiante);
         }
-        //si hay estudiante, mandar un mensjae de que no se puede porq hay no hay estudiantes
-        res.json({"titulo":"Excelente","respuesta":'Juego creado Con éxito',"type":"success"})
+       CrearHabilitarJuego({Curso:Curso, Paralelo:Paralelo, Juego:"VOCABULARIO"});
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     }else {
-        res.json({"titulo":"Error","respuesta":'No hay estudiantes asignados',"type":"error"})
+        res.json({"titulo":"Error","respuesta":'No hay estudiantes para asignar juego',"type":"error"})
     }
     
 } catch (error) {

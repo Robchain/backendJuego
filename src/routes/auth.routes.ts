@@ -15,6 +15,7 @@ import { actualizarJuegoTerminado, DevuelveLaPosicionDentroDelArray, historialJu
 import {  activarJuegoVocabularioPorGrupo } from '../controller/Administrador/auth.JuegoVoca';
 import { reporteGeneralPorCurso, reporteGeneralPorEstudiante, reporteGeneralPorJuego } from '../controller/Administrador/reportes';
 import { CrearCurso, DesibilitarCurso, HabilitarCurso, MostrarCurso, EditarCurso, CrearParalelo, MostrarParalelo, DesibilitarParalelo, HabilitarParalelo, EditarParalelo } from '../controller/Administrador/auth.CursoParalelo';
+import { DesibilitarHabilitarJuego, HabilitarHabilitarJuego, MostrarHabilitarJuego } from '../controller/Administrador/auth.HabilitarJuego';
 
 const router : Router = Router();
 router.get("/",getBase)
@@ -35,6 +36,12 @@ router.delete('/BorrarUsario', borrarPerfiles)
 router.post('/EditarUsuario',test)
 router.get("/perfilesActivosMaestros",perfilesActivosMaestros)
 router.post('/MostrarEstudianteConSusEstudiantes', MostrarMaestrosConSusEstudiantesPorCursos),
+//HabilitarJuegos
+router.get("/MostrarHabilitarJuego",MostrarHabilitarJuego);
+router.post("/DesibilitarHabilitarJuego",DesibilitarHabilitarJuego);
+router.post("/HabilitarHabilitarJuego",HabilitarHabilitarJuego);
+
+
 //Curso
 router.post('/CrearCurso', CrearCurso);
 router.get('/MostrarCurso', MostrarCurso);

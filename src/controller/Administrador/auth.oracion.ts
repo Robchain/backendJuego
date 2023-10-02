@@ -6,6 +6,7 @@ import {  rompecabezas } from '../auth.TestDeLlamada';
 import QuienImagen from '../../models/Administrador/QuienImagen';
 import { ActivoJuego } from '../../interface/JuegoVoca.Interface';
 import { responseformualrio } from '../../lib';
+import { CrearHabilitarJuego } from './auth.HabilitarJuego';
 
 
 export const subirOracion = async (req:Request, res:Response) => {
@@ -129,14 +130,16 @@ export const HabilitarOracion =async (req:Request, res:Response) => {
 export const ActivarJuegoConEstudianteOracion = async (req:Request, res:Response)=>{
 
     try {
-        const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:req.body.Paralelo,Curso:req.body.Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+        const {Paralelo, Curso} = req.body;
+        const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:Paralelo,Curso:Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
        if(Estudiantes.length> 0){
         for (const estudiante of Estudiantes){
             await crearJuegoOraciones(estudiante)
         }
-        res.json({"titulo":"Excelente","respuesta":'Juego Creado Con éxito',"type":"success"})
+       CrearHabilitarJuego({Curso:Curso, Juego:"ORACION", Paralelo:Paralelo});
+        res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     }else{
-        res.json({"titulo":"Error","respuesta":'No hay estudiantes asignados',"type":"error"})
+        res.json({"titulo":"Error","respuesta":'No hay estudiantes para asignar juego',"type":"error"})
     }
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`Hubo un error al crear el juego`, "type":"error"}); 

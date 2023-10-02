@@ -10,7 +10,7 @@ export const CrearCurso = async (req:Request, res:Response) => {
             Nombre:req.body.Nombre,
             Estado:"ACTIVO",
         })
-        const data = equipo.save();
+        const data = await equipo.save();
         res.json({"titulo":"Excelente","respuesta":responseformualrio.Creado.Creado,"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})  
@@ -67,7 +67,7 @@ export const CrearParalelo = async (req:Request, res:Response) => {
             Nombre:req.body.Nombre,
             Estado:"ACTIVO",
         })
-        const data = equipo.save();
+        const data = await equipo.save();
         res.json({"titulo":"Excelente","respuesta":responseformualrio.Creado.Creado,"type":"success"})
     } catch (error:any) {
         res.json({"titulo":"Error","respuesta":`el dato: ${Object.keys(error.keyPattern)} ya existe`, "type":"error"})  
