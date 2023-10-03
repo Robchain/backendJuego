@@ -11,7 +11,7 @@ import { /*partidaVocabularioInicial,*/testas,/*partidaEstudiante*/ prueba, llam
 import { BuscarPorCursoYParaleloMultijugador, CreaJuegoMultijuador, CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, UpdateTerminadoOracion } from '../controller/Juego/OracionPartidas';
 import { borrarCategoriaOracion, crearCategoriasOraciones, DesibilitarCategoriaOraciones, EditarCategoriaOracion, HabilitarCategoriaOraciones } from '../controller/Administrador/CategoriaOracionesController';
-import { actualizarJuegoTerminado, DevuelveLaPosicionDentroDelArray, historialJuego, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
+import { ActivarCoolaborativo, ActualizarCoolaborativo, actualizarJuegoTerminado, DesactivarCoolaborativo, DevuelveLaPosicionDentroDelArray, historialJuego, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
 import {  activarJuegoVocabularioPorGrupo } from '../controller/Administrador/auth.JuegoVoca';
 import { reporteGeneralPorCurso, reporteGeneralPorEstudiante, reporteGeneralPorJuego } from '../controller/Administrador/reportes';
 import { CrearCurso, DesibilitarCurso, HabilitarCurso, MostrarCurso, EditarCurso, CrearParalelo, MostrarParalelo, DesibilitarParalelo, HabilitarParalelo, EditarParalelo } from '../controller/Administrador/auth.CursoParalelo';
@@ -143,6 +143,9 @@ router.post('/UneIntegrantesConJuegos',UneIntegrantesConJuegos)
 router.get('/CreaJuegoMulti/:id',CreaJuegoMultijuador);
 router.post('/actualizarJuegoTerminadoMulti', actualizarJuegoTerminado);
 router.post('/historialJuego', historialJuego);
+router.post('/DesactivarCoolaborativo', DesactivarCoolaborativo);
+router.post('/ActivarCoolaborativo',ActivarCoolaborativo);
+router.post('/ActualizarCoolaborativo', ActualizarCoolaborativo)
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno
 
 //Reportes

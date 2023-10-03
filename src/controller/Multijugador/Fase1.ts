@@ -6,6 +6,7 @@ import { uniendoOracionesPorCategoria } from '../Juego/OracionPartidas';
 import { IAvanceInter, IAvenceArriba, IPartidaMulti } from '../../interface/Multijugador/Grupos.Interface';
 import EquipoConJuegos, { IEquipoConJuego } from '../../models/Administrador/EquipoConJuegos';
 import EquipoBase from '../../models/Administrador/Equipo';
+import { responseformualrio } from '../../lib';
 
 //creacion de partida
 export const CrearModeloInicialSinJuegos = async (BaseMulti: IMultiJuga) => {
@@ -329,6 +330,7 @@ export const actualizarJuegoTerminado = async (req: Request, res: Response) => {
     }
 }
 
+///--------------------------------------------------
 
 export const historialJuego = async (req: Request, res: Response) => {
     try {
@@ -343,9 +345,8 @@ export const historialJuego = async (req: Request, res: Response) => {
             }, {
                 '$group': {
                     '_id': {
-                        'FechaDeInicio': '$FechaDeInicio',
-                        'FechaDeFin': '$FechaDeFin'
-                    },
+                        'IdDeLaAsignacion': '$IdDeLaAsignacion'
+                      },
                     'documentos': {
                         '$push': '$$ROOT'
                     }
@@ -359,5 +360,60 @@ export const historialJuego = async (req: Request, res: Response) => {
         }
     } catch (error) {
         res.status(500).json(error);
+    }
+}
+
+export const ActualizarCoolaborativo = async (req: Request, res: Response) => {
+    try {
+      
+        let {_id, picker, TipoDeJuego} = req.body;
+        if(Array.isArray(picker)){
+             const data = await Grupos.findByIdAndUpdate({ _id: _id },
+            {$set:
+            {   FechaDeFin:picker[1],
+                FechaDeInicio:picker[0],
+                TipoDeJuego:TipoDeJuego
+            }})
+          res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
+        } else if(!Array.isArray(picker)) {
+            const data = await Grupos.findByIdAndUpdate({ _id: _id },
+                {$set:
+                { 
+                    TipoDeJuego:TipoDeJuego
+                }})
+              res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
+        }else {
+            res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"})
+        }
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"})
+    }
+}
+
+export const DesactivarCoolaborativo = async (req: Request, res: Response) => {
+    try {
+        let {_id} = req.body;
+        const data = await Grupos.findByIdAndUpdate({_id:_id},
+            {$set:
+            {  Estado:"INACTIVO"  
+            }})
+          res.json({"titulo":"Excelente","respuesta":responseformualrio.Desactivar.Desactivar,"type":"success"})
+        
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":responseformualrio.Desactivar.NoDesactivar, "type":"error"})
+    }
+}
+
+export const ActivarCoolaborativo = async (req: Request, res: Response) => {
+    try {
+        let {_id} = req.body;
+        const data = await Grupos.findByIdAndUpdate({_id:_id},
+            {$set:
+            {  Estado:"ACTIVO"  
+            }})
+          res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
+        
+    } catch (error) {
+        res.json({"titulo":"Error","respuesta":responseformualrio.Activar.NoActivar, "type":"error"})
     }
 }

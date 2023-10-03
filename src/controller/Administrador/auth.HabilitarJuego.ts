@@ -56,14 +56,3 @@ export const HabilitarHabilitarJuego =async (req:Request, res:Response) => {
         res.json({"titulo":"Error","respuesta":responseformualrio.Activar.NoActivar, "type":"error"});
     }
  }
-// export const EditarHabilitarJuego = async (req:Request, res:Response) => {
-//     try {
-//         const data = await HabilitarJuego.findByIdAndUpdate({_id:req.body._id},
-//         {$set:
-//         {   Nombre:req.body.Nombre,
-//         }})
-//             res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
-//     } catch (error) {
-//         res.json({"titulo":"Error","respuesta":responseformualrio.Editadar.editadoFracaso, "type":"error"});
-//     }
-// }
