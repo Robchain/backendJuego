@@ -2,9 +2,9 @@ import Rompecabeza from "../../models/Administrador/RecursosRompecabeza";
 import { Request, Response } from "express";
 import Persona from "../../models/Administrador/Persona";
 import { rompecabezas } from "../auth.TestDeLlamada";
-import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
 import { CrearHabilitarJuego } from "./auth.HabilitarJuego";
 import { responseformualrio } from "../../lib";
+import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
 
 export const example = async (req:Request, res:Response) => {
     try {
@@ -31,6 +31,10 @@ export const example = async (req:Request, res:Response) => {
 export const activarJuegoVocabularioPorGrupo = async (req:Request, res:Response)=>{
 try {    
     const {Paralelo, Curso} = req.body;
+    const jugadoresConVocabularios = await JugadoresConVocabularios.find({"Estudiante.Curso":Curso, "Estudiante.Paralelo":Paralelo});
+    if(jugadoresConVocabularios.length >0){
+        res.json({"titulo":"Error","respuesta":'Los estudiantes ya tienen juegos asignados',"type":"error"})
+    }else if(jugadoresConVocabularios.length ===0){
     const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:Paralelo,Curso:Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 })
     if(Estudiantes.length > 0 ){ 
         for( const estudiante of Estudiantes){
@@ -41,6 +45,7 @@ try {
     }else {
         res.json({"titulo":"Error","respuesta":'No hay estudiantes para asignar juego',"type":"error"})
     }
+}
     
 } catch (error) {
     res.json({"titulo":"Error","respuesta":`Hubo un error al crear el juego`, "type":"error"}); 

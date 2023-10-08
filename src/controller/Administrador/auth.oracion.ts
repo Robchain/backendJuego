@@ -131,6 +131,10 @@ export const ActivarJuegoConEstudianteOracion = async (req:Request, res:Response
 
     try {
         const {Paralelo, Curso} = req.body;
+        const jugadoresConOracion = await JugadoresConOraciones.find({"Estudiante.Curso":Curso, "Estudiante.Paralelo":Paralelo});
+        if(jugadoresConOracion.length >0){
+            res.json({"titulo":"Error","respuesta":'Los estudiantes ya tienen juegos asignados',"type":"error"})
+        }else if(jugadoresConOracion.length ===0){
         const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:Paralelo,Curso:Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
        if(Estudiantes.length> 0){
         for (const estudiante of Estudiantes){
@@ -141,6 +145,7 @@ export const ActivarJuegoConEstudianteOracion = async (req:Request, res:Response
     }else{
         res.json({"titulo":"Error","respuesta":'No hay estudiantes para asignar juego',"type":"error"})
     }
+}
     } catch (error) {
         res.json({"titulo":"Error","respuesta":`Hubo un error al crear el juego`, "type":"error"}); 
     }

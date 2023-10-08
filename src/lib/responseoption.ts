@@ -15,8 +15,8 @@ export const responseformualrio={
         Desactivar:"Ítem desactivado",
         NoDesactivar:"No se pudo desactivar",
     },Activar:{
-        Activar:"Ítem restaurado",
-        NoActivar:"No se pudo restaurar",
+        Activar:"Ítem activado",
+        NoActivar:"No se pudo activar",
     },Mostrar:{
         NoMostrar:"No se puede mostrar"
     }
