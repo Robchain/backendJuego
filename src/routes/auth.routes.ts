@@ -7,7 +7,7 @@ import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOraci
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria, DesibilitarCategoriaVocabulario, HabilitarCategoriaVocabulario } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo, DesibilitarEquipo, HabilitarEquipo, editarEquipoSinImagen}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
-import { /*partidaVocabularioInicial,*/testas,/*partidaEstudiante*/ prueba, llamadaPartidaVocabulario,  CrearJuegoVocabularioIndividual, UpdateTerminadoVocabulario  } from '../controller/auth.TestDeLlamada';
+import { testas, prueba, llamadaPartidaVocabulario,  CrearJuegoVocabularioIndividual, UpdateTerminadoVocabulario  } from '../controller/auth.TestDeLlamada';
 import { BuscarPorCursoYParaleloMultijugador, CreaJuegoMultijuador, CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, UpdateTerminadoOracion } from '../controller/Juego/OracionPartidas';
 import { borrarCategoriaOracion, crearCategoriasOraciones, DesibilitarCategoriaOraciones, EditarCategoriaOracion, HabilitarCategoriaOraciones } from '../controller/Administrador/CategoriaOracionesController';

@@ -96,6 +96,8 @@ export const editarOracionSinArchivo =async (req:Request, res:Response) => {
             Oracion:req.body.Oracion,
             Verbo:req.body.Verbo,
             Adverbio:req.body.Adverbio,
+            Sujeto:req.body.Sujeto,
+            Que:req.body.Que,
         }
     })
     res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
