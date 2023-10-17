@@ -394,7 +394,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                   return {
                     documentos: {
                       Integrante: integrante,
-                      Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }],
+                      Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No ha jugado colaborativo', PalabraASeleccionada: 'No ha jugado colaborativo' }] }],
                       createdAt,
                       updatedAt
                     }
@@ -404,7 +404,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
               } else if (Avance === null) {
                 return {
                   documentos: {
-                    Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }],
+                    Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No ha jugado colaborativo', PalabraASeleccionada: 'No ha jugado colaborativo' }] }],
                     createdAt,
                     updatedAt
                   }
@@ -415,7 +415,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
           })
           res.status(200).json(nuevoarray);
         } else if (objetosConAvance.length === 0) {
-          res.status(200).json([{ Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }], }])
+          res.status(200).json([{ Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No ha jugado colaborativo', PalabraASeleccionada: 'No ha jugado colaborativo' }] }], }])
         }
         break;
       case 'Todos':
@@ -2081,7 +2081,7 @@ const multijugadorinter = (objetosConAvance: any[], id: String) => {
               return {
                 documentos: {
                   Integrante: integrante,
-                  Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }],
+                  Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No ha jugado colaborativo', PalabraASeleccionada: 'No ha jugado colaborativo' }] }],
                   createdAt,
                   updatedAt
                 }
@@ -2092,7 +2092,7 @@ const multijugadorinter = (objetosConAvance: any[], id: String) => {
             return {
               documentos: {
 
-                Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }],
+                Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No ha jugado colaborativo', PalabraASeleccionada: 'No ha jugado colaborativo' }] }],
                 createdAt,
                 updatedAt
               }
@@ -2104,7 +2104,7 @@ const multijugadorinter = (objetosConAvance: any[], id: String) => {
     }
 
   } catch (error) {
-    return [{ Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No a jugado colaborativo', PalabraASeleccionada: 'No a jugado colaborativo' }] }], }]
+    return [{ Avance: [{ Incorrecto: [{ PalabraAEvaluar: 'No ha jugado colaborativo', PalabraASeleccionada: 'No ha jugado colaborativo' }] }], }]
   }
 
 }
