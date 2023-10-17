@@ -44,24 +44,40 @@ export const CreaciondePartidasIndividualesVocabulario = async () => {
   let vocabulario: any[] = [];
   let categoria = [];
   let Palabras = [];
-  do {
-  categoria = await Categoria.aggregate([
-    {'$match': {
-      'Estado': 'ACTIVO'
-    }
-  }, 
-  {
+  
+  categoria = await Vocabulario.aggregate([
+    {
+      '$match': {
+        'Estado': 'ACTIVO'
+      }
+    }, {
+      '$group': {
+        '_id': '$Categoria', 
+        'total': {
+          '$sum': 1
+        }
+      }
+    }, {
+      '$match': {
+        'total': {
+          '$gte': 3
+        }
+      }
+    }, {
+      '$project': {
+        '_id': 1
+      }
+    }, {
       '$sample': {
         'size': 1
       }
-    }, {
-      '$limit': 1
     }
   ]);
   vocabulario = await Vocabulario.aggregate([
     {
       '$match': {
-        'Categoria': categoria[0].NombreCategoria
+        'Categoria': categoria[0]._id,
+        'Estado':"ACTIVO"
       }
     }, {
       '$sample': {
@@ -92,7 +108,7 @@ export const CreaciondePartidasIndividualesVocabulario = async () => {
       }
     },
   ]);
-} while ( vocabulario.length > 2);
+
   if (vocabulario[0].correcto[0]) {
     let arrayId = [vocabulario[0].correcto[0]._id.toString(), vocabulario[0].incorrecto[0]._id.toString(), vocabulario[0].incorrecto[1]._id.toString()]
     arrayId.sort();
@@ -122,7 +138,7 @@ export const rompecabezas = async () => {
   rompecabeza = await Rompecabeza.aggregate([
     {
       '$match': {
-        "Estado": true
+        "Estado": "ACTIVO"
       }
     }
     , {

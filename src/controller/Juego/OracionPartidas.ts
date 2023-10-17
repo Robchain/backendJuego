@@ -47,24 +47,41 @@ export const uniendoOracionesPorCategoria= async ()=>{
    let categoriaOra = [];
    let oraciones:any[]=[];
    let Oraciones = [];
-   do {
+   
     
-   categoriaOra = await CategoriaOraciones.aggregate([{'$match': {
-      'Estado': 'ACTIVO'
-    }
-  }, 
-  {
+   categoriaOra = await RecursosOracion.aggregate([
+    {
+      '$match': {
+        'Estado': 'ACTIVO'
+      }
+    }, {
+      '$group': {
+        '_id': '$Categoria', 
+        'total': {
+          '$sum': 1
+        }
+      }
+    }, {
+      '$match': {
+        'total': {
+          '$gte': 3
+        }
+      }
+    }, {
+      '$project': {
+        '_id': 1
+      }
+    }, {
       '$sample': {
         'size': 1
       }
-    }, {
-      '$limit': 1
     }
-]);
+  ]);
 oraciones = await RecursosOracion.aggregate([
         {
           '$match': {
-            'Categoria': categoriaOra[0].NombreCategoria
+            'Categoria': categoriaOra[0]._id,
+            'Estado':"ACTIVO"
           }
         }, {
           '$sample': {
@@ -95,8 +112,7 @@ oraciones = await RecursosOracion.aggregate([
           }
         },
       ]);
-
-   } while (oraciones.length>2);
+      
       if (oraciones[0].correcto[0]) {
         let arrayId = [oraciones[0].correcto[0]._id.toString(), oraciones[0].incorrecto[0]._id.toString(), oraciones[0].incorrecto[1]._id.toString()]
         arrayId.sort();
