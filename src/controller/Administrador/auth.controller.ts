@@ -104,7 +104,19 @@ export const BuscarPorCursoYParalelo =async (req:Request, res:Response) => {
 
 export const perfilesActivosEstudiantes = async (req: Request, res: Response) => {
     try {
-        const users = await Persona.find({ TipoUsuario: "ESTUDIANTE"}, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+        const users = await Persona.aggregate([
+            {
+              '$match': {
+                'TipoUsuario': 'ESTUDIANTE'
+              }
+            }, {
+              '$sort': {
+                'Curso': 1, 
+                'Paralelo': 1
+              }
+            }
+          ]);
+        //{ TipoUsuario: "ESTUDIANTE"}, { 'createdAt': 0, 'updatedAt': 0, 'Password': 0 }
         res.json(users);
     } catch (error) {
         res.json([]);
