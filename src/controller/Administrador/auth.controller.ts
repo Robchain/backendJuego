@@ -2,6 +2,9 @@ import { Request, Response } from 'express'
 import Persona, { IPersona } from '../../models/Administrador/Persona';
 import jwt from 'jsonwebtoken';
 import { responseformualrio } from '../../lib';
+import { crearJuegoVocabulario, crearJuegoVocabularioConCursoYParalelo } from './auth.JuegoVoca';
+import HabilitarJuego from '../../models/Administrador/HabilitarJuego';
+import { crearJuegoOraciones, crearJuegoOracionesConCursoYParalelo } from './auth.oracion';
 
 //funcion del token 
 function createToken(persona: IPersona) {
@@ -31,6 +34,36 @@ export const signup = async (req: Request, res: Response) => {
             Estado: "ACTIVO"
         })
         const personaSave = await persona.save();
+        if(personaSave.TipoUsuario==="ESTUDIANTE"){
+            const cursohabilitado = await HabilitarJuego.aggregate([
+                {
+                  '$match': {
+                    'Curso': personaSave.Curso, 
+                    'Paralelo': personaSave.Paralelo
+                  }
+                }, {
+                  '$group': {
+                    '_id': '$Juego', 
+                    'documentos': {
+                      '$push': '$$ROOT'
+                    }
+                  }
+                }, {
+                  '$project': {
+                    '_id': 0, 
+                    'TipoJuego': '$_id', 
+                    'Documentos': '$documentos'
+                  }
+                }
+              ]);
+            if(cursohabilitado.some(obj=> obj.TipoJuego === "VOCABULARIO")){
+                await   crearJuegoVocabulario(personaSave)
+            }
+            if(cursohabilitado.some(obj=> obj.TipoJuego === "ORACION")){
+                await   crearJuegoOraciones(personaSave)
+            }
+           
+        }
         res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Creado.Creado, "type": "success" });
 
     } catch (e: any) {
@@ -57,6 +90,36 @@ export const signupsinfoto = async (req: Request, res: Response) => {
             Estado: "ACTIVO"
         })
         const personaSave = await persona.save();
+        if(personaSave.TipoUsuario==="ESTUDIANTE"){
+            const cursohabilitado = await HabilitarJuego.aggregate([
+                {
+                  '$match': {
+                    'Curso': personaSave.Curso, 
+                    'Paralelo': personaSave.Paralelo
+                  }
+                }, {
+                  '$group': {
+                    '_id': '$Juego', 
+                    'documentos': {
+                      '$push': '$$ROOT'
+                    }
+                  }
+                }, {
+                  '$project': {
+                    '_id': 0, 
+                    'TipoJuego': '$_id', 
+                    'Documentos': '$documentos'
+                  }
+                }
+              ]);
+            if(cursohabilitado.some(obj=> obj.TipoJuego === "VOCABULARIO")){
+                await   crearJuegoVocabulario(personaSave)
+            }
+            if(cursohabilitado.some(obj=> obj.TipoJuego === "ORACION")){
+                await   crearJuegoOraciones(personaSave)
+            }
+           
+        }
         res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Creado.Creado, "type": "success" });
 
     } catch (e: any) {
@@ -158,21 +221,80 @@ export const borrarPerfiles = async (req: Request, res: Response) => {
 }
 export const editarUserConArchivo = async (req: Request, res: Response) => {
     try {
+        const {Curso, Paralelo, Nombre, Apellido, Email, Usuario, FotoPerfil, TipoUsuario, Identificacion } = req.body;
         const Data = await Persona.findByIdAndUpdate({
             _id: req.body._id
         }, {
             $set: {
-                Nombre: req.body.Nombre,
-                Apellido: req.body.Apellido,
-                Email: req.body.Email,
-                Usuario: req.body.Usuario,
-                FotoPerfil: req.body.FotoPerfil,
-                TipoUsuario: req.body.TipoUsuario,
-                Identificacion: req.body.Identificacion,
-                Curso: req.body.Curso,
-                Paralelo: req.body.Paralelo,
+                Nombre: Nombre,
+                Apellido: Apellido,
+                Email: Email,
+                Usuario: Usuario,
+                FotoPerfil: FotoPerfil,
+                TipoUsuario: TipoUsuario,
+                Identificacion: Identificacion,
+                Curso: Curso,
+                Paralelo: Paralelo,
             }
         })
+        if(Data?.TipoUsuario==="ESTUDIANTE"){
+            if(Data?.Curso !== Curso || Data?.Paralelo !== Paralelo){
+                const cursohabilitado = await HabilitarJuego.aggregate([
+                    {
+                      '$match': {
+                        'Curso': Curso, 
+                        'Paralelo': Paralelo
+                      }
+                    }, {
+                      '$group': {
+                        '_id': '$Juego', 
+                        'documentos': {
+                          '$push': '$$ROOT'
+                        }
+                      }
+                    }, {
+                      '$project': {
+                        '_id': 0, 
+                        'TipoJuego': '$_id', 
+                        'Documentos': '$documentos'
+                      }
+                    }
+                  ]);
+                  const cursoyParaleloAnterio = await HabilitarJuego.aggregate([
+                    {
+                      '$match': {
+                        'Curso': Data.Curso, 
+                        'Paralelo':Data.Paralelo
+                      }
+                    }, {
+                      '$group': {
+                        '_id': '$Juego', 
+                        'documentos': {
+                          '$push': '$$ROOT'
+                        }
+                      }
+                    }, {
+                      '$project': {
+                        '_id': 0, 
+                        'TipoJuego': '$_id', 
+                        'Documentos': '$documentos'
+                      }
+                    }
+                  ]);
+                  if(cursoyParaleloAnterio.length===0){
+                    //arreglar esto con relacion en mongodb
+                if(cursohabilitado.some(obj=> obj.TipoJuego === "VOCABULARIO")){
+                    await   crearJuegoVocabularioConCursoYParalelo(Data, Curso, Paralelo)
+                }
+                if(cursohabilitado.some(obj=> obj.TipoJuego === "ORACION")){
+                    await   crearJuegoOracionesConCursoYParalelo(Data, Curso, Paralelo)
+                }
+                  }
+                
+               
+            }
+        }
+
         res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Editadar.editadoExito, "type": "success" })
     } catch (error) {
         res.json({ "titulo": "Error", "respuesta": responseformualrio.Editadar.editadoFracaso, "type": "error" })
@@ -181,20 +303,79 @@ export const editarUserConArchivo = async (req: Request, res: Response) => {
 
 export const EditarsinArchivoUsuario = async (req: Request, res: Response) => {
     try {
+        const {Nombre, Apellido, Email, Identificacion, Usuario, TipoUsuario, Curso, Paralelo} = req.body;
         const Data = await Persona.findByIdAndUpdate({
             _id: req.body._id
         }, {
             $set: {
-                Nombre: req.body.Nombre,
-                Apellido: req.body.Apellido,
-                Email: req.body.Email,
-                Identificacion: req.body.Identificacion,
-                Usuario: req.body.Usuario,
-                TipoUsuario: req.body.TipoUsuario,
-                Curso: req.body.Curso,
-                Paralelo: req.body.Paralelo,
+                Nombre: Nombre,
+                Apellido: Apellido,
+                Email: Email,
+                Identificacion: Identificacion,
+                Usuario: Usuario,
+                TipoUsuario: TipoUsuario,
+                Curso: Curso,
+                Paralelo: Paralelo,
             }
         })
+        if(Data?.TipoUsuario==="ESTUDIANTE"){
+        if(Data?.Curso !== Curso || Data?.Paralelo !== Paralelo){
+            const cursohabilitado = await HabilitarJuego.aggregate([
+                {
+                  '$match': {
+                    'Curso': Curso, 
+                    'Paralelo': Paralelo
+                  }
+                }, {
+                  '$group': {
+                    '_id': '$Juego', 
+                    'documentos': {
+                      '$push': '$$ROOT'
+                    }
+                  }
+                }, {
+                  '$project': {
+                    '_id': 0, 
+                    'TipoJuego': '$_id', 
+                    'Documentos': '$documentos'
+                  }
+                }
+              ]);
+              const cursoyParaleloAnterio = await HabilitarJuego.aggregate([
+                {
+                  '$match': {
+                    'Curso': Data.Curso, 
+                    'Paralelo':Data.Paralelo
+                  }
+                }, {
+                  '$group': {
+                    '_id': '$Juego', 
+                    'documentos': {
+                      '$push': '$$ROOT'
+                    }
+                  }
+                }, {
+                  '$project': {
+                    '_id': 0, 
+                    'TipoJuego': '$_id', 
+                    'Documentos': '$documentos'
+                  }
+                }
+              ]);
+              if(cursoyParaleloAnterio.length===0){
+                //arreglar esto con relacion en mongodb
+            if(cursohabilitado.some(obj=> obj.TipoJuego === "VOCABULARIO")){
+                await   crearJuegoVocabularioConCursoYParalelo(Data, Curso, Paralelo)
+            }
+            if(cursohabilitado.some(obj=> obj.TipoJuego === "ORACION")){
+                await   crearJuegoOracionesConCursoYParalelo(Data, Curso, Paralelo)
+            }
+              }
+            
+           
+        }
+    }
+
         res.json({ "titulo": "Excelente", "respuesta": responseformualrio.Editadar.editadoExito, "type": "success" })
     } catch (error) {
         res.json({ "titulo": "Error", "respuesta": responseformualrio.Editadar.editadoFracaso, "type": "error" })

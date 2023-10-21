@@ -154,7 +154,7 @@ export const ActivarJuegoConEstudianteOracion = async (req:Request, res:Response
 
 }
 
-const crearJuegoOraciones = async (estudiante:any)=>{
+export const crearJuegoOraciones = async (estudiante:any)=>{
     for (let index = 0; index < 13; index++) {
         const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
             Estudiante: {
@@ -164,6 +164,26 @@ const crearJuegoOraciones = async (estudiante:any)=>{
                 Identificacion:estudiante.Identificacion,
                 Curso:estudiante.Curso,
                 Paralelo:estudiante.Paralelo
+            },
+            Rompecabeza: await rompecabezas(),
+            Avance: null,
+            Terminado:false,
+            Estado:true
+        });
+        juegosOracion.save();
+    }
+
+}
+export const crearJuegoOracionesConCursoYParalelo = async (estudiante:any, Curso:string, Paralelo:string )=>{
+    for (let index = 0; index < 13; index++) {
+        const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
+            Estudiante: {
+                _id: estudiante._id,
+                Nombre: estudiante.Nombre,
+                Usuario: estudiante.Usuario,
+                Identificacion:estudiante.Identificacion,
+                Curso:Curso,
+                Paralelo:Paralelo
             },
             Rompecabeza: await rompecabezas(),
             Avance: null,

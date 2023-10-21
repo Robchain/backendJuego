@@ -5,7 +5,13 @@ import { responseformualrio } from "../../lib";
 
 export const crearCategoriasOraciones = async (req: Request, res: Response) => {
     try {
-        const categoria  = await  CategoriaOraciones.find({},{"createdAt":0,"updatedAt":0});
+        const categoria  = await  CategoriaOraciones.aggregate([
+            {
+              '$sort': {
+                'NombreCategoria': 1
+              }
+            }
+          ]);
         res.json(categoria);
     } catch (error: any) {
         res.json({"titulo":"Error","respuesta":responseformualrio.Mostrar.NoMostrar, "type":"error"});

@@ -59,7 +59,13 @@ export const HabilitarCategoriaVocabulario =async (req:Request, res:Response) =>
 //mostrar todos
 export const mostrarCateTodos  =async (req:Request, res:Response) => {
 try {
-    const Data = await Categoria.find({},{"createdAt":0,"updatedAt":0});
+    const Data = await Categoria.aggregate([
+        {
+          '$sort': {
+            'NombreCategoria': 1
+          }
+        }
+      ]);
     res.json(Data);
    
 } catch (error) {
