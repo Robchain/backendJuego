@@ -4,6 +4,7 @@ import PartidaVocabuario from '../models/Juego/Vocabulario/PartidaVocabulario'
 import Categoria from '../models/Administrador/Categoria';
 import Rompecabeza from '../models/Administrador/RecursosRompecabeza';
 import JugadoresConVocabularios from '../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios';
+import mongoose from 'mongoose';
 
 export const CrearJuegoVocabularioIndividual = async (req: Request, res: Response) => {
   try {
@@ -388,19 +389,42 @@ res.status(500).json(null);
   }
 }
 
+export const llamadaPartidaVocabularioRompecabeza = async (req: Request, res: Response) => {
+  try {
+    const {id}=req.body;
+    console.log(id)
+    const objectId = new mongoose.Types.ObjectId(id);
+    const objetos = await JugadoresConVocabularios.aggregate([
+      {
+        '$match': {
+          'Estudiante._id': objectId, 
+          'Terminado': true
+        }
+      }
+    ]);
+   if(objetos.length >=1){
+    res.json(objetos);
+   }else {
+    res.json(null);
+   }
+  } catch (error) {
+res.status(500).json(null);
+  }
+}
+
 // actualizacion
 
 export const UpdateTerminadoVocabulario = async (req: Request, res: Response) => {
   try {
    let input:any[] = req.body.Avance
 let finished:boolean=false
-    if( input.length === 4 && input.filter(obj => obj.Resultado === "CORRECTO").length===4){
+    if( input.length === 4 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
       finished=true;
-    }else if(input.length === 5 && input.filter(obj => obj.Resultado === "CORRECTO").length===4){
+    }else if(input.length === 5 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
       finished=true;
-    }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length===6){
+    }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
       finished=true;
-    }else if(input.length === 7 && input.filter(obj => obj.Resultado === "CORRECTO").length===6){
+    }else if(input.length === 7 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
       finished=true;
     }else{
       finished=false;

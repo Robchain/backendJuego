@@ -7,9 +7,9 @@ import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOraci
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria, DesibilitarCategoriaVocabulario, HabilitarCategoriaVocabulario } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo, DesibilitarEquipo, HabilitarEquipo, editarEquipoSinImagen}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
-import { testas, prueba, llamadaPartidaVocabulario,  CrearJuegoVocabularioIndividual, UpdateTerminadoVocabulario  } from '../controller/auth.TestDeLlamada';
+import { testas, prueba, llamadaPartidaVocabulario,  CrearJuegoVocabularioIndividual, UpdateTerminadoVocabulario, llamadaPartidaVocabularioRompecabeza  } from '../controller/auth.TestDeLlamada';
 import { BuscarPorCursoYParaleloMultijugador, CreaJuegoMultijuador, CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
-import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, UpdateTerminadoOracion } from '../controller/Juego/OracionPartidas';
+import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, llamarJuegoterminados, UpdateTerminadoOracion } from '../controller/Juego/OracionPartidas';
 import { borrarCategoriaOracion, crearCategoriasOraciones, DesibilitarCategoriaOraciones, EditarCategoriaOracion, HabilitarCategoriaOraciones } from '../controller/Administrador/CategoriaOracionesController';
 import { ActivarCoolaborativo, ActualizarCoolaborativo, actualizarJuegoTerminado, DesactivarCoolaborativo, DevuelveLaPosicionDentroDelArray, historialJuego, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
 import {  activarJuegoVocabularioPorGrupo } from '../controller/Administrador/auth.JuegoVoca';
@@ -130,7 +130,9 @@ router.post("/UpdateTerminadoVocabulario", UpdateTerminadoVocabulario)//guardado
 router.get("/armandoJuegosOracionesPorPiezas/:id",armandoJuegosOracionesPorPiezas); //cada llamada trae un modelo diferente
 router.post("/llamadaPartidaOracion",llamadaPartidaOracion);
 router.post("/UpdateTerminadoOracion", UpdateTerminadoOracion);//guardado final
-
+//trofeo
+router.post('/llamarJuegoterminados',llamarJuegoterminados);
+router.post('/llamadaPartidaVocabularioRompecabeza',llamadaPartidaVocabularioRompecabeza);
 //test de llamadas
 router.get('/CallMatch',ArmandoPartida)
 router.get('/Listado-Estudiante', SoloEstudiantes)
