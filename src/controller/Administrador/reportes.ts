@@ -40,7 +40,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
           objetosConAvance = await JugadoresConVocabularios.aggregate([
             {
               '$match': {
-                'Estudiante.Identificacion': valorId, 'createdAt': {
+                'Estudiante.Identificacion': valorId, 'updatedAt': {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -57,7 +57,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -89,7 +89,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -121,7 +121,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -154,7 +154,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
           objetosConAvance = await JugadoresConOraciones.aggregate([
             {
               '$match': {
-                'Estudiante.Identificacion': valorId, 'createdAt': {
+                'Estudiante.Identificacion': valorId, 'updatedAt': {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -170,7 +170,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -203,7 +203,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -235,7 +235,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -274,7 +274,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                     'value': valorId
                   }
                 },
-                "createdAt": {
+                "updatedAt": {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -284,7 +284,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -314,7 +314,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -345,7 +345,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -423,7 +423,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
           objetosConAvance = await JugadoresConVocabularios.aggregate([
             {
               '$match': {
-                'Estudiante.Identificacion': valorId, 'createdAt': {
+                'Estudiante.Identificacion': valorId, 'updatedAt': {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -439,7 +439,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -457,7 +457,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
           objetosConAvancedos = await JugadoresConOraciones.aggregate([
             {
               '$match': {
-                'Estudiante.Identificacion': valorId, 'createdAt': {
+                'Estudiante.Identificacion': valorId, 'updatedAt': {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -473,7 +473,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -497,7 +497,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                     'value': valorId
                   }
                 },
-                "createdAt": {
+                "updatedAt": {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -507,7 +507,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -539,7 +539,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -570,7 +570,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -599,7 +599,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -631,7 +631,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -662,7 +662,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -691,7 +691,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -765,7 +765,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
               '$match': {
                 "Estudiante.Curso": Curso,
                 "Estudiante.Paralelo": Paralelo,
-                "createdAt": {
+                "updatedAt": {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -781,7 +781,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -815,7 +815,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -849,7 +849,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -886,7 +886,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
               '$match': {
                 "Estudiante.Curso": Curso,
                 "Estudiante.Paralelo": Paralelo,
-                "createdAt": {
+                "updatedAt": {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -902,7 +902,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -936,7 +936,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -970,7 +970,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1007,7 +1007,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
               '$match': {
                 "Estudiante.Curso": Curso,
                 "Estudiante.Paralelo": Paralelo,
-                "createdAt": {
+                "updatedAt": {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -1017,7 +1017,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1044,7 +1044,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1072,7 +1072,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1107,7 +1107,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
               '$match': {
                 "Estudiante.Curso": Curso,
                 "Estudiante.Paralelo": Paralelo,
-                "createdAt": {
+                "updatedAt": {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -1123,7 +1123,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1144,7 +1144,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
               '$match': {
                 "Estudiante.Curso": Curso,
                 "Estudiante.Paralelo": Paralelo,
-                "createdAt": {
+                "updatedAt": {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -1160,7 +1160,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1181,7 +1181,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
               '$match': {
                 "Curso": Curso,
                 "Paralelo": Paralelo,
-                "createdAt": {
+                "updatedAt": {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -1191,7 +1191,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1226,7 +1226,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1259,7 +1259,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1286,7 +1286,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1320,7 +1320,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1353,7 +1353,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1380,7 +1380,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1472,7 +1472,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1501,7 +1501,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
               'createdAtDay': {
                 '$dateToString': {
                   'format': '%Y-%m-%d',
-                  'date': '$createdAt'
+                  'date': '$updatedAt'
                 }
               }
             }
@@ -1530,7 +1530,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
               'createdAtDay': {
                 '$dateToString': {
                   'format': '%Y-%m-%d',
-                  'date': '$createdAt'
+                  'date': '$updatedAt'
                 }
               }
             }
@@ -1580,7 +1580,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1609,7 +1609,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
               'createdAtDay': {
                 '$dateToString': {
                   'format': '%Y-%m-%d',
-                  'date': '$createdAt'
+                  'date': '$updatedAt'
                 }
               }
             }
@@ -1638,7 +1638,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
               'createdAtDay': {
                 '$dateToString': {
                   'format': '%Y-%m-%d',
-                  'date': '$createdAt'
+                  'date': '$updatedAt'
                 }
               }
             }
@@ -1672,7 +1672,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
           objetosConAvance = await Grupos.aggregate([
             {
               '$match': {
-                "createdAt": {
+                "updatedAt": {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -1683,7 +1683,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1705,7 +1705,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1727,7 +1727,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1774,7 +1774,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1809,7 +1809,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1828,7 +1828,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
           objetosConAvancetres = await Grupos.aggregate([
             {
               '$match': {
-                "createdAt": {
+                "updatedAt": {
                   $gte: fechaInicio,
                   $lte: fechaFin
                 }
@@ -1839,7 +1839,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1867,7 +1867,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
               'createdAtDay': {
                 '$dateToString': {
                   'format': '%Y-%m-%d',
-                  'date': '$createdAt'
+                  'date': '$updatedAt'
                 }
               }
             }
@@ -1895,7 +1895,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
               'createdAtDay': {
                 '$dateToString': {
                   'format': '%Y-%m-%d',
-                  'date': '$createdAt'
+                  'date': '$updatedAt'
                 }
               }
             }
@@ -1917,7 +1917,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -1945,7 +1945,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
               'createdAtDay': {
                 '$dateToString': {
                   'format': '%Y-%m-%d',
-                  'date': '$createdAt'
+                  'date': '$updatedAt'
                 }
               }
             }
@@ -1973,7 +1973,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
               'createdAtDay': {
                 '$dateToString': {
                   'format': '%Y-%m-%d',
-                  'date': '$createdAt'
+                  'date': '$updatedAt'
                 }
               }
             }
@@ -1995,7 +1995,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 'createdAtDay': {
                   '$dateToString': {
                     'format': '%Y-%m-%d',
-                    'date': '$createdAt'
+                    'date': '$updatedAt'
                   }
                 }
               }
@@ -2117,6 +2117,8 @@ const modeladosalidaGeneralIndividualPorJugador = (input: any[]) => {
   let avance: any[] = [];
   if (input.length > 0) {
     for (let j = 0; input.length > j; j++) {
+      Correcto =[]
+      Incorrecto=[]
       if (input[j].Avance !== null) {
         if (input[j].Avance.length >= 0) {
           for (let i = 0; input[j].Avance.length > i; i++) {
@@ -2151,6 +2153,8 @@ const modeladosalidaGeneralIndividualOracion = (input: any[]) => {
   let avance: any[] = []
   if (input.length > 0) {
     for (let j = 0; input.length > j; j++) {
+      Correcto =[]
+      Incorrecto=[]
       if (input[j].Avance !== null) {
         if (input[j].Avance.length >= 0) {
           for (let i = 0; input[j].Avance.length > i; i++) {

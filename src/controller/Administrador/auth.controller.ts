@@ -2,9 +2,9 @@ import { Request, Response } from 'express'
 import Persona, { IPersona } from '../../models/Administrador/Persona';
 import jwt from 'jsonwebtoken';
 import { responseformualrio } from '../../lib';
-import { crearJuegoVocabulario, crearJuegoVocabularioConCursoYParalelo } from './auth.JuegoVoca';
+import { cambiarCursoYParaleloDeLosJuegosCreadosVocabulario, crearJuegoVocabulario, crearJuegoVocabularioConCursoYParalelo } from './auth.JuegoVoca';
 import HabilitarJuego from '../../models/Administrador/HabilitarJuego';
-import { crearJuegoOraciones, crearJuegoOracionesConCursoYParalelo } from './auth.oracion';
+import { cambiarCursoYParaleloDeLosJuegosCreadosOracion, crearJuegoOraciones, crearJuegoOracionesConCursoYParalelo } from './auth.oracion';
 
 //funcion del token 
 function createToken(persona: IPersona) {
@@ -239,6 +239,8 @@ export const editarUserConArchivo = async (req: Request, res: Response) => {
         })
         if(Data?.TipoUsuario==="ESTUDIANTE"){
             if(Data?.Curso !== Curso || Data?.Paralelo !== Paralelo){
+              await cambiarCursoYParaleloDeLosJuegosCreadosVocabulario({_id:Data._id, Curso:Curso, Paralelo:Paralelo})
+          await cambiarCursoYParaleloDeLosJuegosCreadosOracion({_id:Data._id, Curso:Curso, Paralelo:Paralelo})
                 const cursohabilitado = await HabilitarJuego.aggregate([
                     {
                       '$match': {
@@ -260,29 +262,8 @@ export const editarUserConArchivo = async (req: Request, res: Response) => {
                       }
                     }
                   ]);
-                  const cursoyParaleloAnterio = await HabilitarJuego.aggregate([
-                    {
-                      '$match': {
-                        'Curso': Data.Curso, 
-                        'Paralelo':Data.Paralelo
-                      }
-                    }, {
-                      '$group': {
-                        '_id': '$Juego', 
-                        'documentos': {
-                          '$push': '$$ROOT'
-                        }
-                      }
-                    }, {
-                      '$project': {
-                        '_id': 0, 
-                        'TipoJuego': '$_id', 
-                        'Documentos': '$documentos'
-                      }
-                    }
-                  ]);
-                  if(cursoyParaleloAnterio.length===0){
-                    //arreglar esto con relacion en mongodb
+
+                  if(cursohabilitado.length>0){  
                 if(cursohabilitado.some(obj=> obj.TipoJuego === "VOCABULARIO")){
                     await   crearJuegoVocabularioConCursoYParalelo(Data, Curso, Paralelo)
                 }
@@ -290,8 +271,6 @@ export const editarUserConArchivo = async (req: Request, res: Response) => {
                     await   crearJuegoOracionesConCursoYParalelo(Data, Curso, Paralelo)
                 }
                   }
-                
-               
             }
         }
 
@@ -318,8 +297,11 @@ export const EditarsinArchivoUsuario = async (req: Request, res: Response) => {
                 Paralelo: Paralelo,
             }
         })
+      
         if(Data?.TipoUsuario==="ESTUDIANTE"){
         if(Data?.Curso !== Curso || Data?.Paralelo !== Paralelo){
+          await cambiarCursoYParaleloDeLosJuegosCreadosVocabulario({_id:Data._id, Curso:Curso, Paralelo:Paralelo})
+          await cambiarCursoYParaleloDeLosJuegosCreadosOracion({_id:Data._id, Curso:Curso, Paralelo:Paralelo})
             const cursohabilitado = await HabilitarJuego.aggregate([
                 {
                   '$match': {
@@ -341,38 +323,15 @@ export const EditarsinArchivoUsuario = async (req: Request, res: Response) => {
                   }
                 }
               ]);
-              const cursoyParaleloAnterio = await HabilitarJuego.aggregate([
-                {
-                  '$match': {
-                    'Curso': Data.Curso, 
-                    'Paralelo':Data.Paralelo
-                  }
-                }, {
-                  '$group': {
-                    '_id': '$Juego', 
-                    'documentos': {
-                      '$push': '$$ROOT'
-                    }
-                  }
-                }, {
-                  '$project': {
-                    '_id': 0, 
-                    'TipoJuego': '$_id', 
-                    'Documentos': '$documentos'
-                  }
-                }
-              ]);
-              if(cursoyParaleloAnterio.length===0){
-                //arreglar esto con relacion en mongodb
+              if(cursohabilitado.length>0){
             if(cursohabilitado.some(obj=> obj.TipoJuego === "VOCABULARIO")){
                 await   crearJuegoVocabularioConCursoYParalelo(Data, Curso, Paralelo)
             }
             if(cursohabilitado.some(obj=> obj.TipoJuego === "ORACION")){
                 await   crearJuegoOracionesConCursoYParalelo(Data, Curso, Paralelo)
+
             }
               }
-            
-           
         }
     }
 

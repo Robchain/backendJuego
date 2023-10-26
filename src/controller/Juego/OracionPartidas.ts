@@ -3,10 +3,11 @@ import { Request, Response } from "express"
 import PartidaOracion from "../../models/Juego/Oracion/PartidaOracion";
 import Rompecabeza from "../../models/Administrador/RecursosRompecabeza";
 import CategoriaOraciones from "../../models/Administrador/CategoriaOraciones";
-import { IPersona } from "../../models/Administrador/Persona";
+import Persona, { IPersona } from "../../models/Administrador/Persona";
 import JugadoresConOracion, { IJugadoresConOraciones } from "../../models/Jugadores/JugadoresOracion/JugadoresConOraciones";
 import { modeloPartida } from "../auth.TestDeLlamada";
 import mongoose from "mongoose";
+import { crearJuegoVocabulario } from "../Administrador/auth.JuegoVoca";
 //une un rompecabeza con un juego
 export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Response) => {
     try { 
@@ -260,10 +261,37 @@ juegosOracion6.save();
 //------------------------------
 export const llamadaPartidaOracion = async (req: Request, res: Response) => {
     try {
-      const objetos = await JugadoresConOracion.find({ "Estudiante.Usuario": req.body.Usuario }).limit(6);
-      if(objetos.length >=1){
-        res.json(objetos)
-      }else{
+      const {id}=req.body;
+    const objectId = new mongoose.Types.ObjectId(id);
+      const objetos = await JugadoresConOracion.aggregate([
+        {
+          '$match': {
+            'Estudiante._id': objectId
+          }
+        }, {
+          '$sort': {
+            'createdAt': 1
+          }
+        }
+      ]);
+      const grupos = [];
+    for (let i = 0; i < objetos.length; i += 3) {
+      const grupo = objetos.slice(i, i + 3);
+      if (grupo.some(objeto => !objeto.Terminado)) {
+        grupos.push(grupo);
+      }
+    }
+    if(grupos.length<3){
+      const Estudiantes = await Persona.findOne({_id:objectId},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 })
+      await  crearJuegoVocabulario(Estudiantes)
+    }
+    const primerGrupo = grupos[0];
+    const segundoGrupo = grupos[1];
+    const resultado = [...primerGrupo, ...segundoGrupo];
+
+   if(resultado.length >=1){
+    res.json(resultado);
+   }else{
         res.json(null)
       }
     } catch (error) {

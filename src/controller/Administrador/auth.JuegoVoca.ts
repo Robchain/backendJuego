@@ -5,6 +5,7 @@ import { rompecabezas } from "../auth.TestDeLlamada";
 import { CrearHabilitarJuego } from "./auth.HabilitarJuego";
 import { responseformualrio } from "../../lib";
 import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
+import mongoose from "mongoose";
 
 export const example = async (req:Request, res:Response) => {
     try {
@@ -53,7 +54,7 @@ try {
 }
 
 export const crearJuegoVocabulario = async (estudiante:any) => {
-    for (let index = 0; index < 13; index++) {
+    for (let index = 0; index < 12; index++) {
       const juegosVocabulario = new JugadoresConVocabularios({
         Estudiante: {
           _id: estudiante._id,
@@ -72,8 +73,11 @@ export const crearJuegoVocabulario = async (estudiante:any) => {
     }
   }
 
+
+
+
   export const crearJuegoVocabularioConCursoYParalelo = async (estudiante:any,Curso:string,Paralelo:string) => {
-    for (let index = 0; index < 13; index++) {
+    for (let index = 0; index < 12; index++) {
       const juegosVocabulario = new JugadoresConVocabularios({
         Estudiante: {
           _id: estudiante._id,
@@ -92,4 +96,16 @@ export const crearJuegoVocabulario = async (estudiante:any) => {
     }
   }
   
+  export const cambiarCursoYParaleloDeLosJuegosCreadosVocabulario =async ({Curso, Paralelo,_id}:{Curso:string, Paralelo:string,_id:string})=>{
+    try {
+      const objectId = new mongoose.Types.ObjectId(_id);
+  const data =   await JugadoresConVocabularios.updateMany({"Estudiante._id":objectId},{
+    $set: {
+      'Estudiante.Curso': Curso,
+      'Estudiante.Paralelo': Paralelo
+    }})
+    } catch (error) {
+      return;
+    }
+  }
   

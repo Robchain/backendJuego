@@ -7,6 +7,7 @@ import QuienImagen from '../../models/Administrador/QuienImagen';
 import { ActivoJuego } from '../../interface/JuegoVoca.Interface';
 import { responseformualrio } from '../../lib';
 import { CrearHabilitarJuego } from './auth.HabilitarJuego';
+import mongoose from 'mongoose';
 
 
 export const subirOracion = async (req:Request, res:Response) => {
@@ -155,7 +156,7 @@ export const ActivarJuegoConEstudianteOracion = async (req:Request, res:Response
 }
 
 export const crearJuegoOraciones = async (estudiante:any)=>{
-    for (let index = 0; index < 13; index++) {
+    for (let index = 0; index < 12; index++) {
         const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
             Estudiante: {
                 _id: estudiante._id,
@@ -175,7 +176,7 @@ export const crearJuegoOraciones = async (estudiante:any)=>{
 
 }
 export const crearJuegoOracionesConCursoYParalelo = async (estudiante:any, Curso:string, Paralelo:string )=>{
-    for (let index = 0; index < 13; index++) {
+    for (let index = 0; index < 12; index++) {
         const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
             Estudiante: {
                 _id: estudiante._id,
@@ -195,6 +196,18 @@ export const crearJuegoOracionesConCursoYParalelo = async (estudiante:any, Curso
 
 }
 
+export const cambiarCursoYParaleloDeLosJuegosCreadosOracion =async ({Curso, Paralelo,_id}:{Curso:string, Paralelo:string,_id:string})=>{
+    try {
+      const objectId = new mongoose.Types.ObjectId(_id);
+      const data =    await JugadoresConOraciones.updateMany({"Estudiante._id":objectId},{
+        $set: {
+          'Estudiante.Curso': Curso,
+          'Estudiante.Paralelo': Paralelo
+        }})
+    } catch (error) {
+      return;
+    }
+  }
 
 //--------------------------------------
 
