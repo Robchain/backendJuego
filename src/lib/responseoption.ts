@@ -2,7 +2,8 @@ export const responseformualrio={
 
     Creado:{
         Creado:"Ítem creado con éxito",
-        NoCreado:"No se pudo crear el ítem"
+        NoCreado:"No se pudo crear el ítem",
+        Repetido:"Item ya repetido",
     },
     Editadar:{
         editadoExito: "Ítem editado con éxito",

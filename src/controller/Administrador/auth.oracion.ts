@@ -8,6 +8,7 @@ import { ActivoJuego } from '../../interface/JuegoVoca.Interface';
 import { responseformualrio } from '../../lib';
 import { CrearHabilitarJuego } from './auth.HabilitarJuego';
 import mongoose from 'mongoose';
+import HabilitarJuego from '../../models/Administrador/HabilitarJuego';
 
 
 export const subirOracion = async (req:Request, res:Response) => {
@@ -134,9 +135,9 @@ export const ActivarJuegoConEstudianteOracion = async (req:Request, res:Response
 
     try {
         const {Paralelo, Curso} = req.body;
-        const jugadoresConOracion = await JugadoresConOraciones.find({"Estudiante.Curso":Curso, "Estudiante.Paralelo":Paralelo});
+        const jugadoresConOracion = await HabilitarJuego.find({Juego:"ORACION", Curso:Curso, Paralelo:Paralelo});
         if(jugadoresConOracion.length >0){
-            res.json({"titulo":"Error","respuesta":'Los estudiantes ya tienen juegos asignados',"type":"error"})
+            res.json({"titulo":"Error","respuesta":responseformualrio.Creado.Repetido,"type":"error"})
         }else if(jugadoresConOracion.length ===0){
         const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:Paralelo,Curso:Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
        if(Estudiantes.length> 0){
@@ -146,7 +147,7 @@ export const ActivarJuegoConEstudianteOracion = async (req:Request, res:Response
        CrearHabilitarJuego({Curso:Curso, Juego:"ORACION", Paralelo:Paralelo});
         res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     }else{
-        res.json({"titulo":"Error","respuesta":'No hay estudiantes para asignar juego',"type":"error"})
+        res.json({"titulo":"Error","respuesta":'No hay estudiantes para asignar juegos',"type":"error"})
     }
 }
     } catch (error) {

@@ -6,6 +6,7 @@ import { CrearHabilitarJuego } from "./auth.HabilitarJuego";
 import { responseformualrio } from "../../lib";
 import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
 import mongoose from "mongoose";
+import HabilitarJuego from "../../models/Administrador/HabilitarJuego";
 
 export const example = async (req:Request, res:Response) => {
     try {
@@ -32,9 +33,9 @@ export const example = async (req:Request, res:Response) => {
 export const activarJuegoVocabularioPorGrupo = async (req:Request, res:Response)=>{
 try {    
     const {Paralelo, Curso} = req.body;
-    const jugadoresConVocabularios = await JugadoresConVocabularios.find({"Estudiante.Curso":Curso, "Estudiante.Paralelo":Paralelo});
+    const jugadoresConVocabularios = await HabilitarJuego.find({Juego:"VOCABULARIO", Curso:Curso, Paralelo:Paralelo});
     if(jugadoresConVocabularios.length >0){
-        res.json({"titulo":"Error","respuesta":'Los estudiantes ya tienen juegos asignados',"type":"error"})
+        res.json({"titulo":"Error","respuesta":responseformualrio.Creado.Repetido,"type":"error"})
     }else if(jugadoresConVocabularios.length ===0){
     const Estudiantes = await Persona.find({Estado:"ACTIVO",TipoUsuario:"ESTUDIANTE",Paralelo:Paralelo,Curso:Curso},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 })
     if(Estudiantes.length > 0 ){ 
@@ -44,7 +45,7 @@ try {
        CrearHabilitarJuego({Curso:Curso, Paralelo:Paralelo, Juego:"VOCABULARIO"});
         res.json({"titulo":"Excelente","respuesta":responseformualrio.Activar.Activar,"type":"success"})
     }else {
-        res.json({"titulo":"Error","respuesta":'No hay estudiantes para asignar juego',"type":"error"})
+        res.json({"titulo":"Error","respuesta":'No hay estudiantes para asignar juegos',"type":"error"})
     }
 }
     
