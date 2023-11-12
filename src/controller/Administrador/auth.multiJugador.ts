@@ -11,13 +11,13 @@ import { CreaciondePartidasIndividualesVocabulario } from '../auth.TestDeLlamada
 
 export const CrearEvento = async (req: Request, res: Response) => {
   try {
-    const { picker, TipoDeJuego, Curso, Paralelo, Segundo, NumeroDeIntegrantes, NumeroDeGrupos, NombreDeEquipo } = req.body;
+    const { picker, TipoDeJuego, Curso, Paralelo, Segundo, NumeroDeIntegrantes, NumeroDeGrupos, NombreDeEquipo, picker2 } = req.body;
     let fechaInicio = undefined;
     let fechaFin = undefined;
     const fechaActual = new Date();
-    if (Array.isArray(picker) && picker.length > 0) {
-      fechaInicio = new Date(picker[0]);
-      fechaFin = new Date(picker[1]);
+    if (picker2.length > 0 && picker.length > 0) {
+      fechaInicio = new Date(picker);
+      fechaFin = new Date(picker2);
 
       const grupo: IGrupoDeTrabajo[] = await Grupos.find({ Curso: Curso, Paralelo: Paralelo });
       if (grupo.length !== 0) {
@@ -36,7 +36,7 @@ export const CrearEvento = async (req: Request, res: Response) => {
           TipoDeJuego: TipoDeJuego,
           Curso: Curso,
           Paralelo: Paralelo,
-          Fecha: picker,
+          Fecha: [picker,picker2],
           Estado: "ACTIVO"
         })
         const guardarmulti = await multiJugador.save();
@@ -55,7 +55,7 @@ export const CrearEvento = async (req: Request, res: Response) => {
           TipoDeJuego: TipoDeJuego,
           Curso: Curso,
           Paralelo: Paralelo,
-          Fecha: picker,
+          Fecha: [picker,picker2],
           Estado: "ACTIVO"
         })
         const guardarmulti = await multiJugador.save();

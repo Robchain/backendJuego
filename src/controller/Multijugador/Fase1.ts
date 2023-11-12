@@ -366,16 +366,16 @@ export const historialJuego = async (req: Request, res: Response) => {
 export const ActualizarCoolaborativo = async (req: Request, res: Response) => {
     try {
       
-        let {_id, picker, TipoDeJuego} = req.body;
-        if(Array.isArray(picker)){
+        let {_id, picker,picker2, TipoDeJuego} = req.body;
+        if(picker!=undefined && picker2!=undefined){
              const data = await Grupos.findByIdAndUpdate({ _id: _id },
             {$set:
-            {   FechaDeFin:picker[1],
-                FechaDeInicio:picker[0],
+            {   FechaDeFin:picker2,
+                FechaDeInicio:picker,
                 TipoDeJuego:TipoDeJuego
             }})
           res.json({"titulo":"Excelente","respuesta":responseformualrio.Editadar.editadoExito,"type":"success"})
-        } else if(!Array.isArray(picker)) {
+        } else if(picker==undefined && picker2==undefined) {
             const data = await Grupos.findByIdAndUpdate({ _id: _id },
                 {$set:
                 { 
