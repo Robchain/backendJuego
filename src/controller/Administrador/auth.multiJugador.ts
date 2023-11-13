@@ -24,8 +24,8 @@ export const CrearEvento = async (req: Request, res: Response) => {
         for (let i = 0; grupo.length > i; i++) {
           let fechafinjuegos = new Date(grupo[i].FechaDeFin);
           if (fechaInicio <= fechafinjuegos) {
-            res.status(500).json({ "titulo": "Error", "respuesta": `La fecha inicial del juego está dentro del rango de otra actividad`, "type": "error" });
-            break;
+            res.status(200).json({ "titulo": "Error", "respuesta": `La fecha inicial del juego está dentro del rango de otra actividad`, "type": "error" });
+            return;
           }
         }
         const multiJugador: IMultiJuga = new MultiJugador({
