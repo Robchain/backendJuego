@@ -64,7 +64,7 @@ export const crearJuegoVocabulario = async (estudiante:any) => {
     }
   ]);
 
-    for (let index = 0; index <= rompecabeza.length; index++) {
+    for (let index = 0; index < rompecabeza.length; index++) {
       const juegosVocabulario = new JugadoresConVocabularios({
         Estudiante: {
           _id: estudiante._id,
@@ -118,7 +118,7 @@ export const crearJuegoVocabulario = async (estudiante:any) => {
       }
     ]);
 
-    for (let index = 0; index <= rompecabeza.length; index++) {
+    for (let index = 0; index < rompecabeza.length; index++) {
       const juegosVocabulario = new JugadoresConVocabularios({
         Estudiante: {
           _id: estudiante._id,

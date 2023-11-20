@@ -168,7 +168,7 @@ export const crearJuegoOraciones = async (estudiante:any)=>{
     }
   ]);
 
-    for (let index = 0; index <= rompecabeza.length; index++) {
+    for (let index = 0; index < rompecabeza.length; index++) {
         const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
             Estudiante: {
                 _id: estudiante._id,
@@ -217,7 +217,7 @@ export const crearJuegoOracionesConCursoYParalelo = async (estudiante:any, Curso
         }
       ]);
 
-    for (let index = 0; index <= rompecabeza.length; index++) {
+    for (let index = 0; index < rompecabeza.length; index++) {
         const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
             Estudiante: {
                 _id: estudiante._id,
