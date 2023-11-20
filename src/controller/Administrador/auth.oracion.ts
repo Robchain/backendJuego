@@ -2,8 +2,9 @@ import Persona from '../../models/Administrador/Persona';
 import Oracion,{IRecursosOracion} from  '../../models/Administrador/RecursosOracion';
 import { Request, Response} from "express";
 import JugadoresConOraciones, { IJugadoresConOraciones } from '../../models/Jugadores/JugadoresOracion/JugadoresConOraciones';
-import {  rompecabezas } from '../auth.TestDeLlamada';
+import {  rompecabezasOracion } from '../auth.TestDeLlamada';
 import QuienImagen from '../../models/Administrador/QuienImagen';
+import Rompecabeza from '../../models/Administrador/RecursosRompecabeza';
 import { ActivoJuego } from '../../interface/JuegoVoca.Interface';
 import { responseformualrio } from '../../lib';
 import { CrearHabilitarJuego } from './auth.HabilitarJuego';
@@ -157,7 +158,17 @@ export const ActivarJuegoConEstudianteOracion = async (req:Request, res:Response
 }
 
 export const crearJuegoOraciones = async (estudiante:any)=>{
-    for (let index = 0; index < 12; index++) {
+
+  const   rompecabeza = await Rompecabeza.aggregate([
+    {
+      '$match': {
+        'Estado': 'ACTIVO', 
+        'Juego': 'ORACION'
+      }
+    }
+  ]);
+
+    for (let index = 0; index <= rompecabeza.length; index++) {
         const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
             Estudiante: {
                 _id: estudiante._id,
@@ -167,7 +178,7 @@ export const crearJuegoOraciones = async (estudiante:any)=>{
                 Curso:estudiante.Curso,
                 Paralelo:estudiante.Paralelo
             },
-            Rompecabeza: await rompecabezas(),
+            Rompecabeza: rompecabeza[index],
             Avance: null,
             Terminado:false,
             Estado:true
@@ -176,8 +187,37 @@ export const crearJuegoOraciones = async (estudiante:any)=>{
     }
 
 }
+export const crearJuegoOracionrioIndividualAsignar = async ({estudiante,rompecabeza}:{estudiante:any,rompecabeza:any})=>{
+      
+          const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
+              Estudiante: {
+                  _id: estudiante._id,
+                  Nombre: estudiante.Nombre,
+                  Usuario: estudiante.Usuario,
+                  Identificacion:estudiante.Identificacion,
+                  Curso:estudiante.Curso,
+                  Paralelo:estudiante.Paralelo
+              },
+              Rompecabeza: rompecabeza,
+              Avance: null,
+              Terminado:false,
+              Estado:true
+          });
+          juegosOracion.save();
+      
+  }
 export const crearJuegoOracionesConCursoYParalelo = async (estudiante:any, Curso:string, Paralelo:string )=>{
-    for (let index = 0; index < 12; index++) {
+  
+    const   rompecabeza = await Rompecabeza.aggregate([
+        {
+          '$match': {
+            'Estado': 'ACTIVO', 
+            'Juego': 'ORACION'
+          }
+        }
+      ]);
+
+    for (let index = 0; index <= rompecabeza.length; index++) {
         const juegosOracion: IJugadoresConOraciones = new JugadoresConOraciones({
             Estudiante: {
                 _id: estudiante._id,
@@ -187,7 +227,7 @@ export const crearJuegoOracionesConCursoYParalelo = async (estudiante:any, Curso
                 Curso:Curso,
                 Paralelo:Paralelo
             },
-            Rompecabeza: await rompecabezas(),
+            Rompecabeza: rompecabeza[index],
             Avance: null,
             Terminado:false,
             Estado:true

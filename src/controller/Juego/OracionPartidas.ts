@@ -20,7 +20,7 @@ export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Respons
       let Juego6 = {}
       let Juego7 = {}
       if(parseInt(piezas) !== 4 && parseInt(piezas) !==6){
-        res.status(500).json("Numero no valido")
+        res.status(200).json("Numero no valido")
       }
       if (parseInt(piezas) === 4) {
         Juego1 = await uniendoOracionesPorCategoria();
@@ -290,9 +290,9 @@ export const llamadaPartidaOracion = async (req: Request, res: Response) => {
     const resultado = [...primerGrupo, ...segundoGrupo];
 
    if(resultado.length >=1){
-    res.json(resultado);
+    res.status(200).json(resultado);
    }else{
-        res.json(null)
+        res.status(200).json(null)
       }
     } catch (error) {
       res.status(500).json(null);

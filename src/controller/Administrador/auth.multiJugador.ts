@@ -67,7 +67,7 @@ export const CrearEvento = async (req: Request, res: Response) => {
         res.status(200).json({ "titulo": "Excelente", "respuesta": 'Colaborativo creado con éxito', "type": "success" })
       }
     }else{
-      res.status(500).json({ "titulo": "Error", "respuesta": `Error en las fechas`, "type": "error" });
+      res.status(200).json({ "titulo": "Error", "respuesta": `Error en las fechas`, "type": "error" });
     }
   } catch (error) {
     res.status(500).json({ "titulo": "Error", "respuesta": `No se pudo crear el colaborativo, reinicie la página y vuelva a intentarlo`, "type": "error" });
@@ -111,7 +111,7 @@ export const CreaJuegoMultijuador = async (req: Request, res: Response) => {
     let Juego4 = {}
     let Juego5 = {}
     if (parseInt(piezas) !== 1 && parseInt(piezas) !== 2 && parseInt(piezas) !== 3) {
-      res.status(500).json("Numero no valido")
+      res.status(200).json("Numero no valido")
     }
     if (parseInt(piezas) === 1) {
       Juego1 = await CreaciondePartidasIndividualesVocabulario();

@@ -397,7 +397,7 @@ export const DesactivarCoolaborativo = async (req: Request, res: Response) => {
             {$set:
             {  Estado:"INACTIVO"  
             }})
-          res.json({"titulo":"Excelente","respuesta":responseformualrio.Desactivar.Desactivar,"type":"success"})
+          res.status(200).json({"titulo":"Excelente","respuesta":responseformualrio.Desactivar.Desactivar,"type":"success"})
         
     } catch (error) {
         res.json({"titulo":"Error","respuesta":responseformualrio.Desactivar.NoDesactivar, "type":"error"})

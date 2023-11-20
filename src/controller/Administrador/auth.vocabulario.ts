@@ -129,7 +129,6 @@ export const JuegosActivos =async (req:Request, res:Response) => {
             output.push({Curso:data[i].Estudiante[0].Curso, Paralelo:data[i].Estudiante[0].Paralelo,Activo:'ACTIVO' });
           }
         }
-
       res.status(200).json(output)
   } catch (error) {
       res.status(500).json({"titulo":"Error","respuesta":responseformualrio.Desactivar.NoDesactivar, "type":"error"});

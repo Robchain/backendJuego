@@ -4,6 +4,7 @@ export interface IRompecabeza extends Document{
     Pieza:number,
     FileBlanco:string,
     FileColor:string,
+    Juego:string,
     Estado:string
 }
 
