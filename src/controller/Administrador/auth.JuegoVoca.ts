@@ -1,7 +1,7 @@
 import Rompecabeza from "../../models/Administrador/RecursosRompecabeza";
 import { Request, Response } from "express";
 import Persona from "../../models/Administrador/Persona";
-import { rompecabezasVocabulario } from "../auth.TestDeLlamada";
+
 import { CrearHabilitarJuego } from "./auth.HabilitarJuego";
 import { responseformualrio } from "../../lib";
 import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";

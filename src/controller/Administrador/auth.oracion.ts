@@ -2,7 +2,6 @@ import Persona from '../../models/Administrador/Persona';
 import Oracion,{IRecursosOracion} from  '../../models/Administrador/RecursosOracion';
 import { Request, Response} from "express";
 import JugadoresConOraciones, { IJugadoresConOraciones } from '../../models/Jugadores/JugadoresOracion/JugadoresConOraciones';
-import {  rompecabezasOracion } from '../auth.TestDeLlamada';
 import QuienImagen from '../../models/Administrador/QuienImagen';
 import Rompecabeza from '../../models/Administrador/RecursosRompecabeza';
 import { ActivoJuego } from '../../interface/JuegoVoca.Interface';

@@ -1,4 +1,4 @@
-import Equipo, {IEquipo} from '../../models/Administrador/Equipo'
+import Equipo from '../../models/Administrador/Equipo'
 import { Request, Response } from 'express'
 import Persona from '../../models/Administrador/Persona'
 import { responseformualrio } from '../../lib'
