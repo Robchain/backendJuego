@@ -19,6 +19,9 @@ export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Respons
       let Juego5 = {}
       let Juego6 = {}
       let Juego7 = {}
+      let Juego8 = {}
+    let Juego9 = {}
+    let Juego10 = {}
       if(parseInt(piezas) !== 4 && parseInt(piezas) !==6){
         res.status(200).json("Numero no valido")
       }
@@ -28,6 +31,9 @@ export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Respons
         Juego3 = await uniendoOracionesPorCategoria();
         Juego4 = await uniendoOracionesPorCategoria();
         Juego5 = await uniendoOracionesPorCategoria();
+        Juego6 = await uniendoOracionesPorCategoria();
+        Juego7 = await uniendoOracionesPorCategoria();
+        Juego8 = await uniendoOracionesPorCategoria();
         res.json({ Juego1, Juego2, Juego3, Juego4, Juego5 })
       } else if (parseInt(piezas) === 6) {
         Juego1 = await uniendoOracionesPorCategoria();
@@ -37,6 +43,9 @@ export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Respons
         Juego5 = await uniendoOracionesPorCategoria();
         Juego6 = await uniendoOracionesPorCategoria();
         Juego7 = await uniendoOracionesPorCategoria();
+        Juego8 = await uniendoOracionesPorCategoria();
+        Juego9 = await uniendoOracionesPorCategoria();
+        Juego10 = await uniendoOracionesPorCategoria();
         res.json({  Juego1, Juego2, Juego3, Juego4, Juego5, Juego6, Juego7 })
       }
     } catch (error) {
@@ -356,25 +365,43 @@ let opc=0;
   export const UpdateTerminadoOracion = async (req: Request, res: Response) => {
     try {
          let input:any[] = req.body.Avance
+         let id = req.body.id;
 let finished:boolean=false
-    if( input.length === 4 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
-      finished=true;
-    }else if(input.length === 5 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
-      finished=true;
-    }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
-      finished=true;
-    }else if(input.length === 7 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
-      finished=true;
-    }else{
-      finished=false;
-    }
-const dad = await JugadoresConOracion.findByIdAndUpdate({ _id: req.body.id }, {$set:
-  {   
-      Avance:input,
-        Terminado:finished
-  }});
-      res.json(dad);
-    } catch (error) {
+const data = await JugadoresConOracion.findOne({ _id:id });
+if(data!==null){
+  if( input.length === 4 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
+    finished=true;
+  }else if(input.length === 5 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
+    finished=true;
+  }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
+    finished=true;
+  }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
+    finished=true;
+  }else if(input.length === 7 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
+    finished=true;
+  }else if(input.length === 8 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
+    finished=true;
+  }else{
+    finished=false;
+  }
+  if(data.Avance !==null){
+    let aux = data.Avance;
+    let nuevo= aux.concat(input)
+    data.Avance = nuevo;
+    data.Terminado = finished;
+    await data.save();
+    res.json(data);
+  }else if(data.Avance === null){
+        data.Avance = input;
+        data.Terminado = finished;
+        await data.save();
+        res.json(data);
+  }
+}else if(data === null){
+  res.json()
+}
   
+    } catch (error) {
+      res.status(500).json(error)
     }
   }

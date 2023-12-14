@@ -310,9 +310,7 @@ export const actualizarJuegoTerminado = async (req: Request, res: Response) => {
         if (data !== null) {
             if (data.Avance !== null) {
                 let aux = data.Avance;
-
                 let nuevo = aux.concat(input);
-
                 data.Avance = nuevo;
                 await data.save();
                 res.json()
@@ -326,7 +324,7 @@ export const actualizarJuegoTerminado = async (req: Request, res: Response) => {
             res.json()
         }
     } catch (error) {
-        res.json(error)
+        res.status(500).json(error)
     }
 }
 

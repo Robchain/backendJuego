@@ -18,6 +18,9 @@ export const CrearJuegoVocabularioIndividual = async (req: Request, res: Respons
     let Juego5 = {}
     let Juego6 = {}
     let Juego7 = {}
+    let Juego8 = {}
+    let Juego9 = {}
+    let Juego10 = {}
     if(parseInt(piezas) !== 4 && parseInt(piezas) !==6){
       res.status(200).json("Numero no valido")
     }
@@ -27,7 +30,9 @@ export const CrearJuegoVocabularioIndividual = async (req: Request, res: Respons
       Juego3 = await CreaciondePartidasIndividualesVocabulario();
       Juego4 = await CreaciondePartidasIndividualesVocabulario();
       Juego5 = await CreaciondePartidasIndividualesVocabulario();
-      res.json({ Juego1, Juego2, Juego3, Juego4, Juego5 })
+      Juego6 = await CreaciondePartidasIndividualesVocabulario();
+      Juego7 = await CreaciondePartidasIndividualesVocabulario();
+      res.json({ Juego1, Juego2, Juego3, Juego4, Juego5, Juego6,Juego7 })
     } else if (parseInt(piezas) === 6) {
       Juego1 = await CreaciondePartidasIndividualesVocabulario();
       Juego2 = await CreaciondePartidasIndividualesVocabulario();
@@ -36,7 +41,10 @@ export const CrearJuegoVocabularioIndividual = async (req: Request, res: Respons
       Juego5 = await CreaciondePartidasIndividualesVocabulario();
       Juego6 = await CreaciondePartidasIndividualesVocabulario();
       Juego7 = await CreaciondePartidasIndividualesVocabulario();
-      res.json({ Juego1, Juego2, Juego3, Juego4, Juego5, Juego6, Juego7 })
+      Juego8 = await CreaciondePartidasIndividualesVocabulario();
+      Juego9 = await CreaciondePartidasIndividualesVocabulario();
+      Juego10 = await CreaciondePartidasIndividualesVocabulario();
+      res.json({ Juego1, Juego2, Juego3, Juego4, Juego5, Juego6, Juego7, Juego8, Juego9, Juego10 })
     }
   } catch (error) {
     res.json(error)
@@ -468,27 +476,42 @@ res.status(500).json(null);
 export const UpdateTerminadoVocabulario = async (req: Request, res: Response) => {
   try {
    let input:any[] = req.body.Avance
+   let id = req.body.id;
 let finished:boolean=false
-    if( input.length === 4 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
-      finished=true;
-    }else if(input.length === 5 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
-      finished=true;
-    }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
-      finished=true;
-    }else if(input.length === 7 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
-      finished=true;
-    }else{
-      finished=false;
+    const data = await JugadoresConVocabularios.findOne({_id:id});
+    if(data!== null){
+      if( input.length === 4 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
+        finished=true;
+      }else if(input.length === 5 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
+        finished=true;
+      }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
+        finished=true;
+      }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
+        finished=true;
+      }else if(input.length === 7 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
+        finished=true;
+      }else if(input.length === 8 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
+        finished=true;
+      }else{
+        finished=false;
+      }
+      if(data.Avance!== null){
+        let aux = data.Avance;
+        let nuevo = aux.concat(input);
+        data.Avance = nuevo;
+        data.Terminado = finished;
+        await data.save();
+        res.json(data);
+      }else if(data.Avance===null){
+        data.Avance = input;
+        data.Terminado = finished;
+        await data.save();
+        res.json(data);
+      }
     }
-    const dad = await JugadoresConVocabularios.findByIdAndUpdate({ _id: req.body.id }, {$set:
-      {   
-          Avance:input,
-          Terminado:finished
-      }});
-      
-    res.json(dad);
-  } catch (error) {
 
+  } catch (error) {
+res.status(500).json(error);
   }
 }
 
