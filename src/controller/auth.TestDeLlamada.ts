@@ -477,6 +477,7 @@ export const UpdateTerminadoVocabulario = async (req: Request, res: Response) =>
   try {
    let input:any[] = req.body.Avance
    let id = req.body.id;
+   let end = req.body.end;
 let finished:boolean=false
     const data = await JugadoresConVocabularios.findOne({_id:id});
     if(data!== null){
@@ -499,12 +500,12 @@ let finished:boolean=false
         let aux = data.Avance;
         let nuevo = aux.concat(input);
         data.Avance = nuevo;
-        data.Terminado = finished;
+        data.Terminado = end;
         await data.save();
         res.json(data);
       }else if(data.Avance===null){
         data.Avance = input;
-        data.Terminado = finished;
+        data.Terminado = end;
         await data.save();
         res.json(data);
       }
