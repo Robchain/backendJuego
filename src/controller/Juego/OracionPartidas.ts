@@ -369,35 +369,39 @@ let opc=0;
 let finished:boolean=false
 const data = await JugadoresConOracion.findOne({ _id:id });
 if(data!==null){
-  if( input.length === 4 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
-    finished=true;
-  }else if(input.length === 5 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
-    finished=true;
-  }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
-    finished=true;
-  }else if(input.length === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
-    finished=true;
-  }else if(input.length === 7 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
-    finished=true;
-  }else if(input.length === 8 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
-    finished=true;
-  }else{
-    finished=false;
-  }
   if(data.Avance !==null){
     let aux = data.Avance;
     let nuevo= aux.concat(input)
     data.Avance = nuevo;
+    let piezasLocal =  data.Rompecabeza.Pieza;
+    if( piezasLocal === 4 && nuevo.filter(obj => obj.Resultado === "CORRECTO").length>=4){
+      finished=true;
+    }else if(piezasLocal === 6 && nuevo.filter(obj => obj.Resultado === "CORRECTO").length>=6){
+      finished=true;
+    }else{
+      finished=false;
+    }
     data.Terminado = finished;
     await data.save();
     res.json(data);
   }else if(data.Avance === null){
         data.Avance = input;
+        let piezasLocal =  data.Rompecabeza.Pieza
+        if( piezasLocal === 4 && input.filter(obj => obj.Resultado === "CORRECTO").length>=4){
+          finished=true;
+        }else if(piezasLocal === 6 && input.filter(obj => obj.Resultado === "CORRECTO").length>=6){
+          finished=true;
+        }else{
+          finished=false;
+        }
         data.Terminado = finished;
         await data.save();
         res.json(data);
   }
-}else if(data === null){
+  
+ 
+}
+else if(data === null){
   res.json()
 }
   

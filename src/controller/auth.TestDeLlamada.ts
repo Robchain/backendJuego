@@ -512,6 +512,10 @@ let finished:boolean=false
         res.json(data);
       }
     }
+    else if(data === null){
+      res.json()
+    }
+    
 
   } catch (error) {
 res.status(500).json(error);
