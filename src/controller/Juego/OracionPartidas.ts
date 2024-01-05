@@ -34,7 +34,7 @@ export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Respons
         Juego6 = await uniendoOracionesPorCategoria();
         Juego7 = await uniendoOracionesPorCategoria();
         Juego8 = await uniendoOracionesPorCategoria();
-        res.json({ Juego1, Juego2, Juego3, Juego4, Juego5 })
+        res.json({ Juego1, Juego2, Juego3, Juego4, Juego5,Juego6,Juego7,Juego8 })
       } else if (parseInt(piezas) === 6) {
         Juego1 = await uniendoOracionesPorCategoria();
         Juego2 = await uniendoOracionesPorCategoria();
@@ -46,7 +46,7 @@ export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Respons
         Juego8 = await uniendoOracionesPorCategoria();
         Juego9 = await uniendoOracionesPorCategoria();
         Juego10 = await uniendoOracionesPorCategoria();
-        res.json({  Juego1, Juego2, Juego3, Juego4, Juego5, Juego6, Juego7 })
+        res.json({  Juego1, Juego2, Juego3, Juego4, Juego5, Juego6, Juego7,Juego8,Juego9,Juego10  })
       }
     } catch (error) {
       res.json(error)
