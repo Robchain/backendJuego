@@ -260,7 +260,6 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
                     }
                 }
             }
-
             res.json({
                 _id: data[0].id,
                 IdDeLaAsignacion: data[0].IdDeLaAsignacion,
@@ -302,12 +301,12 @@ export const UneIntegrantesConJuegos = async (req: Request, res: Response) => {
 
 
 export const actualizarJuegoTerminado = async (req: Request, res: Response) => {
-    try {
+    try { 
         //busca, encuentra, verifica si hay una antes, si no, lo guarda directemente, si si hay, captura la que estaba, anexa la nueva al final y guarda todo
         let id = req.body.idOutput;
         let input = req.body.Avance;
         const data = await Grupos.findOne({ _id: id });
-        if (data !== null) {
+        if (data !== null && input.length === 5) {
             if (data.Avance !== null) {
                 let aux = data.Avance;
                 let nuevo = aux.concat(input);
