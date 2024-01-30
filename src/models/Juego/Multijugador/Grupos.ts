@@ -1,5 +1,6 @@
 import { Schema, Document, model, Date } from "mongoose";
 import { IAvenceArriba, IEquipoMult, IIntegrantes } from "../../../interface/Multijugador/Grupos.Interface";
+import { ObjetoConAvance } from "../../../controller/Multijugador/Fase1";
 
 
 export interface IGrupoDeTrabajo extends Document {
@@ -9,7 +10,7 @@ export interface IGrupoDeTrabajo extends Document {
     Curso:string;
     Paralelo:string;
     TipoDeJuego: string;
-    Avance: IAvenceArriba[];
+    Avance: ObjetoConAvance[];
     FechaDeInicio: string;
     FechaDeFin: string;
     Estado:string

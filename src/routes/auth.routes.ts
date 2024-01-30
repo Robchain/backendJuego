@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {validarToken}   from '../lib/verifyToken';
+import cron from 'node-cron';
 import { SoloEstudiantes,signup, signin,profile,perfilesNoActivos,borrarPerfiles,editarUserConArchivo,test,perfilesTotales, MostrarMaestrosConSusEstudiantesPorCursos, perfilesActivosEstudiantes, perfilesActivosMaestros, activarPersonas, desabilitarPersonas, getBase, EditarsinArchivoUsuario, ActualizarContraseña, BuscarPorCursoYParalelo, signupsinfoto } from "../controller/Administrador/auth.controller";
 import {subirRom,borrarRom,mostrarRom,mostrarRomTodos,EditarRompecabeza, EditarRompecabezaSinArchivo, DesibilitarRompecabeza, HabilitarRompecabeza} from '../controller/Administrador/auth.rompecabeza';
 import {subirVocabulario,borrarVocabulario,mostrarVocaTodos,mostrarVocaPala, editarVocabulario, DesibilitarVocabulario, HabilitarVocabulario, editarVocabularioSinArchivos, JuegosActivos} from '../controller/Administrador/auth.vocabulario';
@@ -16,6 +17,7 @@ import {  activarJuegoVocabularioPorGrupo } from '../controller/Administrador/au
 import { reporteGeneralPorCurso, reporteGeneralPorEstudiante, reporteGeneralPorJuego } from '../controller/Administrador/reportes';
 import { CrearCurso, DesibilitarCurso, HabilitarCurso, MostrarCurso, EditarCurso, CrearParalelo, MostrarParalelo, DesibilitarParalelo, HabilitarParalelo, EditarParalelo } from '../controller/Administrador/auth.CursoParalelo';
 import { DesibilitarHabilitarJuego, HabilitarHabilitarJuego, MostrarHabilitarJuego } from '../controller/Administrador/auth.HabilitarJuego';
+import Grupos from '../models/Juego/Multijugador/Grupos';
 
 const router : Router = Router();
 router.get("/",getBase)
@@ -159,6 +161,29 @@ router.post('/Reporte/Cursos',reporteGeneralPorCurso);
 router.post('/Reporte/Juego',reporteGeneralPorJuego);
 //por todos los juegos
 
+cron.schedule('*/59 * * * *', async ()=>{
+    try {
+    const fechaActual = new Date();
+    let fechaFin = undefined;
+    const data = await Grupos.find()
+
+    for(let i = 0; i<data.length;i++){
+        fechaFin = new Date(data[i].FechaDeFin);
+        if( fechaFin<=fechaActual ){
+            data[i].Estado="INACTIVO";
+            data[i].save()
+            console.log('actualizado');
+            console.log(fechaActual)
+        }else{
+            console.log("No Caducado")
+        }
+    }
+
+} catch (error) {
+ console.log('error del cron')       
+}
+ 
+})
 
 export default router;
 

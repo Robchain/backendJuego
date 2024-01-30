@@ -25,6 +25,7 @@ export interface INumeroDeIntegrantes{
 export interface IIntegrantes{
     label:string;
     value:string;
+    Terminado:boolean;
 }
 export interface IIntegrantesPorGrupos{
     [key: string]: IEquipoInterno[] | undefined;
@@ -63,7 +64,6 @@ export interface IAvenceArriba{
     Juego3:IAvanceInter;
     Juego4:IAvanceInter;
     Juego5:IAvanceInter;
-    Terminado:Boolean;
 }
 
 
