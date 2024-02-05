@@ -7,6 +7,7 @@ import JugadoresConVocabularios from '../models/Jugadores/JugadoresVocabulario/J
 import mongoose from 'mongoose';
 import { crearJuegoVocabulario } from './Administrador/auth.JuegoVoca';
 import Persona from '../models/Administrador/Persona';
+import Grupos from '../models/Juego/Multijugador/Grupos';
 
 export const CrearJuegoVocabularioIndividual = async (req: Request, res: Response) => {
   try {
@@ -521,4 +522,3 @@ let finished:boolean=false
 res.status(500).json(error);
   }
 }
-

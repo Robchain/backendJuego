@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 import Grupos, { IGrupoDeTrabajo } from "../../models/Juego/Multijugador/Grupos"
 import { IMultiJuga } from '../../models/Administrador/MultiJugador';
 import { CreaciondePartidasIndividualesVocabulario } from '../auth.TestDeLlamada';
 import { uniendoOracionesPorCategoria } from '../Juego/OracionPartidas';
-import { IAvanceInter, IAvenceArriba, IEquipoInterno, IPartidaMulti } from '../../interface/Multijugador/Grupos.Interface';
+import { IEquipoInterno, IPartidaMulti } from '../../interface/Multijugador/Grupos.Interface';
 import EquipoConJuegos, { IEquipoConJuego } from '../../models/Administrador/EquipoConJuegos';
 import EquipoBase from '../../models/Administrador/Equipo';
 import { responseformualrio } from '../../lib';
@@ -23,11 +24,11 @@ interface ObjetoConTerminado {
   }
   
   export interface ObjetoConAvance {
-    AvanceIndividual: Juego[]| null;
+    AvanceIndividual: Juego[];
   }
   
   function generarArrayDeObjetos(numero: number): ObjetoConAvance[] {
-    return Array.from({ length: numero }, () => ({ AvanceIndividual: null }));
+    return Array.from({ length: numero }, () => ({ AvanceIndividual: [] }));
   }
   
 //creacion de partida
@@ -211,6 +212,8 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
         if (data.length !== 0) {
             let pos = data[0].Integrantes.findIndex(obj => JSON.stringify(obj.value) === JSON.stringify(objetoaBuscar.value));
             const vecesTerminadoEsTrue = data[0].Integrantes.filter(elemento => elemento.Terminado).length;
+            const faltaPorCompletar = data[0].Avance[pos].AvanceIndividual.length > 2 ?  5 - data[0].Avance[pos].AvanceIndividual.filter(objeto  => objeto.Resultado === "CORRECTO").length : 5;
+            
             if (data[0].Equipo === null) {
                 if (pos === 0) {
                     situacion = "Eleccion Equipo";
@@ -237,7 +240,6 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
         }else if(vecesTerminadoEsTrue === data[0].Integrantes.length){
             situacion = "Podio";
         }
-
             }
             res.json({
                 _id: data[0]._id,
@@ -252,6 +254,7 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
                 FechaDeFin: data[0].FechaDeFin,
                 Estado: data[0].Estado,
                 Posicion: pos,
+                FaltaPorCompletar:faltaPorCompletar,
                 Situacion: situacion
             });
         } else {
@@ -281,42 +284,100 @@ export const UneIntegrantesConJuegos = async (req: Request, res: Response) => {
 
 
 export const actualizarJuegoTerminado = async (req: Request, res: Response) => {
-    try { 
+    try {
+        const id = req.body.idOutput;
+const pos = req.body.pos;
+    const input = req.body.Avance;
+    let terminado = false
+const filter = { _id: id };
+
+const update = {
+  $push: {
+    [`Avance.${pos}.AvanceIndividual`]: { $each: input }
+  }
+};
+        console.log(id)
+        console.log(input)
+        console.log(pos)
+const options = { new: true, runValidators: true };
+if(input.length <= 5){
+const data = await Grupos.findOneAndUpdate(filter, update, options);
+
+//----------
+if (data !== null) {
+  const cantidadCorrectos =  data!.Avance[pos].AvanceIndividual === null || data!.Avance[pos].AvanceIndividual === undefined  ? 0 : data.Avance[pos].AvanceIndividual.filter(objeto => objeto.Resultado === "CORRECTO").length; 
+
+  if (cantidadCorrectos >= 5) {
+    terminado = true;
+  } else {
+    terminado = false;
+  }
+  const update2 = {
+    $set: {
+        [`Integrantes.${pos}.Terminado`]: terminado
+      }
+  };
+  const data2 = await Grupos.findOneAndUpdate(filter, update2, options);
+
+  res.json(data);
+} else {
+  res.json();
+}
+} else {
+    res.json();
+}
         //busca, encuentra, verifica si hay una antes, si no, lo guarda directemente, si si hay, captura la que estaba, anexa la nueva al final y guarda todo
-        let id = req.body.idOutput;
-        let input = req.body.Avance;
-        let pos = req.body.pos
-        const data = await Grupos.findOne({ _id: id });
-        if (data !== null && input.length === 5) {
-            if (data.Avance[pos].AvanceIndividual !== null) {
-                let aux = data.Avance[pos].AvanceIndividual;
-                let nuevo = aux!.concat(input);
-                data.Avance[pos].AvanceIndividual = nuevo;
-                const cantidadCorrectos = nuevo.filter(objeto => objeto.Resultado === "CORRECTO").length;
-                if(cantidadCorrectos >= 5){
-                    data.Integrantes[pos].Terminado=true;
-                }else{
-                    data.Integrantes[pos].Terminado=false;
-                }
-                await data.save();
-                res.json()
-            } else if (data.Avance[pos].AvanceIndividual === null) {
-                data.Avance[pos].AvanceIndividual = input;
-                const cantidadCorrectos =  data.Avance[pos].AvanceIndividual!.filter(objeto  => objeto.Resultado === "CORRECTO").length;
-                if(cantidadCorrectos >= 5){
-                    data.Integrantes[pos].Terminado=true;
-                }else{
-                    data.Integrantes[pos].Terminado=false;
-                }
-                await data.save()
-                res.json()
-            }
-        } else {
-            //no hay data
-            res.json()
-        }
+    //     let id = req.body.idOutput;
+    //     let input:any[] = req.body.Avance;
+    //     let pos = req.body.pos
+    //     let finished:boolean=false
+    //     console.log(id)
+    //     console.log(input)
+    //     console.log(pos)
+    //     const data = await Grupos.findOne({_id:id});
+    //     data!.Avance[0].AvanceIndividual = []
+    //   await data!.save();
+    //     res.json(data)
+//         //-------
+// console.log(data);
+//         if (data !== null && input.length === 5) {
+//             if (data.Avance[pos].AvanceIndividual !== null) {
+//                 let aux = data.Avance[pos].AvanceIndividual;
+//                 let nuevo = aux!.concat(input);
+//                 data.Avance[pos].AvanceIndividual = nuevo;
+//                 const cantidadCorrectos = nuevo.filter(objeto => objeto.Resultado === "CORRECTO").length;
+//                 if(cantidadCorrectos >= 5){
+//                     finished=true;
+//                 }else{
+//                     finished = false;
+//                 }
+//                 data.Integrantes[pos].Terminado=finished;
+//                 await data.save();
+//                 res.json(data)
+//             } else if (data.Avance[pos].AvanceIndividual === null) {
+//                 data.Avance[pos].AvanceIndividual = input;
+//                 console.log(data.Avance[pos].AvanceIndividual)
+//                 const cantidadCorrectos =  data.Avance[pos].AvanceIndividual!.filter(objeto  => objeto.Resultado === "CORRECTO").length;
+//                 if(cantidadCorrectos >= 5){
+//                     finished=true;
+                    
+//                 }else{
+//                     finished = false;
+//                 }
+//                 data.Integrantes[pos].Terminado=finished;
+//                 await data.save();
+//                 console.log(data);
+//                 res.json(data)
+//             }
+         
+//         } else {
+//             //no hay data
+//             res.json()
+//         }
     } catch (error) {
+        console.log(error)
         res.status(500).json(error)
+        
     }
 }
 

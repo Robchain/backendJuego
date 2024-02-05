@@ -8,11 +8,11 @@ import { subirOracion,borrarOracion,mostrarOracTodos,mostrarOracPala,editarOraci
 import { crearCategorias,borrarCategoria,mostrarCateTodos,mostrarCatePala,EditarCategoria, DesibilitarCategoriaVocabulario, HabilitarCategoriaVocabulario } from '../controller/Administrador/auth.categoria';
 import {CrearEquipo, CrearEquipoAuto,MostrarEquipo,EliminarEquipo, editarEquipo, DesibilitarEquipo, HabilitarEquipo, editarEquipoSinImagen}    from '../controller/Administrador/auth.equipo';
 import {ArmandoPartida} from '../controller/Juego/auth.vocabularioPartida'
-import { testas, prueba, llamadaPartidaVocabulario,  CrearJuegoVocabularioIndividual, UpdateTerminadoVocabulario, llamadaPartidaVocabularioRompecabeza  } from '../controller/auth.TestDeLlamada';
+import { testas, prueba, llamadaPartidaVocabulario,  CrearJuegoVocabularioIndividual, UpdateTerminadoVocabulario, llamadaPartidaVocabularioRompecabeza } from '../controller/auth.TestDeLlamada';
 import { BuscarPorCursoYParaleloMultijugador, CreaJuegoMultijuador, CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, llamarJuegoterminados, UpdateTerminadoOracion } from '../controller/Juego/OracionPartidas';
 import { borrarCategoriaOracion, crearCategoriasOraciones, DesibilitarCategoriaOraciones, EditarCategoriaOracion, HabilitarCategoriaOraciones } from '../controller/Administrador/CategoriaOracionesController';
-import { ActivarCoolaborativo, ActualizarCoolaborativo, actualizarJuegoTerminado, DesactivarCoolaborativo, DevuelveLaPosicionDentroDelArray, historialJuego, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos } from '../controller/Multijugador/Fase1';
+import { ActivarCoolaborativo, ActualizarCoolaborativo, DesactivarCoolaborativo, DevuelveLaPosicionDentroDelArray, historialJuego, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos, actualizarJuegoTerminado } from '../controller/Multijugador/Fase1';
 import {  activarJuegoVocabularioPorGrupo } from '../controller/Administrador/auth.JuegoVoca';
 import { reporteGeneralPorCurso, reporteGeneralPorEstudiante, reporteGeneralPorJuego } from '../controller/Administrador/reportes';
 import { CrearCurso, DesibilitarCurso, HabilitarCurso, MostrarCurso, EditarCurso, CrearParalelo, MostrarParalelo, DesibilitarParalelo, HabilitarParalelo, EditarParalelo } from '../controller/Administrador/auth.CursoParalelo';
@@ -141,7 +141,7 @@ router.get('/Listado-Estudiante', SoloEstudiantes)
 /*router.get('/partidaEstudiante',partidaEstudiante);*/
 router.get('/prueba',prueba);
 /* Mutlijugador */
-router.post('/LlamadainicalDelJugagor',DevuelveLaPosicionDentroDelArray); 
+router.post('/LlamadainicalDelJugagor',DevuelveLaPosicionDentroDelArray);  
 router.post('/LlamadaDeJuegosBasesPorAsignar', LlamadaDeJuegosBasesPorAsignar);
 router.post('/UneIntegrantesConJuegos',UneIntegrantesConJuegos)
 router.get('/CreaJuegoMulti/:id',CreaJuegoMultijuador);

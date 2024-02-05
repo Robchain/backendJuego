@@ -1,5 +1,5 @@
-import { Schema, Document, model, Date } from "mongoose";
-import { IAvenceArriba, IEquipoMult, IIntegrantes } from "../../../interface/Multijugador/Grupos.Interface";
+import {Schema, Document, model} from "mongoose";
+import { IEquipoMult, IIntegrantes } from "../../../interface/Multijugador/Grupos.Interface";
 import { ObjetoConAvance } from "../../../controller/Multijugador/Fase1";
 
 
@@ -24,6 +24,7 @@ const schemaPartidaGrupoDeTrabjo = new Schema({
     },
     Equipo: {
         type: Object,
+        require: true,
     },
     Integrantes: {
         type: Array,
@@ -31,16 +32,20 @@ const schemaPartidaGrupoDeTrabjo = new Schema({
     },
     Curso:{
         type:String,
-        trim:true
+        trim:true,
+        require: true,
     },Paralelo:{
         type:String,
-        trim:true
+        trim:true,
+        require: true,
     },
     TipoDeJuego: {
         type: String,
+        require: true,
     },
     Avance: {
         type: Array,
+        require: true,
     },
     FechaDeInicio: {
         type: String,
@@ -59,4 +64,4 @@ const schemaPartidaGrupoDeTrabjo = new Schema({
     versionKey: false
 })
 
-export default model<IGrupoDeTrabajo>('equiposdetrabajoMulti', schemaPartidaGrupoDeTrabjo);
+export default model<IGrupoDeTrabajo>('equiposdetrabajomultis', schemaPartidaGrupoDeTrabjo);
