@@ -13,7 +13,8 @@ export interface IGrupoDeTrabajo extends Document {
     Avance: ObjetoConAvance[];
     FechaDeInicio: string;
     FechaDeFin: string;
-    Estado:string
+    Medalla:string;
+    Estado:string;
 }
 
 
@@ -52,6 +53,10 @@ const schemaPartidaGrupoDeTrabjo = new Schema({
         require: true,
     },
     FechaDeFin: {
+        type: String,
+        require: true,
+    },
+    Medalla:{
         type: String,
         require: true,
     },

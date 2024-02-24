@@ -51,6 +51,7 @@ export const CrearModeloInicialSinJuegos = async (BaseMulti: IMultiJuga) => {
                 Avance: arraydeAvance,
                 FechaDeInicio: BaseMulti.Fecha[0],
                 FechaDeFin: BaseMulti.Fecha[1],
+                Medalla:'',
                 Estado: "ACTIVO"
             })
             GrupoInicialsinJuegos.save()
@@ -84,96 +85,6 @@ export const GuardarRelacionEntreEquipoYJuegos = async (inputObject: IMultiJuga)
     }
 
 }
-
-
-const Los5JuegosTIPO1 = async () => {
-    let Juego1 = {}
-    let Juego2 = {}
-    let Juego3 = {}
-    let Juego4 = {}
-    let Juego5 = {}
-    let modeloFinal: IPartidaMulti;
-    try {
-        Juego1 = await CreaciondePartidasIndividualesVocabulario();
-        Juego2 = await uniendoOracionesPorCategoria();
-        Juego3 = await CreaciondePartidasIndividualesVocabulario();
-        Juego4 = await uniendoOracionesPorCategoria();
-        Juego5 = await CreaciondePartidasIndividualesVocabulario();
-
-        modeloFinal = {
-            Juego1,
-            Juego2,
-            Juego3,
-            Juego4,
-            Juego5,
-        }
-        return modeloFinal;
-
-    } catch (error) {
-
-        return null;
-    }
-}
-const Los5JuegosTIPO2 = async () => {
-    let Juego1 = {}
-    let Juego2 = {}
-    let Juego3 = {}
-    let Juego4 = {}
-    let Juego5 = {}
-    let modeloFinal: IPartidaMulti;
-    try {
-        Juego1 = await uniendoOracionesPorCategoria()
-        Juego2 = await uniendoOracionesPorCategoria()
-        Juego3 = await uniendoOracionesPorCategoria()
-        Juego4 = await uniendoOracionesPorCategoria();
-        Juego5 = await uniendoOracionesPorCategoria();
-
-        modeloFinal = {
-            Juego1,
-            Juego2,
-            Juego3,
-            Juego4,
-            Juego5,
-        }
-        return modeloFinal;
-
-    } catch (error) {
-
-        return null;
-    }
-}
-
-const Los5JuegosTIPO3 = async () => {
-    let Juego1 = {}
-    let Juego2 = {}
-    let Juego3 = {}
-    let Juego4 = {}
-    let Juego5 = {}
-    let modeloFinal: IPartidaMulti;
-    try {
-        Juego1 = await CreaciondePartidasIndividualesVocabulario();
-        Juego2 = await CreaciondePartidasIndividualesVocabulario();
-        Juego3 = await CreaciondePartidasIndividualesVocabulario();
-        Juego4 = await CreaciondePartidasIndividualesVocabulario();
-        Juego5 = await CreaciondePartidasIndividualesVocabulario();
-
-        modeloFinal = {
-            Juego1,
-            Juego2,
-            Juego3,
-            Juego4,
-            Juego5,
-        }
-        return modeloFinal;
-
-    } catch (error) {
-
-        return null;
-    }
-}
-
-
-
 
 export const LlamadaDeJuegosBasesPorAsignar = async (req: Request, res: Response) => {
     try {
@@ -239,6 +150,7 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
             }
         }else if(vecesTerminadoEsTrue === data[0].Integrantes.length){
             situacion = "Podio";
+
         }
             }
             res.json({
@@ -288,6 +200,7 @@ export const actualizarJuegoTerminado = async (req: Request, res: Response) => {
         const id = req.body.idOutput;
 const pos = req.body.pos;
     const input = req.body.Avance;
+    let medalla = ''
     let terminado = false
 const filter = { _id: id };
 
@@ -319,61 +232,75 @@ if (data !== null) {
   };
   const data2 = await Grupos.findOneAndUpdate(filter, update2, options);
 
-  res.json(data);
+  if(data2 !==null){
+    const vecesTerminadoEsTrue = data2.Integrantes.filter(elemento => elemento.Terminado).length; 
+    if(vecesTerminadoEsTrue === data2.Integrantes.length){
+        const final = await Grupos.aggregate([
+            {
+              '$match': {
+                'IdDeLaAsignacion': data2.IdDeLaAsignacion
+              }
+            }, {
+              '$unwind': '$Avance'
+            }, {
+              '$project': {
+                '_id': 1, 
+                'integrantes': '$Integrantes', 
+                'avanceIndividual': '$Avance.AvanceIndividual'
+              }
+            }, {
+              '$group': {
+                '_id': {
+                  '_id': '$_id', 
+                  'integrantes': '$integrantes'
+                }, 
+                'sumaAvanceIndividual': {
+                  '$sum': {
+                    '$size': '$avanceIndividual'
+                  }
+                }
+              }
+            }, {
+              '$project': {
+                '_id': '$_id._id', 
+                'integrantes': '$_id.integrantes', 
+                'sumaAvanceIndividual': 1
+              }
+            },{
+                '$sort': {
+                  'sumaAvanceIndividual': 1
+                }
+              }
+          ])
+
+          if(final!==null){
+            for(let i=0; i < final.length;i++){
+                if(final[i].sumaAvanceIndividual >0){
+                    if(i===0){
+                        medalla = "ORO"
+                        
+                    }
+                    if(i===1){
+                        medalla = "PLATA"
+                    }
+                    if(i>=2){
+                        medalla = "BRONCE"
+                    }
+                }
+            }
+          }
+
+    }
+  }
+  
+  
+  res.json(data2);
 } else {
   res.json();
 }
 } else {
     res.json();
 }
-        //busca, encuentra, verifica si hay una antes, si no, lo guarda directemente, si si hay, captura la que estaba, anexa la nueva al final y guarda todo
-    //     let id = req.body.idOutput;
-    //     let input:any[] = req.body.Avance;
-    //     let pos = req.body.pos
-    //     let finished:boolean=false
-    //     console.log(id)
-    //     console.log(input)
-    //     console.log(pos)
-    //     const data = await Grupos.findOne({_id:id});
-    //     data!.Avance[0].AvanceIndividual = []
-    //   await data!.save();
-    //     res.json(data)
-//         //-------
-// console.log(data);
-//         if (data !== null && input.length === 5) {
-//             if (data.Avance[pos].AvanceIndividual !== null) {
-//                 let aux = data.Avance[pos].AvanceIndividual;
-//                 let nuevo = aux!.concat(input);
-//                 data.Avance[pos].AvanceIndividual = nuevo;
-//                 const cantidadCorrectos = nuevo.filter(objeto => objeto.Resultado === "CORRECTO").length;
-//                 if(cantidadCorrectos >= 5){
-//                     finished=true;
-//                 }else{
-//                     finished = false;
-//                 }
-//                 data.Integrantes[pos].Terminado=finished;
-//                 await data.save();
-//                 res.json(data)
-//             } else if (data.Avance[pos].AvanceIndividual === null) {
-//                 data.Avance[pos].AvanceIndividual = input;
-//                 console.log(data.Avance[pos].AvanceIndividual)
-//                 const cantidadCorrectos =  data.Avance[pos].AvanceIndividual!.filter(objeto  => objeto.Resultado === "CORRECTO").length;
-//                 if(cantidadCorrectos >= 5){
-//                     finished=true;
-                    
-//                 }else{
-//                     finished = false;
-//                 }
-//                 data.Integrantes[pos].Terminado=finished;
-//                 await data.save();
-//                 console.log(data);
-//                 res.json(data)
-//             }
-         
-//         } else {
-//             //no hay data
-//             res.json()
-//         }
     } catch (error) {
         console.log(error)
         res.status(500).json(error)
