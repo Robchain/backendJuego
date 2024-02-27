@@ -166,6 +166,7 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
                 FechaDeFin: data[0].FechaDeFin,
                 Estado: data[0].Estado,
                 Posicion: pos,
+                Medalla:data[0].Medalla,
                 FaltaPorCompletar:faltaPorCompletar,
                 Situacion: situacion
             });
@@ -278,7 +279,6 @@ if (data !== null) {
                 if(final[i].sumaAvanceIndividual >0){
                     if(i===0){
                         medalla = "ORO"
-                        
                     }
                     if(i===1){
                         medalla = "PLATA"
@@ -286,6 +286,8 @@ if (data !== null) {
                     if(i>=2){
                         medalla = "BRONCE"
                     }
+                    const data3 = await Grupos.findOneAndUpdate({ _id: final[i]._id }, {"Medalla":medalla}, options);
+                    console.log(data3)
                 }
             }
           }
