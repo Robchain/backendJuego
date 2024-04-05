@@ -324,15 +324,21 @@ export const historialJuego = async (req: Request, res: Response) => {
                 }
             }, {
                 '$group': {
-                    '_id': {
-                        'IdDeLaAsignacion': '$IdDeLaAsignacion'
-                      },
-                    'documentos': {
-                        '$push': '$$ROOT'
-                    }
+                  '_id': {
+                    'IdDeLaAsignacion': '$IdDeLaAsignacion', 
+                    'FechaDeInicio': '$FechaDeInicio'
+                  }, 
+                  'documentos': {
+                    '$push': '$$ROOT'
+                  }
                 }
-            }
+              }, {
+                '$sort': {
+                  '_id.FechaDeInicio': -1
+                }
+              }
         ]);
+        
         if (data.length !== 0) {
             res.json(data)
         } else if (data.length === 0) {

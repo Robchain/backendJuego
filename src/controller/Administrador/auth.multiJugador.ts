@@ -77,7 +77,7 @@ export const CrearEvento = async (req: Request, res: Response) => {
 
 export const BuscarPorCursoYParaleloMultijugador = async (req: Request, res: Response) => {
   try {
-    const user = await Persona.find({ Curso: req.body.Curso, Paralelo: req.body.Paralelo,TipoUsuario:'ESTUDIANTE' }, { password: 0 });
+    const user = await Persona.find({ Curso: req.body.Curso, Paralelo: req.body.Paralelo,TipoUsuario:'ESTUDIANTE',Estado:"ACTIVO" }, { password: 0 });
     // const user = await Persona.find({ Curso: req.body.Curso, Paralelo: req.body.Paralelo }, { password: 0 });
     if (user.length === 0) {
       res.status(200).json([{ value: "NO HAY ESTUDIANTES", label: "NO HAY ESTUDIANTES" }]);
