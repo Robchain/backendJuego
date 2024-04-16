@@ -79,7 +79,7 @@ export const BuscarPorCursoYParaleloMultijugador = async (req: Request, res: Res
   try {
     const user = await Persona.find({ Curso: req.body.Curso, Paralelo: req.body.Paralelo,TipoUsuario:'ESTUDIANTE',Estado:"ACTIVO" }, { password: 0 });
     // const user = await Persona.find({ Curso: req.body.Curso, Paralelo: req.body.Paralelo }, { password: 0 });
-    if (user.length === 0) {
+    if ( 1 >= user.length ) {
       res.status(200).json([{ value: "NO HAY ESTUDIANTES", label: "NO HAY ESTUDIANTES" }]);
     } else {
       let respuesta = user.map((item) => ({

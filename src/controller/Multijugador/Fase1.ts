@@ -178,6 +178,51 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
     }
 }
 
+export const medallas = async (req:Request, res:Response) => {
+  try{
+    let value = req.body.value;
+    let label = req.body.label;
+   const data = await Grupos.aggregate(
+    [
+        {
+          '$match': {
+            'Integrantes.label': label, 
+            'Integrantes.value': value,
+          },    
+        },{
+          '$group': {
+            '_id': '$Medalla', 
+            'count': {
+              '$sum': 1
+            }
+          }
+        }
+      ])
+      
+      let final: {
+        ORO: number;
+        PLATA: number;
+        BRONCE: number;
+      } = {
+        ORO: 0,
+        PLATA: 0,
+        BRONCE: 0
+      };
+      data.forEach((resultado: { _id: string, count: number }) => {
+        final[resultado._id as keyof {
+          ORO: number;
+          PLATA: number;
+          BRONCE: number;
+        }] = resultado.count || 0;
+      });
+      res.json(final)
+      console.log(final)
+  }catch{
+    res.json(null)
+  }
+}
+
+
 export const UneIntegrantesConJuegos = async (req: Request, res: Response) => {
     try {
         let input = req.body.BaseUno as IEquipoConJuego;

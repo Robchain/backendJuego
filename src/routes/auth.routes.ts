@@ -12,7 +12,7 @@ import { testas, prueba, llamadaPartidaVocabulario,  CrearJuegoVocabularioIndivi
 import { BuscarPorCursoYParaleloMultijugador, CreaJuegoMultijuador, CrearEvento, PEvento } from '../controller/Administrador/auth.multiJugador';
 import { armandoJuegosOracionesPorPiezas, llamadaPartidaOracion, llamarJuegoterminados, UpdateTerminadoOracion } from '../controller/Juego/OracionPartidas';
 import { borrarCategoriaOracion, crearCategoriasOraciones, DesibilitarCategoriaOraciones, EditarCategoriaOracion, HabilitarCategoriaOraciones } from '../controller/Administrador/CategoriaOracionesController';
-import { ActivarCoolaborativo, ActualizarCoolaborativo, DesactivarCoolaborativo, DevuelveLaPosicionDentroDelArray, historialJuego, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos, actualizarJuegoTerminado } from '../controller/Multijugador/Fase1';
+import { ActivarCoolaborativo, ActualizarCoolaborativo, DesactivarCoolaborativo, DevuelveLaPosicionDentroDelArray, historialJuego, LlamadaDeJuegosBasesPorAsignar, UneIntegrantesConJuegos, actualizarJuegoTerminado, medallas } from '../controller/Multijugador/Fase1';
 import {  activarJuegoVocabularioPorGrupo } from '../controller/Administrador/auth.JuegoVoca';
 import { reporteGeneralPorCurso, reporteGeneralPorEstudiante, reporteGeneralPorJuego } from '../controller/Administrador/reportes';
 import { CrearCurso, DesibilitarCurso, HabilitarCurso, MostrarCurso, EditarCurso, CrearParalelo, MostrarParalelo, DesibilitarParalelo, HabilitarParalelo, EditarParalelo } from '../controller/Administrador/auth.CursoParalelo';
@@ -142,6 +142,7 @@ router.get('/Listado-Estudiante', SoloEstudiantes)
 router.get('/prueba',prueba);
 /* Mutlijugador */
 router.post('/LlamadainicalDelJugagor',DevuelveLaPosicionDentroDelArray);  
+router.post('/medallas', medallas);
 router.post('/LlamadaDeJuegosBasesPorAsignar', LlamadaDeJuegosBasesPorAsignar);
 router.post('/UneIntegrantesConJuegos',UneIntegrantesConJuegos)
 router.get('/CreaJuegoMulti/:id',CreaJuegoMultijuador);
