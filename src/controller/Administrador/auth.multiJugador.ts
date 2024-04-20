@@ -5,6 +5,7 @@ import Grupos, { IGrupoDeTrabajo } from "../../models/Juego/Multijugador/Grupos"
 import Persona from '../../models/Administrador/Persona';
 import { uniendoOracionesPorCategoria } from '../Juego/OracionPartidas';
 import { CreaciondePartidasIndividualesVocabulario } from '../auth.TestDeLlamada';
+import HabilitarJuego from '../../models/Administrador/HabilitarJuego';
 
 
 
@@ -79,9 +80,12 @@ export const BuscarPorCursoYParaleloMultijugador = async (req: Request, res: Res
   try {
     const user = await Persona.find({ Curso: req.body.Curso, Paralelo: req.body.Paralelo,TipoUsuario:'ESTUDIANTE',Estado:"ACTIVO" }, { password: 0 });
     // const user = await Persona.find({ Curso: req.body.Curso, Paralelo: req.body.Paralelo }, { password: 0 });
+    const cursoParapeloActivo = await HabilitarJuego.find({Curso:"PRIMERO", Paralelo:"A", Estado:"ACTIVO"});
     if ( 1 >= user.length ) {
       res.status(200).json([{ value: "NO HAY ESTUDIANTES", label: "NO HAY ESTUDIANTES" }]);
-    } else {
+    } else if(cursoParapeloActivo.length <= 1){
+      res.status(200).json([{ value: "NO HAY ESTUDIANTES", label: "NO HAY ESTUDIANTES" }])
+    }else {
       let respuesta = user.map((item) => ({
         value: item.Identificacion,
         label: `${item.Nombre} ${item.Apellido}`
