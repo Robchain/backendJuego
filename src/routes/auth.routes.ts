@@ -18,6 +18,7 @@ import { reporteGeneralPorCurso, reporteGeneralPorEstudiante, reporteGeneralPorJ
 import { CrearCurso, DesibilitarCurso, HabilitarCurso, MostrarCurso, EditarCurso, CrearParalelo, MostrarParalelo, DesibilitarParalelo, HabilitarParalelo, EditarParalelo } from '../controller/Administrador/auth.CursoParalelo';
 import { DesibilitarHabilitarJuego, HabilitarHabilitarJuego, MostrarHabilitarJuego } from '../controller/Administrador/auth.HabilitarJuego';
 import Grupos from '../models/Juego/Multijugador/Grupos';
+import { reportePrimero } from '../controller/Administrador/nuevoReporte';
 
 const router : Router = Router();
 router.get("/",getBase)
@@ -154,6 +155,8 @@ router.post('/ActualizarCoolaborativo', ActualizarCoolaborativo)
 //revisar los get y post, ver cual seria   mejor o cuando usar cada uno
 
 //Reportes
+//priemro 
+router.post('/reporte/primero',reportePrimero);
 //individual
 router.post('/Reporte/Jugador',reporteGeneralPorEstudiante);
 //por curso
