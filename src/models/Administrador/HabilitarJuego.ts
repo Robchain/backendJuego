@@ -6,6 +6,7 @@ export interface IHabilidarJuego extends Document{
     Curso:string;
     Paralelo:string;
     Estado:string;
+    Docente:string;
 }
 
 const schemaJuego =  new Schema({
@@ -24,6 +25,11 @@ const schemaJuego =  new Schema({
         trim:true
     },
     Estado:{
+        type:String,
+        require:true,
+        trim:true
+    },
+    Docente:{
         type:String,
         require:true,
         trim:true
