@@ -897,3 +897,203 @@ return  palabrasSinRepetir; // Esto mostrará ["manzana", "banana", "uva", "nara
 }
 
 
+
+
+
+
+// import fs from 'fs';
+// import path from 'path';
+// import PdfPrinter from 'pdfmake';
+
+// // Definir las fuentes
+// const fonts = {
+//     Poppins: {
+//         normal: path.resolve(__dirname, 'fonts/Poppins-Regular.ttf'),
+//         bold: path.resolve(__dirname, 'fonts/Poppins-Bold.ttf'),
+//         italics: path.resolve(__dirname, 'fonts/Poppins-Italic.ttf'),
+//         bolditalics: path.resolve(__dirname, 'fonts/Poppins-BoldItalic.ttf')
+//     }
+// };
+
+// // Crear una nueva instancia de PdfPrinter con las fuentes
+// const printer = new PdfPrinter(fonts);
+
+// // Leer y convertir el archivo PNG a base64
+// const pngPath = path.resolve(__dirname, 'kronio_logo.png');
+// const pngBuffer = fs.readFileSync(pngPath);
+// const pngBase64 = pngBuffer.toString('base64');
+// const pngDataUrl = `data:image/png;base64,${pngBase64}`;
+
+// // Leer y convertir el icono de imagen a base64
+// const iconPath = path.resolve(__dirname, 'icon.png');
+// const iconBuffer = fs.readFileSync(iconPath);
+// const iconBase64 = iconBuffer.toString('base64');
+// const iconDataUrl = `data:image/png;base64,${iconBase64}`;
+
+// // Leer y convertir el segundo icono de imagen a base64
+// const iconPath2 = path.resolve(__dirname, 'icon2.png');
+// const iconBuffer2 = fs.readFileSync(iconPath2);
+// const iconBase64_2 = iconBuffer2.toString('base64');
+// const iconDataUrl2 = `data:image/png;base64,${iconBase64_2}`;
+
+// export const generatePDF = (): Promise<string> => {
+//     const docDefinition = {
+//         pageSize: 'A4',
+//         pageMargins: [40, 80, 40, 80],
+//         content: [
+//             { text: 'Reporte de Asistencia', style: 'header' },
+//             { text: '01 de noviembre al 15 de noviembre del 2022', style: 'caption' },
+//             {
+//                 style: 'tableExample',
+//                 table: {
+//                     widths: ['*', '*', '*', '*', '*', '*', '*'],
+//                     body: [
+//                         [{ text: 'Horario Fijo - Oficina', colSpan: 7, alignment: 'center', style: 'header', margin: [0, 5] }, {}, {}, {}, {}, {}, {}],
+//                         [
+//                             { text: 'L', alignment: 'center', style: 'days' },
+//                             { text: 'M', alignment: 'center', style: 'days' },
+//                             { text: 'M', alignment: 'center', style: 'days', fillColor: '#4E388A', color: '#fff' },
+//                             { text: 'J', alignment: 'center', style: 'days' },
+//                             { text: 'V', alignment: 'center', style: 'days' },
+//                             { text: 'S', alignment: 'center', style: 'days' },
+//                             { text: 'D', alignment: 'center', style: 'days' }
+//                         ],
+//                         [{ text: 'Hora de entrada', style: 'footer3' }, { text: '08:00', style: 'footer3', alignment: 'right' }, {}, {}, {}, {}, {}],
+//                         [{ text: 'Hora de salida', style: 'footer3' }, { text: '17:00', style: 'footer3', alignment: 'right' }, {}, {}, {}, {}, {}],
+//                         [{ text: 'Tiempo de descanso', style: 'footer3' }, { text: '60 min', style: 'footer3', alignment: 'right' }, {}, {}, {}, {}, {}]
+//                     ]
+//                 },
+//                 layout: {
+//                     hLineWidth: (i: number, node: any) => {
+//                         return (i === 0 || i === node.table.body.length) ? 1 : 0; // Líneas horizontales solo en el borde superior e inferior
+//                     },
+//                     vLineWidth: (i: number, node: any) => {
+//                         return (i === 0 || i === node.table.widths.length) ? 1 : 0; // Líneas verticales solo en los bordes izquierdo y derecho
+//                     },
+//                     hLineColor: (i: number, node: any) => {
+//                         return '#4E388A';
+//                     },
+//                     vLineColor: (i: number, node: any) => {
+//                         return '#4E388A';
+//                     },
+//                     paddingTop: (i: number, node: any) => 5,
+//                     paddingBottom: (i: number, node: any) => 5
+//                 }
+//             }
+//         ],
+//         background: (currentPage: number, pageSize: any) => {
+//             return {
+//                 image: pngDataUrl,
+//                 width: 211.2,
+//                 height: 352,
+//                 opacity: 0.5,
+//                 absolutePosition: { x: 191.78, y: 245.29 }
+//             };
+//         },
+//         defaultStyle: {
+//             font: 'Poppins'
+//         },
+//         footer: (currentPage: number, pageSize: any) => {
+//             return {
+//                 layout: {
+//                     hLineWidth: (i: number, node: any) => {
+//                         return (i === 0) ? 2 : 0;  // Grosor del borde superior
+//                     },
+//                     vLineWidth: (i: number, node: any) => {
+//                         return 0; // Elimina las líneas verticales
+//                     },
+//                     hLineColor: (i: number, node: any) => {
+//                         return (i === 0) ? '#000' : '#FFF';  // Color del borde superior
+//                     }
+//                 },
+//                 table: {
+//                     widths: ['*', '*'],
+//                     body: [
+//                         [
+//                             {
+//                                 columns: [
+//                                     { image: iconDataUrl, width: 13, height: 13, margin: [5, 0, 0, 0] },
+//                                     { text: ' No se registró salida', style: 'footer3', margin: [5, 0, 0, 0] }
+//                                 ],
+//                                 border: [false, false, false, false]
+//                             },
+//                             {
+//                                 columns: [
+//                                     { image: iconDataUrl2, width: 12, height: 12, margin: [5, 0, 0, 0] },
+//                                     { text: ' Atraso', style: 'footer3', margin: [5, 0, 0, 0] }
+//                                 ],
+//                                 border: [false, false, false, false]
+//                             }
+//                         ],
+//                         [
+//                             { text: 'Empresa: Unidad Educativa Brisas del Río', style: 'footer1', margin: [10, 0, 0, 0], border: [false, false, false, false] },
+//                             { text: '25 - Noviembre - 2022', style: 'footer2', margin: [0, 0, 10, 0], border: [false, false, false, false] }
+//                         ],
+//                         [
+//                             { text: 'Generado por: Edison Aciniegas', style: 'footer1', margin: [10, 0, 0, 0], border: [false, false, false, false] },
+//                             { text: '', border: [false, false, false, false] }
+//                         ]
+//                     ]
+//                 }
+//             };
+//         },
+//         styles: {
+//             header: {
+//                 font: 'Poppins',
+//                 fontSize: 20,
+//                 bold: true,
+//                 color: '#4E388A'
+//             },
+//             caption: {
+//                 font: 'Poppins',
+//                 color: '#222025',
+//                 fontSize: 11
+//             },
+//             footer1: {
+//                 fontSize: 8
+//             },
+//             footer2: {
+//                 alignment: 'right',
+//                 fontSize: 8
+//             },
+//             footer3: {
+//                 fontSize: 8,
+//                 color: '#646464'
+//             },
+//             days: {
+//                 fontSize: 10,
+//                 bold: true,
+//                 color: '#4E388A'
+//             },
+//             default: {
+//                 font: 'Poppins'
+//             }
+//         }
+//     };
+
+//     return new Promise<string>((resolve, reject) => {
+//         const pdfDoc = printer.createPdfKitDocument(docDefinition);
+
+//         let chunks: Uint8Array[] = [];
+//         pdfDoc.on('data', (chunk) => {
+//             chunks.push(chunk);
+//             console.log('Received chunk of size:', chunk.length);
+//         });
+
+//         pdfDoc.on('end', () => {
+//             console.log('PDF generation finished');
+//             const pdfBuffer = Buffer.concat(chunks);
+//             console.log('PDF buffer length:', pdfBuffer.length);
+//             const pdfBase64 = pdfBuffer.toString('base64');
+//             resolve(pdfBase64);
+//         });
+
+//         pdfDoc.on('error', (error) => {
+//             console.error('Error generating PDF:', error);
+//             reject(error);
+//         });
+
+//         pdfDoc.end();
+//         console.log("PDF document ended");
+//     });
+// };

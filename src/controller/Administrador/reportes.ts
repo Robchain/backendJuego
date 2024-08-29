@@ -1001,7 +1001,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
 
             
             console.log({FechaInicio, FechaFin, Pregunta, valorId, datosPer})
-          res.status(200).json({data:groupedSortedArray, pdf:datapdf});
+          res.status(200).json({data:groupedSortedArray, pdf:''});
           // res.status(200).json(groupedSortedArray);
 
         } else if (objetosConAvance.length === 0 && objetosConAvancedos.length === 0) {
