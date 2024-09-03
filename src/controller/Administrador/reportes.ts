@@ -10,6 +10,8 @@ import { isObject } from "@typegoose/typegoose/lib/internal/utils";
 import { groupAndSortByDate } from "./FuncionHelpers";
 import { pdfColaborativoEstudiante, pdfOracionEstudiante, pdfTodosEstudiante, pdfVocabularioEstudiante } from "../../pdf/pdfmakes";
 import { OutputTodosJugador, Salida, SalidaDatum } from "../../interface/ouputTodosJugadorReporte.interface";
+import { pdfJuegoColaborativo, pdfJuegoOracion, pdfJuegoTodos, pdfJuegoVocabulario } from "../../pdf/pdfmakesJuego";
+import { CursoElement, Datum } from "../../interface/juegoReporteVocabulario.interface";
 
 
 
@@ -1231,83 +1233,6 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
           }
         ]);
 
-        // if (fechaInicio && fechaFin) {
-          
-        // } else if (fechaInicio) {
-        //   objetosConAvance = await JugadoresConOraciones.aggregate([
-        //     {
-        //       '$match': {
-        //         "Estudiante.Curso": Curso,
-        //         "Estudiante.Paralelo": Paralelo,
-        //       }
-        //     }, {
-        //       '$match': {
-        //         'Avance': {
-        //           '$ne': null
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields': {
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d', 
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group': {
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         }, 
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     }, {
-        //       '$sort': {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ]);
-        // } else if (!fechaInicio) {
-        //   objetosConAvance = await JugadoresConOraciones.aggregate([
-        //     {
-        //       '$match': {
-        //         "Estudiante.Curso": Curso,
-        //         "Estudiante.Paralelo": Paralelo,
-        //       }
-        //     }, {
-        //       '$match': {
-        //         'Avance': {
-        //           '$ne': null
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields': {
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d', 
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group': {
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         }, 
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     }, {
-        //       '$sort': {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ]);
-        // }
         if (objetosConAvance.length > 0) {
             const salidaData = objetosConAvance.map(individual=>{
               const {updatedAtDay} = individual._id
@@ -1338,7 +1263,7 @@ export const reporteGeneralPorCurso = async (req: Request, res: Response) => {
                  tipo:'oracion',
               }
             })
-
+            
           res.status(200).json(salidaData);
         } else if (objetosConAvance.length === 0) {
           res.status(200).json([])
@@ -1984,12 +1909,13 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
     let objectosalida: any[] = [];
     let objectosalida2: any[] = [];
     let objectosalida3: any[] = [];
+    let objetosConAvanceVocabulario: Datum[] = []
     let objetosConAvance: any[] = []
     let objetosConAvancedos: any[] = []
     let objetosConAvancetres: any[] = []
     switch (Pregunta) {
       case 'vocabulario':
-        objetosConAvance = await JugadoresConVocabularios.aggregate([
+        objetosConAvanceVocabulario = await JugadoresConVocabularios.aggregate([
           {
             '$match': {
               "Estudiante.Curso": Curso,
@@ -2031,75 +1957,10 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
           }
         ]);
 
-        // if (fechaInicio && fechaFin) {
-          
-        // } else if (fechaInicio) {
-        //   objetosConAvance = await JugadoresConVocabularios.aggregate([{
-        //     '$match': {
-        //       'Avance': {
-        //         '$ne': null
-        //       }
-        //     }
-        //   }, {
-        //     '$addFields': {
-        //       'updatedAtDay': {
-        //         '$dateToString': {
-        //           'format': '%Y-%m-%d', 
-        //           'date': '$updatedAt'
-        //         }
-        //       }
-        //     }
-        //   }, {
-        //     '$group': {
-        //       '_id': {
-        //         'Nombre': '$Estudiante.Nombre', 
-        //         'Identificacion': '$Estudiante.Identificacion', 
-        //         'Curso': '$Estudiante.Curso', 
-        //         'Paralelo': '$Estudiante.Paralelo',
-        //           'tipo':'vocabulario'
-        //       }, 
-        //       'documentos': {
-        //         '$push': '$$ROOT'
-        //       }
-        //     }
-        //   }
-        //   ]);
-        // } else if (!fechaInicio) {
-        //   objetosConAvance = await JugadoresConVocabularios.aggregate([{
-        //     '$match': {
-        //       'Avance': {
-        //         '$ne': null
-        //       }
-        //     }
-        //   }, {
-        //     '$addFields': {
-        //       'updatedAtDay': {
-        //         '$dateToString': {
-        //           'format': '%Y-%m-%d', 
-        //           'date': '$updatedAt'
-        //         }
-        //       }
-        //     }
-        //   }, {
-        //     '$group':  {
-        //       '_id': {
-        //         'Nombre': '$Estudiante.Nombre', 
-        //         'Identificacion': '$Estudiante.Identificacion', 
-        //         'Curso': '$Estudiante.Curso', 
-        //         'Paralelo': '$Estudiante.Paralelo',
-        //           'tipo':'vocabulario'
-        //       }, 
-        //       'documentos': {
-        //         '$push': '$$ROOT'
-        //       }
-        //     }
-        //   }
-        //   ]);
-        // }
-        if (objetosConAvance.length > 0) {
-          const uniqueCourses:any[] = [];
+        if (objetosConAvanceVocabulario.length > 0) {
+          const uniqueCourses:CursoElement[] = [];
 
-          objetosConAvance.forEach(item => {
+          objetosConAvanceVocabulario.forEach(item => {
               const { Curso, Paralelo } = item._id;
               const courseParalelo = { Curso, Paralelo };
           
@@ -2108,14 +1969,26 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                   uniqueCourses.push(courseParalelo);
               }
           });
+          
+          let echaInicio =  FechaInicio.toString() ;
+          
+          let echaFin=    FechaFin.toString();
+          
           const final ={
             Juego:'vocabulario',
             Cursos:uniqueCourses,
-            data:objetosConAvance,
-            fechaInicio, fechaFin,
+            data:objetosConAvanceVocabulario,
+            fechaInicio: echaInicio,
+            fechaFin:    echaFin,
+            Curso, 
+            Paralelo 
           }
-          res.status(200).json(final);
-        } else if (objetosConAvance.length === 0) {
+          const pdfdata =await pdfJuegoVocabulario(final);
+
+        
+          res.status(200).json({data:final, pdf:pdfdata});
+        
+        } else if (objetosConAvanceVocabulario.length === 0) {
           res.status(200).json([])
         }
         break;
@@ -2161,69 +2034,6 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
           }
         ]);
 
-        // if (fechaInicio && fechaFin) {
-          
-        // } else if (fechaInicio) {
-        //   objetosConAvance = await JugadoresConOraciones.aggregate([{
-        //     '$match': {
-        //       'Avance': {
-        //         '$ne': null
-        //       }
-        //     }
-        //   }, {
-        //     '$addFields': {
-        //       'updatedAtDay': {
-        //         '$dateToString': {
-        //           'format': '%Y-%m-%d', 
-        //           'date': '$updatedAt'
-        //         }
-        //       }
-        //     }
-        //   }, {
-        //     '$group': {
-        //       '_id': {
-        //         'Nombre': '$Estudiante.Nombre', 
-        //         'Identificacion': '$Estudiante.Identificacion', 
-        //         'Curso': '$Estudiante.Curso', 
-        //         'Paralelo': '$Estudiante.Paralelo'
-        //       }, 
-        //       'documentos': {
-        //         '$push': '$$ROOT'
-        //       }
-        //     }
-        //   }
-        //   ]);
-        // } else if (!fechaInicio) {
-        //   objetosConAvance = await JugadoresConOraciones.aggregate([{
-        //     '$match': {
-        //       'Avance': {
-        //         '$ne': null
-        //       }
-        //     }
-        //   }, {
-        //     '$addFields': {
-        //       'updatedAtDay': {
-        //         '$dateToString': {
-        //           'format': '%Y-%m-%d', 
-        //           'date': '$updatedAt'
-        //         }
-        //       }
-        //     }
-        //   }, {
-        //     '$group': {
-        //       '_id': {
-        //         'Nombre': '$Estudiante.Nombre', 
-        //         'Identificacion': '$Estudiante.Identificacion', 
-        //         'Curso': '$Estudiante.Curso', 
-        //         'Paralelo': '$Estudiante.Paralelo'
-        //       }, 
-        //       'documentos': {
-        //         '$push': '$$ROOT'
-        //       }
-        //     }
-        //   }
-        //   ]);
-        // }
         if (objetosConAvance.length > 0) {
           const uniqueCourses:any[] = [];
 
@@ -2236,13 +2046,21 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                   uniqueCourses.push(courseParalelo);
               }
           });
+          let echaInicio =  FechaInicio.toString() ;
+          
+          let echaFin=    FechaFin.toString();
           const final ={
             Juego:'oracion',
             Cursos:uniqueCourses,
             data:objetosConAvance,
-            fechaInicio, fechaFin,
+            fechaInicio: echaInicio,
+            fechaFin:    echaFin,
+            Curso, 
+            Paralelo 
           }
-          res.status(200).json(final);
+          const pdfdata = await pdfJuegoOracion(final);
+          console.log({ FechaInicio, FechaFin,  Pregunta, Curso, Paralelo })
+          res.status(200).json({data:final, pdf:pdfdata});
         } else if (objetosConAvance.length === 0) {
           res.status(200).json([])
         }
@@ -2288,79 +2106,8 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
           }
         ])
 
-        // if (fechaInicio && fechaFin) {
-          
-        // } else if (fechaInicio) {
-        //   objetosConAvance = await Grupos.aggregate([
-        //     {
-        //       '$addFields': {
-        //         'createdAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group': {
-        //         '_id': {
-        //           'createdAtDay': '$createdAtDay',
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     }
-        //   ])
-        // } else if (!fechaInicio) {
-        //   objetosConAvance = await Grupos.aggregate([
-        //     {
-        //       '$addFields': {
-        //         'createdAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group': {
-        //         '_id': {
-        //           'createdAtDay': '$createdAtDay',
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     }
-        //   ])
-        // }
         if (objetosConAvance.length > 0) {
-          // const uniqueCourses: { curso: string; paralelo: string }[] = [];
-          // const nameCounts: Record<string, number> = {};
-          
-          // objetosConAvance.forEach(item => {
-          //     const { curso, paralelo } = item._id;
-          //     const courseParalelo = { curso, paralelo };
-          
-          //     // Verificar si ya existe en el array de cursos únicos
-          //     if (!uniqueCourses.some(c => c.curso === curso && c.paralelo === paralelo)) {
-          //         uniqueCourses.push(courseParalelo);
-          //     }
-          
-          //     // Contar las ocurrencias de cada nombre
-          //     const nombres = item._id.integrantes.nombre;
-          //     nombres.forEach((nombre: string) => {
-          //         if (nameCounts[nombre]) {
-          //             nameCounts[nombre]++;
-          //         } else {
-          //             nameCounts[nombre] = 1;
-          //         }
-          //     });
-          // });
-          
-          // // Convertir nameCounts a un array de objetos
-          // const nameCountsArray = Object.entries(nameCounts).map(([nombre, count]) => ({ nombre, count }));
+         
           const courseParallelNameCounts: CourseParallelNameCount[] = [];
           function findOrCreateCourseParallel(curso: string, paralelo: string) {
             let courseParallel = courseParallelNameCounts.find(
@@ -2398,13 +2145,22 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
               }
           });
       });
+      let echaInicio =  FechaInicio.toString() ;
+          
+      let echaFin=    FechaFin.toString();
     const final ={
     Juego:'colaborativo',
     data:courseParallelNameCounts,
-      fechaInicio, fechaFin,  
-      docentes:uniqueDocentes
+      docentes:uniqueDocentes,
+      fechaInicio: echaInicio,
+            fechaFin:    echaFin,
+            Curso, 
+            Paralelo 
         }
-        res.status(200).json(final);
+
+        const pdfdata = await pdfJuegoColaborativo(final);
+        console.log({ FechaInicio, FechaFin,  Pregunta, Curso, Paralelo })
+        res.status(200).json({data:final, pdf:pdfdata});
         } else if (objetosConAvance.length === 0) {
           res.status(200).json([])
         }
@@ -2531,169 +2287,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
           }
         ])
 
-        // if (fechaInicio && fechaFin) {
-          
-        // } else if (fechaInicio) {
-        //   objetosConAvance = await JugadoresConVocabularios.aggregate([ {
-        //     '$match': {
-        //       'Avance': {
-        //         '$ne': null
-        //       }
-        //     }
-        //   }, {
-        //     '$addFields': {
-        //       'updatedAtDay': {
-        //         '$dateToString': {
-        //           'format': '%Y-%m-%d', 
-        //           'date': '$updatedAt'
-        //         }
-        //       }
-        //     }
-        //   }, {
-        //     '$group': {
-        //       '_id': {
-        //         'Nombre': '$Estudiante.Nombre', 
-        //         'Identificacion': '$Estudiante.Identificacion', 
-        //         'Curso': '$Estudiante.Curso', 
-        //         'Paralelo': '$Estudiante.Paralelo'
-        //       }, 
-        //       'documentos': {
-        //         '$push': '$$ROOT'
-        //       }
-        //     }
-        //   }
-        //   ]);
-        //   objetosConAvancedos = await JugadoresConOraciones.aggregate([{
-        //     '$match': {
-        //       'Avance': {
-        //         '$ne': null
-        //       }
-        //     }
-        //   }, {
-        //     '$addFields': {
-        //       'updatedAtDay': {
-        //         '$dateToString': {
-        //           'format': '%Y-%m-%d', 
-        //           'date': '$updatedAt'
-        //         }
-        //       }
-        //     }
-        //   }, {
-        //     '$group': {
-        //       '_id': {
-        //         'Nombre': '$Estudiante.Nombre', 
-        //         'Identificacion': '$Estudiante.Identificacion', 
-        //         'Curso': '$Estudiante.Curso', 
-        //         'Paralelo': '$Estudiante.Paralelo'
-        //       }, 
-        //       'documentos': {
-        //         '$push': '$$ROOT'
-        //       }
-        //     }
-        //   }
-        //   ]);
-        //   objetosConAvancetres = await Grupos.aggregate([
-        //     {
-        //       '$addFields': {
-        //         'createdAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group': {
-        //         '_id': {
-        //           'createdAtDay': '$createdAtDay',
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     }
-        //   ]);
-        // } else if (!fechaInicio) {
-        //   objetosConAvance = await JugadoresConVocabularios.aggregate([ {
-        //     '$match': {
-        //       'Avance': {
-        //         '$ne': null
-        //       }
-        //     }
-        //   }, {
-        //     '$addFields': {
-        //       'updatedAtDay': {
-        //         '$dateToString': {
-        //           'format': '%Y-%m-%d', 
-        //           'date': '$updatedAt'
-        //         }
-        //       }
-        //     }
-        //   }, {
-        //     '$group': {
-        //       '_id': {
-        //         'Nombre': '$Estudiante.Nombre', 
-        //         'Identificacion': '$Estudiante.Identificacion', 
-        //         'Curso': '$Estudiante.Curso', 
-        //         'Paralelo': '$Estudiante.Paralelo'
-        //       }, 
-        //       'documentos': {
-        //         '$push': '$$ROOT'
-        //       }
-        //     }
-        //   }
-        //   ]);
-        //   objetosConAvancedos = await JugadoresConOraciones.aggregate([{
-        //     '$match': {
-        //       'Avance': {
-        //         '$ne': null
-        //       }
-        //     }
-        //   }, {
-        //     '$addFields': {
-        //       'updatedAtDay': {
-        //         '$dateToString': {
-        //           'format': '%Y-%m-%d', 
-        //           'date': '$updatedAt'
-        //         }
-        //       }
-        //     }
-        //   }, {
-        //     '$group': {
-        //       '_id': {
-        //         'Nombre': '$Estudiante.Nombre', 
-        //         'Identificacion': '$Estudiante.Identificacion', 
-        //         'Curso': '$Estudiante.Curso', 
-        //         'Paralelo': '$Estudiante.Paralelo'
-        //       }, 
-        //       'documentos': {
-        //         '$push': '$$ROOT'
-        //       }
-        //     }
-        //   }
-        //   ]);
-        //   objetosConAvancetres = await Grupos.aggregate([
-        //     {
-        //       '$addFields': {
-        //         'createdAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group': {
-        //         '_id': {
-        //           'createdAtDay': '$createdAtDay',
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     }
-        //   ]);
-        // }
+
         if (objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length > 0) {
           const uniqueCoursesVoca:any[] = [];
 
@@ -2758,17 +2352,23 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
               }
           });
       });
-
+      let echaInicio =  FechaInicio.toString() ;
+          
+      let echaFin=    FechaFin.toString();
+      
               const  final = {
                 juego:'Todos',
-                fechaInicio, fechaFin,
+                fechaInicio: echaInicio,
+                fechaFin:    echaFin,
+                Curso, 
+                Paralelo,
                 dataVocabulario:{
                   Cursos:uniqueCoursesVoca,
                   data:objetosConAvance,
                 },
                 dataOracion:{
                   Cursos:uniqueCoursesOrac,
-                  data:objetosConAvance,
+                  data:objetosConAvancedos,
                 },
                 dataColaborativo:{
                   data:courseParallelNameCounts,
@@ -2776,7 +2376,9 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 }
 
               }
-          res.status(200).json(final);
+              const pdfdata = await pdfJuegoTodos(final);
+        console.log({ FechaInicio, FechaFin,  Pregunta, Curso, Paralelo })
+          res.status(200).json({data:final, pdf:pdfdata});
         } else if (objetosConAvance.length === 0 && objetosConAvancedos.length === 0 && objetosConAvancetres.length === 0) {
           res.status(200).json([])
         }

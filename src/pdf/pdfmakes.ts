@@ -3,11 +3,11 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { Inportcolaborativo } from '../interface/outputColaborativoJugador.interface';
 import {  OutputTodosJugador } from '../interface/ouputTodosJugadorReporte.interface';
+import { fechaEcuador } from '../helpers/helpers';
 
 // Asigna las fuentes del archivo vfs_fonts.js a pdfMake
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const estudiante = 'Martin 1A';
 
 export const pdfVocabularioEstudiante = async (inputarray: Respuestavocabulario[]): Promise<string> => {
 
@@ -148,7 +148,7 @@ export const pdfVocabularioEstudiante = async (inputarray: Respuestavocabulario[
       header: {
         fontSize: 20,
         bold:true,
-        color: '#4E388A'
+        color: '#9696D3'
       },
       membrete:{
         bold: true,
@@ -341,7 +341,7 @@ export const pdfOracionEstudiante = async (inputarray: Respuestavocabulario[]): 
       header: {
         fontSize: 20,
         bold:true,
-        color: '#4E388A'
+        color: '#9696D3'
       },
       membrete:{
         bold: true,
@@ -534,7 +534,7 @@ export const pdfColaborativoEstudiante = async (inputarray: Inportcolaborativo[]
       header: {
         fontSize: 20,
         bold:true,
-        color: '#4E388A'
+        color: '#9696D3'
       },
       fechalinea2:{
         color: "#62269E", 
@@ -752,7 +752,7 @@ export const pdfTodosEstudiante = async (inputarray: OutputTodosJugador): Promis
       header: {
         fontSize: 20,
         bold:true,
-        color: '#4E388A'
+        color: '#9696D3'
       },
       fechalinea2:{
         color: "#62269E", 
@@ -814,21 +814,6 @@ marginBottom:8
 
 
 
-const fechaEcuador = (fecha: string) => {
-  const fechaUtc = new Date(fecha);
-  const fechaLocal = new Date(fechaUtc.getTime() - fechaUtc.getTimezoneOffset() * 60000);
-  
-  // Asegúrate de que las opciones estén correctamente definidas con los tipos literales esperados
-  const options: Intl.DateTimeFormatOptions = { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric', 
-    timeZone: 'America/Guayaquil' 
-  };
-
-  const fechaFormateada = fechaLocal.toLocaleDateString('es-EC', options);
-  return fechaFormateada;
-}
 
 
 
