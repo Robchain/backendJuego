@@ -20,11 +20,13 @@ export const subirRom = async (req: Request, res: Response) => {
         })
         const rompecabezaGuardar = await rompecabeza.save();
 
+
+        
         if (rompecabezaGuardar.Juego === "VOCABULARIO") {
             await AsiganarNuevaRompecabezaVocabulario(rompecabezaGuardar);
         }
 
-        if (rompecabezaGuardar.Juego === "VOCABULARIO") {
+        if (rompecabezaGuardar.Juego === "ORACION") {
             await AsiganarNuevaRompecabezaOracion(rompecabezaGuardar);
         }
 
@@ -189,7 +191,7 @@ const AsiganarNuevaRompecabezaVocabulario = async (rompecabeza: any) => {
             }
         }
     ]);
-
+if(cursosYParalelosActivosPorJuego.length > 0) return ;
     for (let i = 0; i <= cursosYParalelosActivosPorJuego.length; i++) {
         const estudiantes = await Persona.aggregate([
             {
@@ -217,7 +219,7 @@ const AsiganarNuevaRompecabezaOracion = async (rompecabeza: any) => {
             }
         }
     ])
-
+    if(cursosYParalelosActivosPorJuego.length > 0) return ;
     for (let i = 0; i <= cursosYParalelosActivosPorJuego.length; i++) {
         const estudiantes = await Persona.aggregate([
             {
