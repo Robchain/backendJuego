@@ -8,7 +8,8 @@ export interface IJugadoresConOraciones extends Document{
     Rompecabeza:IRompecabeza,
     Avance:Juego[],
     Terminado:boolean,
-    Activo:boolean
+    Activo:boolean,
+    Docente:string;
 }
 
 const schemaJugadoresConOraciones = new Schema({
@@ -27,6 +28,11 @@ const schemaJugadoresConOraciones = new Schema({
     Terminado:{
         type:Boolean,
         require:true
+    },
+    Docente:{
+        type:String,
+        require:true,
+        trim:true
     },
     Activo:{
         type:Boolean,

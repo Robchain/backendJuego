@@ -11,6 +11,8 @@ export interface IMultiJuga extends Document{
     Paralelo:string;
    Fecha:IFechas[];
    Estado:string;
+   Docente:string;
+   
 }
 
 const multiJugador = new Schema({    
@@ -53,6 +55,10 @@ const multiJugador = new Schema({
     },
     Estado:{
         type: String,
+        require:true,
+        trim:true
+    }, Docente:{
+        type:String,
         require:true,
         trim:true
     }

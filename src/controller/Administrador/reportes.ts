@@ -1,25 +1,19 @@
 import { Request, Response } from "express";
 import Grupos from "../../models/Juego/Multijugador/Grupos";
-import JugadoresConOraciones, { IJugadoresConOraciones } from "../../models/Jugadores/JugadoresOracion/JugadoresConOraciones";
-import JugadoresConVocabularios, { IJugadoresConVocabulario } from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
+import JugadoresConOraciones from "../../models/Jugadores/JugadoresOracion/JugadoresConOraciones";
+import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
 import { IAvenceArriba } from "../../interface/Multijugador/Grupos.Interface";
 import { IReporteInterfaceEstudiante, IReporteInterfaceCursoParalelo, IReporteInterfaceJuego, AvanceCoolaborativo, Documento, AvanceIndividual, Estudiante } from "../../interface/Reportes.inteface";
 import { JuegoSimple } from "../../interface/ModeloPartida";
 import { DocumentosColabo } from "../../interface/ReporteDos.interface";
-import { isObject } from "@typegoose/typegoose/lib/internal/utils";
-import { groupAndSortByDate } from "./FuncionHelpers";
 import { pdfColaborativoEstudiante, pdfOracionEstudiante, pdfTodosEstudiante, pdfVocabularioEstudiante } from "../../pdf/pdfmakes";
 import { OutputTodosJugador, Salida, SalidaDatum } from "../../interface/ouputTodosJugadorReporte.interface";
 import { pdfJuegoColaborativo, pdfJuegoOracion, pdfJuegoTodos, pdfJuegoVocabulario } from "../../pdf/pdfmakesJuego";
 import { CursoElement, Datum } from "../../interface/juegoReporteVocabulario.interface";
 
-
-
-
 function seleccionarObjetosPorIntervalo(array: IAvenceArriba[], inicio: number, fin: number) {
   return array.slice(inicio, fin);
 }
-
 
 export const reporteGeneralPorEstudiante = async (req: Request, res: Response) => {
   try {
@@ -1905,10 +1899,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
   try {
     const { FechaInicio, FechaFin,  Pregunta, Curso, Paralelo } = req.body as IReporteInterfaceJuego;
     let fechaInicio = new Date(FechaInicio);
-    let fechaFin = new Date(FechaFin);;
-    let objectosalida: any[] = [];
-    let objectosalida2: any[] = [];
-    let objectosalida3: any[] = [];
+    let fechaFin = new Date(FechaFin);
     let objetosConAvanceVocabulario: Datum[] = []
     let objetosConAvance: any[] = []
     let objetosConAvancedos: any[] = []

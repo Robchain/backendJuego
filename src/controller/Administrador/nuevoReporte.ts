@@ -1,16 +1,12 @@
 import { Request, Response } from "express";
 import { IReporteNuevoCursoParalelo } from "../../interface/Reportes.inteface";
-import JugadoresConVocabularios from "../../models/Jugadores/JugadoresVocabulario/JugadoresConVocabularios";
-import { modeladosalidaGeneralIndividualMulti, modeladosalidaGeneralIndividualOracion, modeladosalidaGeneralIndividualPorJugador } from "./reportes";
-import JugadoresConOraciones from "../../models/Jugadores/JugadoresOracion/JugadoresConOraciones";
-import Grupos from "../../models/Juego/Multijugador/Grupos";
-
 import { Salidavocabylario } from "../../interface/Reportes.interfaces";
 import fs from 'fs';
 import path from 'path';
 import PdfPrinter from 'pdfmake';
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import MultiJugador from "../../models/Administrador/MultiJugador";
+import { pdfPlanificacion } from "../../pdf/pdfmakesPlanificacion";
 var fonts = {
   Courier: {
     normal: 'Courier',
@@ -51,7 +47,7 @@ export const reportePrimero = async (req: Request, res: Response) => {
 try {
     const { Curso, Paralelo,FechaInicio, FechaFin} = req.body as IReporteNuevoCursoParalelo;
     //borrar juego y por juego y solo buscar colaborativa
-
+    
     let fechaInicio = new Date(FechaInicio);
 
     let fechaFin = new Date(FechaFin);
@@ -109,13 +105,21 @@ try {
     const listadoDocentesUnicos = Array.from(docentesUnicos);
     const totalDocumentos = objetosConAvance.reduce((acc, obj) => acc + obj.documentos.length, 0);
 
+    let echaInicio =  FechaInicio.toString() ;
+          
+    let echaFin=    FechaFin.toString();
     const final = {
       data:objetosConAvance,
       docentes:listadoDocentesUnicos,
-      total:totalDocumentos
+      total:totalDocumentos,
+      fechaInicio: echaInicio,
+                fechaFin:    echaFin,
+                Curso, 
+                Paralelo,
     }
-
-    res.status(200).json(final);
+        const pdfdata = await pdfPlanificacion(final);
+        console.log({ Curso, Paralelo,FechaInicio, FechaFin})
+    res.status(200).json({data:final, pdf:pdfdata});
 
     
   } catch (error) {

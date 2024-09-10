@@ -1,63 +1,57 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { OutputJuegoVocabulario } from '../interface/juegoReporteVocabulario.interface';
-import { fechaEcuador } from '../helpers/helpers';
+import { DocentesList2, fechaEcuador } from '../helpers/helpers';
 import { TDocumentDefinitions } from 'pdfmake/interfaces';
+import { OutputPlanificacion } from '../interface/planifiacion.interface';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-export const pdfJuegoVocabulario = async (inputarray: OutputJuegoVocabulario): Promise<string> => {
+export const pdfPlanificacion = async (inputarray: OutputPlanificacion): Promise<string> => {
 
 
     const content: any[] = [
-        { text: 'Reporte vocabulario', style: 'header' },
-        {
-            text:[ 
-              { text: 'Desde: ', style: 'fecha' },
-              { text:`${fechaEcuador(inputarray.fechaInicio)}`, style:'fechacontenido'},
-              { text: 'Hasta: ', style: 'fecha' },
-              { text:`${fechaEcuador(inputarray.fechaFin)}`, style:'fechacontenido'}
-            ],style:'fechalinea2'
-          },
+        { text: 'Reporte Planificación Colaborativa', style: 'header' },
           {
             text:[ 
               { text: 'Curso: ', style: 'fecha' },
-              { text:`${inputarray.Cursos.map(i=>i.Curso)}`, style:'fechacontenido'},
+              { text:`${inputarray.Curso}`, style:'fechacontenido'},
               { text: 'Paralelo: ', style: 'fecha' },
-              { text:`${inputarray.Cursos.map(i=>i.Paralelo)}`, style:'fechacontenido'},
+              { text:`${inputarray.Paralelo}`, style:'fechacontenido'},
               { text: 'Docente: ', style: 'fecha' },
-            //   { text:`${DocentesList(inputarray.data)}`, style:'fechacontenido'}
+              { text:`${DocentesList2(inputarray.docentes)}`, style:'fechacontenido'}
             ],style:'fechalinea2'
           },
       ];
 
+      inputarray.data!= undefined   
       
-
-        content.push({
-          style: 'tableExample',
-          table: {
-            widths: ['*', '*'],
-            body: [
-              [
-                { text: 'Nombre', style: 'tableHeader' },
-                { text: 'Juegos', style: 'tableHeader' }
-              ],
-              ...inputarray.data.filter(item=>(item._id.Curso=== inputarray.Curso && item._id.Paralelo=== inputarray.Paralelo)).map(e => [
-                { text: `${e._id.Nombre}` },
-                { text: `${e.documentos.length}` }
-              ])
-            ]
-          },
-          layout: {
-            hLineWidth: (i: number) => 0.3,
-            vLineWidth: (i: number) => 0.3,
-            hLineColor: () => '#f2f2f2',
-            vLineColor: () => '#f2f2f2',
-            paddingTop: () => 5,
-            paddingBottom: () => 5
+        // content.push({},{
+        //   style: 'tableExample',
+        //   table: {
+        //     widths: ['*', '*'],
+        //     body: [
+        //       [
+        //         { text: 'Fecha de creación', style: 'tableHeader' },
+        //       ],
+        //       ...inputarray.data.filter(item=>(item._id.Curso=== inputarray.Curso && item._id.Paralelo=== inputarray.Paralelo)).map(e => [
+        //         { text: `${e._id.Nombre}` },
+        //         { text: `${e.documentos.length}` }
+        //       ])
+        //     ]
+        //   },
+        //   layout: {
+        //     hLineWidth: (i: number) => 0.3,
+        //     vLineWidth: (i: number) => 0.3,
+        //     hLineColor: () => '#f2f2f2',
+        //     vLineColor: () => '#f2f2f2',
+        //     paddingTop: () => 5,
+        //     paddingBottom: () => 5
             
-          }
-        })
+        //   }
+        // })
      
+
+        content.push()
 
 
 

@@ -12,6 +12,7 @@ export interface IGrupoDeTrabajo extends Document {
     TipoDeJuego: string;
     Avance: ObjetoConAvance[];
     FechaDeInicio: string;
+    Docente:string,
     FechaDeFin: string;
     Medalla:string;
     Estado:string;
@@ -63,6 +64,10 @@ const schemaPartidaGrupoDeTrabjo = new Schema({
     Estado:{
         type:String,
         require:true
+    }, Docente:{
+        type:String,
+        require:true,
+        trim:true
     }
 }, {
     timestamps: true,
