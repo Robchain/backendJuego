@@ -26,7 +26,7 @@ const schemaJugadoresConVocabulario = new Schema({
     },
     Docente:{
         type:String,
-        require:true,
+        // require:true,
         trim:true
     },
     Terminado:{

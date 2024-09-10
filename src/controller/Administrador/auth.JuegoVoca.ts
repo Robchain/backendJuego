@@ -78,6 +78,7 @@ export const crearJuegoVocabulario = async (estudiante:any) => {
         Avance: null,
         Terminado: false,
         Activo:true,
+        Docente:''
       });
       await juegosVocabulario.save();
     }
@@ -101,6 +102,7 @@ export const crearJuegoVocabulario = async (estudiante:any) => {
           Avance: null,
           Terminado: false,
           Activo:true,
+          Docente:''
         });
         await juegosVocabulario.save();
       }
@@ -132,6 +134,7 @@ export const crearJuegoVocabulario = async (estudiante:any) => {
         Avance: null,
         Terminado: false,
         Activo:true,
+        Docente:''
       });
       await juegosVocabulario.save();
     }

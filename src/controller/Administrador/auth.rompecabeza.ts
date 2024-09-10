@@ -184,6 +184,7 @@ const obtenerFraseAlAzar = (): string => {
 const AsiganarNuevaRompecabezaVocabulario = async (rompecabeza: any) => {
     // buscar cursos activos -> extrar curso y paralelos
     // buscar estudiantes por curso y paralelos para asignar este nuevo rompecabeza por cada uno que esta en estos cursos y paralelos
+  try {
     const cursosYParalelosActivosPorJuego = await HabilitarJuego.aggregate([
         {
             '$match': {
@@ -191,7 +192,9 @@ const AsiganarNuevaRompecabezaVocabulario = async (rompecabeza: any) => {
             }
         }
     ]);
-if(cursosYParalelosActivosPorJuego.length > 0) return ;
+if(cursosYParalelosActivosPorJuego.length === 0){
+    return;
+}
     for (let i = 0; i <= cursosYParalelosActivosPorJuego.length; i++) {
         const estudiantes = await Persona.aggregate([
             {
@@ -206,32 +209,41 @@ if(cursosYParalelosActivosPorJuego.length > 0) return ;
             await crearJuegoVocabularioIndividualAsignar({ estudiante: estudiantes[j], rompecabeza: rompecabeza })
         }
     }
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 
 const AsiganarNuevaRompecabezaOracion = async (rompecabeza: any) => {
     // buscar cursos activos -> extrar curso y paralelos
     // buscar estudiantes por curso y paralelos para asignar este nuevo rompecabeza por cada uno que esta en estos cursos y paralelos
-    const cursosYParalelosActivosPorJuego = await HabilitarJuego.aggregate([
-        {
-            '$match': {
-                'Juego': 'ORACION',
-            }
-        }
-    ])
-    if(cursosYParalelosActivosPorJuego.length > 0) return ;
-    for (let i = 0; i <= cursosYParalelosActivosPorJuego.length; i++) {
-        const estudiantes = await Persona.aggregate([
+    try {
+        const cursosYParalelosActivosPorJuego = await HabilitarJuego.aggregate([
             {
                 '$match': {
-                    'Curso': cursosYParalelosActivosPorJuego[i].Curso,
-                    'Paralelo': cursosYParalelosActivosPorJuego[i].Paralelo,
-                    'TipoUsuario': 'ESTUDIANTE'
+                    'Juego': 'ORACION',
                 }
             }
-        ]);
-        for (let j = 0; i <= estudiantes.length; j++) {
-            await crearJuegoOracionrioIndividualAsignar({ estudiante: estudiantes[j], rompecabeza: rompecabeza })
+        ])
+        if(cursosYParalelosActivosPorJuego.length === 0){
+            return;
         }
+        for (let i = 0; i <= cursosYParalelosActivosPorJuego.length; i++) {
+            const estudiantes = await Persona.aggregate([
+                {
+                    '$match': {
+                        'Curso': cursosYParalelosActivosPorJuego[i].Curso,
+                        'Paralelo': cursosYParalelosActivosPorJuego[i].Paralelo,
+                        'TipoUsuario': 'ESTUDIANTE'
+                    }
+                }
+            ]);
+            for (let j = 0; i <= estudiantes.length; j++) {
+                await crearJuegoOracionrioIndividualAsignar({ estudiante: estudiantes[j], rompecabeza: rompecabeza })
+            }
+        }
+    } catch (error) {
+        console.log(error)
     }
 }

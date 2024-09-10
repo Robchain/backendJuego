@@ -59,7 +59,7 @@ const multiJugador = new Schema({
         trim:true
     }, Docente:{
         type:String,
-        require:true,
+        // require:true,
         trim:true
     }
 },{

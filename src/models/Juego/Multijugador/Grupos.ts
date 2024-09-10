@@ -66,7 +66,7 @@ const schemaPartidaGrupoDeTrabjo = new Schema({
         require:true
     }, Docente:{
         type:String,
-        require:true,
+        // require:true,
         trim:true
     }
 }, {
