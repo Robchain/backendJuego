@@ -12,6 +12,7 @@ export const pdfJuegoVocabulario = async (inputarray: OutputJuegoVocabulario): P
 
     const content: any[] = [
         { text: 'Reporte vocabulario', style: 'header' },
+        {text:'',style:'espacioEntrelineas'},
         {
             text:[ 
               { text: 'Desde: ', style: 'fecha' },
@@ -20,6 +21,7 @@ export const pdfJuegoVocabulario = async (inputarray: OutputJuegoVocabulario): P
               { text:`${fechaEcuador(inputarray.fechaFin)}`, style:'fechacontenido'}
             ],style:'fechalinea2'
           },
+          {text:'',style:'espacioEntrelineas'},
           {
             text:[ 
               { text: 'Curso: ', style: 'fecha' },
@@ -27,9 +29,11 @@ export const pdfJuegoVocabulario = async (inputarray: OutputJuegoVocabulario): P
               { text: 'Paralelo: ', style: 'fecha' },
               { text:`${inputarray.Cursos.map(i=>i.Paralelo)}`, style:'fechacontenido'},
               { text: 'Docente: ', style: 'fecha' },
-              { text:`${DocentesList(inputarray.data)}`, style:'fechacontenido'}
+              { text:`${inputarray.Docente}`, style:'fechacontenido'}
+              // { text:`${DocentesList(inputarray.data)}`, style:'fechacontenido'}
             ],style:'fechalinea2'
           },
+          {text:'',style:'espacioEntrelineas'},
       ];
 
       
@@ -91,6 +95,9 @@ export const pdfJuegoVocabulario = async (inputarray: OutputJuegoVocabulario): P
           fechacontenido:{
     
           },
+            espacioEntrelineas:{
+          margin:5
+        },
           fechalinea:{
             background:'#E6DFF0',
              color: "#62269E", 
@@ -132,6 +139,7 @@ export const pdfJuegoOracion = async (inputarray: OutputJuegoVocabulario): Promi
 
   const content: any[] = [
       { text: 'Reporte Oración', style: 'header' },
+      {text:'',style:'espacioEntrelineas'},
       {
           text:[ 
             { text: 'Desde: ', style: 'fecha' },
@@ -140,6 +148,7 @@ export const pdfJuegoOracion = async (inputarray: OutputJuegoVocabulario): Promi
             { text:`${fechaEcuador(inputarray.fechaFin)}`, style:'fechacontenido'}
           ],style:'fechalinea2'
         },
+        {text:'',style:'espacioEntrelineas'},
         {
           text:[ 
             { text: 'Curso: ', style: 'fecha' },
@@ -147,9 +156,11 @@ export const pdfJuegoOracion = async (inputarray: OutputJuegoVocabulario): Promi
             { text: 'Paralelo: ', style: 'fecha' },
             { text:`${inputarray.Cursos.map(i=>i.Paralelo)}  `, style:'fechacontenido'},
             { text: 'Docente: ', style: 'fecha' },
-            { text:`${DocentesList(inputarray.data)}  `, style:'fechacontenido'}
+            { text:`${inputarray.Docente}`, style:'fechacontenido'}
+            // { text:`${DocentesList(inputarray.data)}  `, style:'fechacontenido'}
           ],style:'fechalinea2'
         },
+        {text:'',style:'espacioEntrelineas'},
     ];
 
     
@@ -218,6 +229,9 @@ export const pdfJuegoOracion = async (inputarray: OutputJuegoVocabulario): Promi
   marginTop:8,
   marginBottom:8
         },
+          espacioEntrelineas:{
+          margin:5
+        },
   
         correctoTitle:{
           fontSize:14,
@@ -254,6 +268,7 @@ export const pdfJuegoColaborativo = async (inputarray: OutputJuegoColaborativo):
 
   const content: any[] = [
       { text: 'Reporte Colaborativo', style: 'header' },
+      {text:'',style:'espacioEntrelineas'},
       {
           text:[ 
             { text: 'Desde: ', style: 'fecha' },
@@ -262,6 +277,7 @@ export const pdfJuegoColaborativo = async (inputarray: OutputJuegoColaborativo):
             { text:`${fechaEcuador(inputarray.fechaFin)}`, style:'fechacontenido'}
           ],style:'fechalinea2'
         },
+        {text:'',style:'espacioEntrelineas'},
     ];
 
     inputarray.data.forEach(item=>{
@@ -274,7 +290,8 @@ export const pdfJuegoColaborativo = async (inputarray: OutputJuegoColaborativo):
               { text: 'Docente: ', style: 'fecha' },
               { text:`${DocentesList2(inputarray.docentes)}  `, style:'fechacontenido'}
             ],style:'fechalinea2'
-          },)
+          },
+        {text:'',style:'espacioEntrelineas'},)
           
           content.push({
             style: 'tableExample',
@@ -327,6 +344,9 @@ export const pdfJuegoColaborativo = async (inputarray: OutputJuegoColaborativo):
           bold: true,
           
           color: '#8cc5b0',
+        },
+          espacioEntrelineas:{
+          margin:5
         },
         membreteLinea:{
           marginTop:8,
@@ -381,10 +401,12 @@ export const pdfJuegoTodos = async (inputarray: OutputJuegoJuego): Promise<strin
 
   const content: any[] = [
       { text: 'Reporte', style: 'header' },
+      {text:'',style:'espacioEntrelineas'},
       {
           text:[ 
             { text: 'Desde: ', style: 'fecha' },
             { text:`${fechaEcuador(inputarray.fechaInicio)}`, style:'fechacontenido'},
+            {text:'   '},
             { text: 'Hasta: ', style: 'fecha' },
             { text:`${fechaEcuador(inputarray.fechaFin)}`, style:'fechacontenido'}
           ],style:'fechalinea2'
@@ -393,17 +415,26 @@ export const pdfJuegoTodos = async (inputarray: OutputJuegoJuego): Promise<strin
 
      if(inputarray.dataVocabulario) {  
       
-      content.push({
+      content.push(
+        {text:'',style:'espacioEntrelineas'},
+        {
+        text:[ 
+          { text: 'Docente: ', style: 'fecha' },
+          { text:`${DocentesList2(inputarray.dataColaborativo.docentes)}`, style:'fechacontenido'},
+          // { text:`${DocentesList(inputarray.dataVocabulario.data)}`, style:'fechacontenido'},
+        ],style:'fechalinea2'
+      },
+      {text:'',style:'espacioEntrelineas'},
+
+        {
+        
         text:[ 
           { text: 'Actividad: ', style: 'fecha' },
           { text:`Vocabulario`, style:'fechacontenido'},
         ],style:'fechalinea2'
-      },{
-        text:[ 
-          { text: 'Docente: ', style: 'fecha' },
-          { text:`${DocentesList(inputarray.dataVocabulario.data)}`, style:'fechacontenido'},
-        ],style:'fechalinea2'
       },
+      {text:'',style:'espacioEntrelineas'},
+      
       {
         style: 'tableExample',
         table: {
@@ -433,17 +464,22 @@ export const pdfJuegoTodos = async (inputarray: OutputJuegoJuego): Promise<strin
 
       }
       if(inputarray.dataOracion) {  
-        content.push({
+        content.push(
+          {text:'',style:'espacioEntrelineas'},
+          {
           text:[ 
             { text: 'Actividad: ', style: 'fecha' },
             { text:`Oración`, style:'fechacontenido'},
           ],style:'fechalinea2'
-        },{
-          text:[ 
-            { text: 'Docente: ', style: 'fecha' },
-            { text:`${DocentesList(inputarray.dataOracion.data)}`, style:'fechacontenido'},
-          ],style:'fechalinea2'
-        },{
+        },
+        {text:'',style:'espacioEntrelineas'},
+        // {
+        //   text:[ 
+        //     { text: 'Docente: ', style: 'fecha' },
+        //     // { text:`${DocentesList(inputarray.dataOracion.data)}`, style:'fechacontenido'},
+        //   ],style:'fechalinea2'
+        // },
+        {
           style: 'tableExample',
           table: {
             widths: ['*', '*'],
@@ -473,18 +509,23 @@ export const pdfJuegoTodos = async (inputarray: OutputJuegoJuego): Promise<strin
 
         if(inputarray.dataColaborativo){
           inputarray.dataColaborativo.data.map(item=>{
+            
 
-            content.push({
+            content.push(
+              {text:'',style:'espacioEntrelineas'},
+              {
               text:[ 
                 { text: 'Actividad: ', style: 'fecha' },
                 { text:`Colaborativo`, style:'fechacontenido'},
               ],style:'fechalinea2'
-            },{
-              text:[ 
-                { text: 'Docente: ', style: 'fecha' },
-                { text:`${DocentesList2(inputarray.dataColaborativo.docentes)}`, style:'fechacontenido'},
-              ],style:'fechalinea2'
             },
+            {text:'',style:'espacioEntrelineas'},
+            // {
+            //   text:[ 
+            //     { text: 'Docente: ', style: 'fecha' },
+            //     // { text:`${DocentesList2(inputarray.dataColaborativo.docentes)}`, style:'fechacontenido'},
+            //   ],style:'fechalinea2'
+            // },
             {
               style: 'tableExample',
               table: {
@@ -535,12 +576,16 @@ export const pdfJuegoTodos = async (inputarray: OutputJuegoJuego): Promise<strin
           
           color: '#8cc5b0',
         },
+        espacioEntrelineas:{
+          margin:5
+        },
         membreteLinea:{
           marginTop:8,
           marginBottom:8
         },
         fecha:{
-   color: '#85858C'
+          color: '#85858C',
+          marginBottom:8
         },
         fechacontenido:{
   

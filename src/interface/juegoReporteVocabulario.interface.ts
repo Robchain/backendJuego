@@ -6,6 +6,7 @@ export interface OutputJuegoVocabulario {
     fechaFin:    string;
     Curso:string;
     Paralelo:string;
+    Docente: string
 }
 
 export interface CursoElement {

@@ -10,6 +10,7 @@ import { pdfColaborativoEstudiante, pdfOracionEstudiante, pdfTodosEstudiante, pd
 import { OutputTodosJugador, Salida, SalidaDatum } from "../../interface/ouputTodosJugadorReporte.interface";
 import { pdfJuegoColaborativo, pdfJuegoOracion, pdfJuegoTodos, pdfJuegoVocabulario } from "../../pdf/pdfmakesJuego";
 import { CursoElement, Datum } from "../../interface/juegoReporteVocabulario.interface";
+import Persona from "../../models/Administrador/Persona";
 
 function seleccionarObjetosPorIntervalo(array: IAvenceArriba[], inicio: number, fin: number) {
   return array.slice(inicio, fin);
@@ -227,84 +228,8 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
             }
           }
         ]);
-        // if (fechaInicio && fechaFin) {
-          
 
-        // } else if (fechaInicio) {
-        //   objetosConAvance = await JugadoresConOraciones.aggregate([
-        //     {
-        //       '$match': {
-        //         'Estudiante.Identificacion': valorId
-        //       }
-        //     }, {
-        //       '$match': {
-        //         'Avance': {
-        //           '$ne': null
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields': {
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group':  {
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     },
-        //     {
-        //       '$sort':  {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ]);
-        // } else if (!fechaInicio) {
-        //   objetosConAvance = await JugadoresConOraciones.aggregate([
-        //     {
-        //       '$match': {
-        //         'Estudiante.Identificacion': valorId
-        //       }
-        //     }, {
-        //       '$match': {
-        //         'Avance': {
-        //           '$ne': null
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields': {
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group':  {
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     },
-        //     {
-        //       '$sort':  {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ]);
-        // }
+        
         if (objetosConAvance.length > 0) {
           const nuevoarray = objetosConAvance.map(obj=>{
             const{updatedAtDay, } = obj._id 
@@ -341,6 +266,7 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
           })
 
           const datapdf = await pdfOracionEstudiante(nuevoarray);
+
           res.status(200).json({data:nuevoarray, pdf:datapdf});
         } else if (objetosConAvance.length === 0) {
           res.status(200).json([])
@@ -387,80 +313,6 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
           }
         ])
 
-        // if (fechaInicio && fechaFin) {
-          
-        // } else if (fechaInicio) {
-        //   objetosConAvance = await Grupos.aggregate([
-        //     {
-        //       '$match': {
-        //         'Integrantes': {
-        //           '$elemMatch': {
-        //             'value': valorId
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields': {
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group': {
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     },
-        //     {
-        //       '$sort':  {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ])
-        // } else if (!fechaInicio) {
-        //   //agregar el filtro de null
-        //   objetosConAvance = await Grupos.aggregate([
-        //     {
-        //       '$match': {
-        //         'Integrantes': {
-        //           '$elemMatch': {
-        //             'value': valorId
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields': {
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group': {
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     },
-        //     {
-        //       '$sort':  {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ])
-        // }
         if (objetosConAvance.length > 0) {
           const nuevoarray = objetosConAvance.map(obj => {
                    const {Integrantes,Equipo, Avance, createdAt, updatedAt,updatedAtDay, FechaDeFin, FechaDeInicio} =obj.documentos[0]
@@ -637,223 +489,8 @@ export const reporteGeneralPorEstudiante = async (req: Request, res: Response) =
             }
           }
         ])
-        // if (fechaInicio && fechaFin) {
-         
-        // } else if (fechaInicio) {
-        //   objetosConAvance = await JugadoresConVocabularios.aggregate([
-        //     {
-        //       '$match': {
-        //         'Estudiante.Identificacion': valorId
-        //       }
-        //     }, {
-        //       '$match': {
-        //         'Avance': {
-        //           '$ne': null
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields':{
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group':{
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     },
-        //     {
-        //       '$sort': {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ]);
-        //   objetosConAvancedos = await JugadoresConOraciones.aggregate([
-        //     {
-        //       '$match': {
-        //         'Estudiante.Identificacion': valorId
-        //       }
-        //     },{
-        //       '$match': {
-        //         'Avance': {
-        //           '$ne': null
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields': {
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group':  {
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     },
-        //     {
-        //       '$sort':  {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ]);
-        //   objetosConAvancetres = await Grupos.aggregate([
-        //     {
-        //       '$match': {
-        //         'Integrantes': {
-        //           '$elemMatch': {
-        //             'value': valorId
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields': {
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group': {
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     },
-        //     {
-        //       '$sort':  {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ])
-        // } else if (!fechaInicio) {
-        //   objetosConAvance = await JugadoresConVocabularios.aggregate([
-        //     {
-        //       '$match': {
-        //         'Estudiante.Identificacion': valorId
-        //       }
-        //     }, {
-        //       '$match': {
-        //         'Avance': {
-        //           '$ne': null
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields':{
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group':{
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     },
-        //     {
-        //       '$sort': {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ]);
-        //   objetosConAvancedos = await JugadoresConOraciones.aggregate([
-        //     {
-        //       '$match': {
-        //         'Estudiante.Identificacion': valorId
-        //       }
-        //     }, {
-        //       '$match': {
-        //         'Avance': {
-        //           '$ne': null
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields': {
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group':  {
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     },
-        //     {
-        //       '$sort':  {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ]);
-        //   objetosConAvancetres = await Grupos.aggregate([
-        //     {
-        //       '$match': {
-        //         'Integrantes': {
-        //           '$elemMatch': {
-        //             'value': valorId
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$addFields': {
-        //         'updatedAtDay': {
-        //           '$dateToString': {
-        //             'format': '%Y-%m-%d',
-        //             'date': '$updatedAt'
-        //           }
-        //         }
-        //       }
-        //     }, {
-        //       '$group': {
-        //         '_id': {
-        //           'updatedAtDay': '$updatedAtDay'
-        //         },
-        //         'documentos': {
-        //           '$push': '$$ROOT'
-        //         }
-        //       }
-        //     },
-        //     {
-        //       '$sort':  {
-        //         '_id.updatedAtDay': -1
-        //       }
-        //     }
-        //   ])
-        // }
+        
+        
         if (objetosConAvance.length > 0 || objetosConAvancedos.length > 0 || objetosConAvancetres.length > 0) {
           const nuevoarray = objetosConAvance.length>0 ?objetosConAvance.map(obj=>{
             const{updatedAtDay, } = obj._id 
@@ -1948,6 +1585,16 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
           }
         ]);
 
+        const docente = await Persona.aggregate([
+                  {
+                    '$match': {
+                      'TipoUsuario': 'DOCENTE', 
+                      'Curso': Curso, 
+                      'Paralelo': Paralelo
+                    }
+                  }
+                ]);
+
         if (objetosConAvanceVocabulario.length > 0) {
           const uniqueCourses:CursoElement[] = [];
 
@@ -1972,10 +1619,10 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
             fechaInicio: echaInicio,
             fechaFin:    echaFin,
             Curso, 
-            Paralelo 
+            Paralelo,
+            Docente:`${docente[0].Nombre} ${docente[0].Apellido}` 
           }
           const pdfdata =await pdfJuegoVocabulario(final);
-
         
           res.status(200).json({data:final, pdf:pdfdata});
         
@@ -2025,6 +1672,17 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
           }
         ]);
 
+        const docente2 = await Persona.aggregate([
+                  {
+                    '$match': {
+                      'TipoUsuario': 'DOCENTE', 
+                     'Curso': Curso, 
+                      'Paralelo': Paralelo
+                    }
+                  }
+                ]);
+
+
         if (objetosConAvance.length > 0) {
           const uniqueCourses:any[] = [];
 
@@ -2047,7 +1705,8 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
             fechaInicio: echaInicio,
             fechaFin:    echaFin,
             Curso, 
-            Paralelo 
+            Paralelo,
+            Docente:`${docente2[0].Nombre} ${docente2[0].Apellido}` 
           }
           const pdfdata = await pdfJuegoOracion(final);
           console.log({ FechaInicio, FechaFin,  Pregunta, Curso, Paralelo })
@@ -2096,6 +1755,16 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
             }
           }
         ])
+               const docente3 = await Persona.aggregate([
+                  {
+                    '$match': {
+                      'TipoUsuario': 'DOCENTE', 
+                      'Curso': Curso, 
+                      'Paralelo': Paralelo
+                    }
+                  }
+                ]);
+
 
         if (objetosConAvance.length > 0) {
          
@@ -2142,7 +1811,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
     const final ={
     Juego:'colaborativo',
     data:courseParallelNameCounts,
-      docentes:uniqueDocentes,
+    docentes:[`${docente3[0].Nombre} ${docente3[0].Apellido}`],
       fechaInicio: echaInicio,
             fechaFin:    echaFin,
             Curso, 
@@ -2157,6 +1826,18 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
         }
         break;
       case 'Todos':
+
+      const docente4 = await Persona.aggregate([
+                  {
+                    '$match': {
+                      'TipoUsuario': 'DOCENTE', 
+                      'Curso': Curso, 
+                      'Paralelo': Paralelo
+                    }
+                  }
+                ]);
+
+
         objetosConAvance = await JugadoresConVocabularios.aggregate([
           {
             '$match': {
@@ -2363,7 +2044,8 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
                 },
                 dataColaborativo:{
                   data:courseParallelNameCounts,
-                  docentes:uniqueDocentes
+                  // docentes:uniqueDocentes
+                  docentes:[`${docente4[0].Nombre} ${docente4[0].Apellido}`],
                 }
 
               }

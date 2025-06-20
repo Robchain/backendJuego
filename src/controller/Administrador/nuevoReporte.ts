@@ -7,6 +7,7 @@ import PdfPrinter from 'pdfmake';
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import MultiJugador from "../../models/Administrador/MultiJugador";
 import { pdfPlanificacion } from "../../pdf/pdfmakesPlanificacion";
+import Persona from "../../models/Administrador/Persona";
 var fonts = {
   Courier: {
     normal: 'Courier',
@@ -53,6 +54,17 @@ try {
     let fechaFin = new Date(FechaFin);
 
     let objetosConAvance: any[] = []
+
+    const docente = await Persona.aggregate([
+                      {
+                        '$match': {
+                          'TipoUsuario': 'DOCENTE', 
+                          'Curso': Curso, 
+                          'Paralelo': Paralelo
+                        }
+                      }
+                    ]);
+
         
     objetosConAvance = await MultiJugador.aggregate([
       {
@@ -110,7 +122,7 @@ try {
     let echaFin=    FechaFin.toString();
     const final = {
       data:objetosConAvance,
-      docentes:listadoDocentesUnicos,
+      docentes:[`${docente[0].Nombre} ${docente[0].Apellido}`] ,
       total:totalDocumentos,
       fechaInicio: echaInicio,
                 fechaFin:    echaFin,
