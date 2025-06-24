@@ -17,6 +17,7 @@ export const pdfJuegoVocabulario = async (inputarray: OutputJuegoVocabulario): P
             text:[ 
               { text: 'Desde: ', style: 'fecha' },
               { text:`${fechaEcuador(inputarray.fechaInicio)}`, style:'fechacontenido'},
+              {text:'   '},
               { text: 'Hasta: ', style: 'fecha' },
               { text:`${fechaEcuador(inputarray.fechaFin)}`, style:'fechacontenido'}
             ],style:'fechalinea2'
@@ -26,8 +27,10 @@ export const pdfJuegoVocabulario = async (inputarray: OutputJuegoVocabulario): P
             text:[ 
               { text: 'Curso: ', style: 'fecha' },
               { text:`${inputarray.Cursos.map(i=>i.Curso)}`, style:'fechacontenido'},
+              {text:'   '},
               { text: 'Paralelo: ', style: 'fecha' },
               { text:`${inputarray.Cursos.map(i=>i.Paralelo)}`, style:'fechacontenido'},
+              {text:'   '},
               { text: 'Docente: ', style: 'fecha' },
               { text:`${inputarray.Docente}`, style:'fechacontenido'}
               // { text:`${DocentesList(inputarray.data)}`, style:'fechacontenido'}
@@ -93,7 +96,7 @@ export const pdfJuegoVocabulario = async (inputarray: OutputJuegoVocabulario): P
      color: '#85858C'
           },
           fechacontenido:{
-    
+      color: '#62269E'
           },
             espacioEntrelineas:{
           margin:5
@@ -138,12 +141,13 @@ export const pdfJuegoOracion = async (inputarray: OutputJuegoVocabulario): Promi
 
 
   const content: any[] = [
-      { text: 'Reporte Oración', style: 'header' },
+      { text: 'Reporte oración', style: 'header' },
       {text:'',style:'espacioEntrelineas'},
       {
           text:[ 
             { text: 'Desde: ', style: 'fecha' },
             { text:`${fechaEcuador(inputarray.fechaInicio)}`, style:'fechacontenido'},
+            {text:'   '},
             { text: 'Hasta: ', style: 'fecha' },
             { text:`${fechaEcuador(inputarray.fechaFin)}`, style:'fechacontenido'}
           ],style:'fechalinea2'
@@ -153,8 +157,10 @@ export const pdfJuegoOracion = async (inputarray: OutputJuegoVocabulario): Promi
           text:[ 
             { text: 'Curso: ', style: 'fecha' },
             { text:`${inputarray.Cursos.map(i=>i.Curso)}  `, style:'fechacontenido'},
+            {text:'   '},
             { text: 'Paralelo: ', style: 'fecha' },
             { text:`${inputarray.Cursos.map(i=>i.Paralelo)}  `, style:'fechacontenido'},
+            {text:'   '},
             { text: 'Docente: ', style: 'fecha' },
             { text:`${inputarray.Docente}`, style:'fechacontenido'}
             // { text:`${DocentesList(inputarray.data)}  `, style:'fechacontenido'}
@@ -220,7 +226,7 @@ export const pdfJuegoOracion = async (inputarray: OutputJuegoVocabulario): Promi
    color: '#85858C'
         },
         fechacontenido:{
-  
+    color: '#62269E'
         },
         fechalinea:{
           background:'#E6DFF0',
@@ -267,12 +273,13 @@ export const pdfJuegoColaborativo = async (inputarray: OutputJuegoColaborativo):
 
 
   const content: any[] = [
-      { text: 'Reporte Colaborativo', style: 'header' },
+      { text: 'Reporte colaborativo', style: 'header' },
       {text:'',style:'espacioEntrelineas'},
       {
           text:[ 
             { text: 'Desde: ', style: 'fecha' },
             { text:`${fechaEcuador(inputarray.fechaInicio)}`, style:'fechacontenido'},
+            {text:'   '},
             { text: 'Hasta: ', style: 'fecha' },
             { text:`${fechaEcuador(inputarray.fechaFin)}`, style:'fechacontenido'}
           ],style:'fechalinea2'
@@ -285,10 +292,13 @@ export const pdfJuegoColaborativo = async (inputarray: OutputJuegoColaborativo):
             text:[ 
               { text: 'Curso: ', style: 'fecha' },
               { text:`${item.curso}  `, style:'fechacontenido'},
+              {text:'   '},
               { text: 'Paralelo: ', style: 'fecha' },
               { text:`${item.paralelo}  `, style:'fechacontenido'},
+              {text:'   '},
               { text: 'Docente: ', style: 'fecha' },
-              { text:`${DocentesList2(inputarray.docentes)}  `, style:'fechacontenido'}
+              { text:`${DocentesList2(inputarray.docentes)}  `, style:'fechacontenido'},
+              {text:'   '},
             ],style:'fechalinea2'
           },
         {text:'',style:'espacioEntrelineas'},)
@@ -356,7 +366,7 @@ export const pdfJuegoColaborativo = async (inputarray: OutputJuegoColaborativo):
    color: '#85858C'
         },
         fechacontenido:{
-  
+    color: '#62269E'
         },
         fechalinea:{
           background:'#E6DFF0',
@@ -419,6 +429,12 @@ export const pdfJuegoTodos = async (inputarray: OutputJuegoJuego): Promise<strin
         {text:'',style:'espacioEntrelineas'},
         {
         text:[ 
+          { text: 'Curso: ', style: 'fecha' },
+          { text: `${inputarray.Curso}`, style: 'fechacontenido' },
+          {text:'   '},
+          { text: 'Paralelo: ', style: 'fecha' },
+          { text: `${inputarray.Paralelo}`, style: 'fechacontenido' },
+          {text:'   '},
           { text: 'Docente: ', style: 'fecha' },
           { text:`${DocentesList2(inputarray.dataColaborativo.docentes)}`, style:'fechacontenido'},
           // { text:`${DocentesList(inputarray.dataVocabulario.data)}`, style:'fechacontenido'},
@@ -430,7 +446,7 @@ export const pdfJuegoTodos = async (inputarray: OutputJuegoJuego): Promise<strin
         
         text:[ 
           { text: 'Actividad: ', style: 'fecha' },
-          { text:`Vocabulario`, style:'fechacontenido'},
+          { text:`Vocabulario`, style:'fechacontenido2'},
         ],style:'fechalinea2'
       },
       {text:'',style:'espacioEntrelineas'},
@@ -469,7 +485,7 @@ export const pdfJuegoTodos = async (inputarray: OutputJuegoJuego): Promise<strin
           {
           text:[ 
             { text: 'Actividad: ', style: 'fecha' },
-            { text:`Oración`, style:'fechacontenido'},
+            { text:`Oración`, style:'fechacontenido2'},
           ],style:'fechalinea2'
         },
         {text:'',style:'espacioEntrelineas'},
@@ -516,7 +532,7 @@ export const pdfJuegoTodos = async (inputarray: OutputJuegoJuego): Promise<strin
               {
               text:[ 
                 { text: 'Actividad: ', style: 'fecha' },
-                { text:`Colaborativo`, style:'fechacontenido'},
+                { text:`Colaborativo`, style:'fechacontenido2'},
               ],style:'fechalinea2'
             },
             {text:'',style:'espacioEntrelineas'},
@@ -588,7 +604,7 @@ export const pdfJuegoTodos = async (inputarray: OutputJuegoJuego): Promise<strin
           marginBottom:8
         },
         fechacontenido:{
-  
+             color: '#62269E'
         },
         fechalinea:{
           background:'#E6DFF0',

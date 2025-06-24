@@ -1715,7 +1715,7 @@ export const reporteGeneralPorJuego = async (req: Request, res: Response) => {
           res.status(200).json([])
         }
         break;
-      case 'Colaborativo':
+      case 'colaborativo':
         objetosConAvance = await Grupos.aggregate([
           {
             '$match': {

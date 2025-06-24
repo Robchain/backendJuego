@@ -11,47 +11,76 @@ export const pdfPlanificacion = async (inputarray: OutputPlanificacion): Promise
 
     const content: any[] = [
         { text: 'Reporte Planificación Colaborativa', style: 'header' },
+        {text:'',style:'espacioEntrelineas'},
           {
             text:[ 
               { text: 'Curso: ', style: 'fecha' },
               { text:`${inputarray.Curso}`, style:'fechacontenido'},
+              {text:'   '},
               { text: 'Paralelo: ', style: 'fecha' },
               { text:`${inputarray.Paralelo}`, style:'fechacontenido'},
+              {text:'   '},
               { text: 'Docente: ', style: 'fecha' },
-              { text:`${DocentesList2(inputarray.docentes)}`, style:'fechacontenido'}
+              { text:`${DocentesList2(inputarray.docentes)}`, style:'fechacontenido'},
+              {text:'   '},
             ],style:'fechalinea2'
           },
       ];
 
-      inputarray.data!= undefined   
-      
-        // content.push({},{
-        //   style: 'tableExample',
-        //   table: {
-        //     widths: ['*', '*'],
-        //     body: [
-        //       [
-        //         { text: 'Fecha de creación', style: 'tableHeader' },
-        //       ],
-        //       ...inputarray.data.filter(item=>(item._id.Curso=== inputarray.Curso && item._id.Paralelo=== inputarray.Paralelo)).map(e => [
-        //         { text: `${e._id.Nombre}` },
-        //         { text: `${e.documentos.length}` }
-        //       ])
-        //     ]
-        //   },
-        //   layout: {
-        //     hLineWidth: (i: number) => 0.3,
-        //     vLineWidth: (i: number) => 0.3,
-        //     hLineColor: () => '#f2f2f2',
-        //     vLineColor: () => '#f2f2f2',
-        //     paddingTop: () => 5,
-        //     paddingBottom: () => 5
-            
-        //   }
-        // })
-     
+let totalJuegos = 0;
 
-        content.push()
+inputarray.data !== undefined && inputarray.data.forEach(juego => {
+  const tipoTexto =
+    juego._id.TipoDeJuego === '1' ? "Vocabulario:" :
+    juego._id.TipoDeJuego === '2' ? "Oración:" :
+    juego._id.TipoDeJuego === '3' ? "Mixto:" :
+    "Desconocido:";
+
+  const cantidad = juego.documentos.length;
+  totalJuegos += cantidad;
+
+  // Título de grupo
+  content.push({
+    text: [
+      { text: tipoTexto + ' ', color: '#8cc5b0', bold: true },
+      { text: `${cantidad} Juegos`, bold: true }
+    ],
+    margin: [0, 10, 0, 4]
+  });
+
+  // Tabla con solo la columna de fecha
+  content.push({
+    style: 'tableExample',
+    table: {
+      widths: ['*'],
+      body: [
+        [
+          { text: 'Fecha de creación', style: 'tableHeader' }
+        ],
+        ...juego.documentos.map(i => [
+          { text: fechaEcuador(i.createdAtDay) }
+        ])
+      ]
+    },
+    layout: {
+      hLineWidth: (i: number) => 0.3,
+      vLineWidth: (i: number) => 0.3,
+      hLineColor: () => '#f2f2f2',
+      vLineColor: () => '#f2f2f2',
+      paddingTop: () => 5,
+      paddingBottom: () => 5
+    }
+  });
+});
+
+// Línea de total
+content.push({
+  text: [
+    { text: 'TOTAL: ', color: '#8cc5b0', bold: true },
+    { text: `${totalJuegos}`, bold: true }
+  ],
+  margin: [0, 10, 0, 0]
+});
 
 
 
@@ -77,11 +106,14 @@ export const pdfPlanificacion = async (inputarray: OutputPlanificacion): Promise
             marginTop:8,
             marginBottom:8
           },
+          espacioEntrelineas:{
+          margin:5
+        },
           fecha:{
      color: '#85858C'
           },
           fechacontenido:{
-    
+          color: '#62269E'
           },
           fechalinea:{
             background:'#E6DFF0',
