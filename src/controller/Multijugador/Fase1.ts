@@ -110,6 +110,7 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
         let label = req.body.label;
         let situacion: string = "";
         let objetoaBuscar = { value: value, label: label }
+        
        const data:IGrupoDeTrabajo[] = await Grupos.aggregate(
         [
             {
@@ -120,6 +121,7 @@ export const DevuelveLaPosicionDentroDelArray = async (req: Request, res: Respon
               }
             }
           ])
+          console.log(data)
         if (data.length !== 0) {
             let pos = data[0].Integrantes.findIndex(obj => JSON.stringify(obj.value) === JSON.stringify(objetoaBuscar.value));
             const vecesTerminadoEsTrue = data[0].Integrantes.filter(elemento => elemento.Terminado).length;

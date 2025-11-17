@@ -54,101 +54,182 @@ export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Respons
   }
 
 //une oraciones por categoria
-export const uniendoOracionesPorCategoria= async ()=>{
-   let categoriaOra = [];
-   let oraciones:any[]=[];
-   let Oraciones = [];
+// export const uniendoOracionesPorCategoria= async ()=>{
+//    let categoriaOra = [];
+//    let oraciones:any[]=[];
+//    let Oraciones = [];
    
     
-   categoriaOra = await RecursosOracion.aggregate([
+//    categoriaOra = await RecursosOracion.aggregate([
+//     {
+//       '$match': {
+//         'Estado': 'ACTIVO'
+//       }
+//     }, {
+//       '$group': {
+//         '_id': '$Categoria', 
+//         'total': {
+//           '$sum': 1
+//         }
+//       }
+//     }, {
+//       '$match': {
+//         'total': {
+//           '$gte': 3
+//         }
+//       }
+//     }, {
+//       '$project': {
+//         '_id': 1
+//       }
+//     }, {
+//       '$sample': {
+//         'size': 1
+//       }
+//     }
+//   ]);
+// oraciones = await RecursosOracion.aggregate([
+//         {
+//           '$match': {
+//             'Categoria': categoriaOra[0]._id,
+//             'Estado':"ACTIVO"
+//           }
+//         }, {
+//           '$sample': {
+//             'size': 3
+//           }
+//         }, {
+//           $facet: {
+//             correcto: [
+//               {
+//                 $addFields: {
+//                   Respuesta: "CORRECTO"
+//                 }
+//               },
+//               {
+//                 $limit: 1
+//               }
+//             ],
+//             incorrecto: [
+//               {
+//                 $addFields: {
+//                   Respuesta: "INCORRECTO"
+//                 }
+//               },
+//               {
+//                 $skip: 1
+//               }
+//             ]
+//           }
+//         },
+//       ]);
+      
+//       if (oraciones[0].correcto[0]) {
+//         let arrayId = [oraciones[0].correcto[0]._id.toString(), oraciones[0].incorrecto[0]._id.toString(), oraciones[0].incorrecto[1]._id.toString()]
+//         arrayId.sort();
+//         Oraciones = arrayId.map(x => {
+//           if (oraciones[0].correcto[0]._id.toString() === x) {
+//             return oraciones[0].correcto[0];
+//           }
+//           if (oraciones[0].incorrecto[0]._id.toString() === x) {
+//             return oraciones[0].incorrecto[0];
+//           }
+//           if (oraciones[0].incorrecto[1]._id.toString() === x) {
+//             return oraciones[0].incorrecto[1];
+//           }
+//         })
+//       }
+      
+      
+      
+//       let final = {
+//         Categoria: categoriaOra[0],
+//         Oraciones,
+//         TipoPregunta:Seleccion(Oraciones[0])
+//       }
+//      return final;
+// }
+
+
+export const uniendoOracionesPorCategoria = async () => {
+  // 1. Seleccionar categoría aleatoria con al menos 3 oraciones activas
+  const categoriaOra = await RecursosOracion.aggregate([
     {
-      '$match': {
-        'Estado': 'ACTIVO'
+      $match: {
+        Estado: 'ACTIVO'
       }
-    }, {
-      '$group': {
-        '_id': '$Categoria', 
-        'total': {
-          '$sum': 1
-        }
+    },
+    {
+      $group: {
+        _id: '$Categoria',
+        total: { $sum: 1 }
       }
-    }, {
-      '$match': {
-        'total': {
-          '$gte': 3
-        }
+    },
+    {
+      $match: {
+        total: { $gte: 3 }
       }
-    }, {
-      '$project': {
-        '_id': 1
-      }
-    }, {
-      '$sample': {
-        'size': 1
-      }
+    },
+    {
+      $sample: { size: 1 }
     }
   ]);
-oraciones = await RecursosOracion.aggregate([
-        {
-          '$match': {
-            'Categoria': categoriaOra[0]._id,
-            'Estado':"ACTIVO"
-          }
-        }, {
-          '$sample': {
-            'size': 3
-          }
-        }, {
-          $facet: {
-            correcto: [
-              {
-                $addFields: {
-                  Respuesta: "CORRECTO"
-                }
-              },
-              {
-                $limit: 1
-              }
-            ],
-            incorrecto: [
-              {
-                $addFields: {
-                  Respuesta: "INCORRECTO"
-                }
-              },
-              {
-                $skip: 1
-              }
-            ]
-          }
-        },
-      ]);
-      
-      if (oraciones[0].correcto[0]) {
-        let arrayId = [oraciones[0].correcto[0]._id.toString(), oraciones[0].incorrecto[0]._id.toString(), oraciones[0].incorrecto[1]._id.toString()]
-        arrayId.sort();
-        Oraciones = arrayId.map(x => {
-          if (oraciones[0].correcto[0]._id.toString() === x) {
-            return oraciones[0].correcto[0];
-          }
-          if (oraciones[0].incorrecto[0]._id.toString() === x) {
-            return oraciones[0].incorrecto[0];
-          }
-          if (oraciones[0].incorrecto[1]._id.toString() === x) {
-            return oraciones[0].incorrecto[1];
-          }
-        })
+
+  if (!categoriaOra.length) {
+    throw new Error('No se encontró ninguna categoría con suficientes oraciones');
+  }
+
+  const categoriaSeleccionada = categoriaOra[0]._id;
+
+  // 2. Obtener oraciones con sujetos DIFERENTES
+  const oraciones = await RecursosOracion.aggregate([
+    {
+      $match: {
+        Categoria: categoriaSeleccionada,
+        Estado: 'ACTIVO'
       }
-      
-      
-      
-      let final = {
-        Categoria: categoriaOra[0],
-        Oraciones,
-        TipoPregunta:Seleccion(Oraciones[0])
+    },
+    // Agrupar por sujeto para obtener una oración por cada sujeto diferente
+    {
+      $group: {
+        _id: '$Sujeto.label',
+        oracion: { $first: '$$ROOT' } // Tomar la primera oración de cada sujeto
       }
-     return final;
-}
+    },
+    // Tomar 3 sujetos diferentes aleatoriamente
+    {
+      $sample: { size: 3 }
+    },
+    // Extraer solo el documento de la oración
+    {
+      $replaceRoot: { newRoot: '$oracion' }
+    }
+  ]);
+
+  // Validar que se obtuvieron exactamente 3 oraciones
+  if (oraciones.length < 3) {
+    throw new Error(
+      `La categoría ${categoriaSeleccionada} no tiene suficientes oraciones con sujetos diferentes (solo ${oraciones.length})`
+    );
+  }
+
+  // 3. Marcar una como correcta y las demás como incorrectas
+  const [correcta, ...incorrectas] = oraciones;
+  correcta.Respuesta = 'CORRECTO';
+  incorrectas.forEach(o => (o.Respuesta = 'INCORRECTO'));
+
+  // 4. Mezclar aleatoriamente (shuffle verdadero)
+  const todasLasOraciones = [correcta, ...incorrectas];
+  const oracionesMezcladas = todasLasOraciones.sort(() => Math.random() - 0.5);
+
+  // 5. Retornar resultado
+  return {
+    Categoria: categoriaOra[0],
+    Oraciones: oracionesMezcladas,
+    TipoPregunta: Seleccion(oracionesMezcladas[0])
+  };
+};
+
 //busca un rompecabeza al azar
 const rompecabezas = async () => {
   let categoriaOra = [];
