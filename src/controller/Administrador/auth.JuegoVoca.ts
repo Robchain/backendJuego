@@ -84,6 +84,47 @@ export const crearJuegoVocabulario = async (estudiante:any) => {
     }
   }
 
+  export const crearJuegoVocabulario2 = async (estudiante:any) => {
+
+    const rompecabeza = await Rompecabeza.aggregate([
+      {
+        '$match': {
+          'Estado': 'ACTIVO', 
+          'Juego': 'VOCABULARIO'
+        }
+      },
+      {
+        '$sample': { size: 1 }
+      }
+    ]);
+
+    if (rompecabeza.length === 0) {
+
+      throw new Error('No se encontró ningún rompecabeza activo');
+          
+    }
+  
+        const juegosVocabulario = new JugadoresConVocabularios({
+          Estudiante: {
+            _id: estudiante._id,
+            Nombre: estudiante.Nombre,
+            Usuario: estudiante.Usuario,
+            Identificacion: estudiante.Identificacion,
+            Curso:estudiante.Curso,
+            Paralelo:estudiante.Paralelo
+          },
+          Rompecabeza: rompecabeza[0],
+          Avance: null,
+          Terminado: false,
+          Activo:true,
+          Docente:''
+        });
+
+        await juegosVocabulario.save();
+
+    }
+    
+
   
 
   export const crearJuegoVocabularioIndividualAsignar = async ({estudiante, rompecabeza}:{estudiante:any, rompecabeza:any}) => {

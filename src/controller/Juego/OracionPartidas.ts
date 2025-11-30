@@ -7,7 +7,8 @@ import Persona, { IPersona } from "../../models/Administrador/Persona";
 import JugadoresConOracion, { IJugadoresConOraciones } from "../../models/Jugadores/JugadoresOracion/JugadoresConOraciones";
 import { modeloPartida } from "../auth.TestDeLlamada";
 import mongoose from "mongoose";
-import { crearJuegoVocabulario } from "../Administrador/auth.JuegoVoca";
+import { crearJuegoVocabulario, crearJuegoVocabulario2 } from "../Administrador/auth.JuegoVoca";
+import { crearJuegoOraciones, crearJuegoOraciones2 } from "../Administrador/auth.oracion";
 //une un rompecabeza con un juego
 export const armandoJuegosOracionesPorPiezas = async (req: Request, res: Response) => {
     try { 
@@ -348,11 +349,14 @@ juegosOracion6.save();
 
   }
 }
-//------------------------------
+//------------------------------ agregar mas oraciones cuando ya tenga menos de 8 rompecabezas
 export const llamadaPartidaOracion = async (req: Request, res: Response) => {
     try {
       const {id}=req.body;
     const objectId = new mongoose.Types.ObjectId(id);
+
+    const Estudiante = await Persona.findOne({id:objectId},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+
       const objetos = await JugadoresConOracion.aggregate([
         {
           '$match': {
@@ -365,20 +369,41 @@ export const llamadaPartidaOracion = async (req: Request, res: Response) => {
         }
       ]);
       const grupos = [];
+
+      
+        
+       
+
     for (let i = 0; i < objetos.length; i += 3) {
       const grupo = objetos.slice(i, i + 3);
       if (grupo.some(objeto => !objeto.Terminado)) {
         grupos.push(grupo);
       }
     }
-    if(grupos.length<3){
-      const Estudiantes = await Persona.findOne({_id:objectId},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 })
-      await  crearJuegoVocabulario(Estudiantes)
-    }
-    const primerGrupo = grupos[0];
-    const segundoGrupo = grupos[1];
-    const resultado = [...primerGrupo, ...segundoGrupo];
 
+    if(grupos.length<3){
+      for(let i = 0; i < 10 ; i += 1){
+
+        await  crearJuegoVocabulario2(Estudiante);
+
+      }
+  }
+
+    if(grupos.length<3){
+      for(let i = 0; i < 10 ; i += 1){
+
+        await crearJuegoOraciones2(Estudiante);
+
+      }
+  }
+    
+    
+    const primerGrupo = grupos[0];
+
+    const segundoGrupo = grupos[1];
+
+    const resultado = [...primerGrupo, ...segundoGrupo];
+  
    if(resultado.length >=1){
     res.status(200).json(resultado);
    }else{
