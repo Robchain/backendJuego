@@ -355,7 +355,20 @@ export const llamadaPartidaOracion = async (req: Request, res: Response) => {
       const {id}=req.body;
     const objectId = new mongoose.Types.ObjectId(id);
 
-    const Estudiante = await Persona.findOne({id:objectId},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+    console.log(id, 'id')
+    console.log(objectId, 'objectId')
+
+    // const Estudiante = await Persona.find({id:objectId},{ 'createdAt': 0, 'updatedAt': 0, 'Password': 0 });
+
+    const Estudiante = await Persona.aggregate([
+      {
+        '$match': {
+            '_id': objectId
+          }
+      }
+    ])
+
+    console.log(Estudiante[0], 'Estudiante')
 
       const objetos = await JugadoresConOracion.aggregate([
         {
@@ -368,11 +381,8 @@ export const llamadaPartidaOracion = async (req: Request, res: Response) => {
           }
         }
       ]);
-      const grupos = [];
 
-      
-        
-       
+      const grupos = [];
 
     for (let i = 0; i < objetos.length; i += 3) {
       const grupo = objetos.slice(i, i + 3);
@@ -384,7 +394,7 @@ export const llamadaPartidaOracion = async (req: Request, res: Response) => {
     if(grupos.length<3){
       for(let i = 0; i < 10 ; i += 1){
 
-        await  crearJuegoVocabulario2(Estudiante);
+        await  crearJuegoVocabulario2(Estudiante[0]);
 
       }
   }
@@ -392,25 +402,28 @@ export const llamadaPartidaOracion = async (req: Request, res: Response) => {
     if(grupos.length<3){
       for(let i = 0; i < 10 ; i += 1){
 
-        await crearJuegoOraciones2(Estudiante);
+        await crearJuegoOraciones2(Estudiante[0]);
+
 
       }
   }
     
-    
-    const primerGrupo = grupos[0];
+      const resultado = [...grupos[0], ...grupos[1]];
 
-    const segundoGrupo = grupos[1];
+      if(resultado.length >=1){
 
-    const resultado = [...primerGrupo, ...segundoGrupo];
-  
-   if(resultado.length >=1){
-    res.status(200).json(resultado);
-   }else{
+        res.status(200).json(resultado);
+
+      }else{
+
         res.status(200).json(null)
+
       }
+
     } catch (error) {
+
       res.status(500).json(null);
+
     }
   }
 

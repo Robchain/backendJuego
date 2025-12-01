@@ -203,6 +203,7 @@ export const crearJuegoOraciones2 = async (estudiante:any)=>{
 
       if (rompecabeza.length === 0) {
 
+
         throw new Error('No se encontró ningún rompecabeza activo');
 
       }
@@ -221,9 +222,8 @@ export const crearJuegoOraciones2 = async (estudiante:any)=>{
                 Terminado: false,
                 Estado: true,
         });
-
+        
         await juegosOracion.save();
-  
   }
   //---------------------
 export const crearJuegoOracionrioIndividualAsignar = async ({estudiante,rompecabeza}:{estudiante:any,rompecabeza:any})=>{

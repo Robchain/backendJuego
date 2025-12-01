@@ -100,8 +100,9 @@ export const crearJuegoVocabulario = async (estudiante:any) => {
 
     if (rompecabeza.length === 0) {
 
+      
       throw new Error('No se encontró ningún rompecabeza activo');
-          
+
     }
   
         const juegosVocabulario = new JugadoresConVocabularios({
